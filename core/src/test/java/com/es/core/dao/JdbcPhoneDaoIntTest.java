@@ -2,8 +2,10 @@ package com.es.core.dao;
 
 import com.es.core.dao.impl.JdbcColorDao;
 import com.es.core.dao.impl.JdbcPhoneDao;
+import com.es.core.exception.PhoneNotFoundException;
 import com.es.core.model.phone.Color;
 import com.es.core.model.phone.Phone;
+import org.junit.Assert;
 import org.junit.runner.RunWith;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,18 +28,9 @@ public class JdbcPhoneDaoIntTest extends AbstractPhoneTest{
     @Autowired
     JdbcColorDao jdbcColorDao;
 
-    @Test
-    public void testSaveUpdateGet() {
-        Phone givenPhone = getPhone();
-
-        jdbcPhoneDao.save(givenPhone);
-
-        String brandName = "NewBrand";
-        givenPhone.setBrand(brandName);
-        jdbcPhoneDao.save(givenPhone);
-
-        Phone receivedPhone = jdbcPhoneDao.get(givenPhone.getId());
-        assertEquals(brandName, receivedPhone.getBrand());
+    @Test(expected = PhoneNotFoundException.class)
+    public void testGetPhoneNotExist(){
+        jdbcPhoneDao.get(12345L);
     }
 
     @Test
@@ -46,13 +39,41 @@ public class JdbcPhoneDaoIntTest extends AbstractPhoneTest{
 
         jdbcPhoneDao.save(givenPhone);
 
-        assertNotNull(givenPhone);
         Long phoneId = givenPhone.getId();
         assertNotNull(phoneId);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testSaveEmptyPhone(){
+        Phone phone = new Phone();
+
+        jdbcPhoneDao.save(phone);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testSavePhoneWithoutRequiredFields(){
+        Phone phone = new Phone();
+        phone.setModel("model");
+
+        jdbcPhoneDao.save(phone);
+    }
+
     @Test
-    public void testSaveDelete(){
+    public void testUpdate() {
+        Phone givenPhone = getPhone();
+        jdbcPhoneDao.save(givenPhone);
+
+        String brandName = "NewBrandName";
+        givenPhone.setBrand(brandName);
+        jdbcPhoneDao.save(givenPhone);
+
+        Phone receivedPhone = jdbcPhoneDao.get(givenPhone.getId());
+        assertEquals(givenPhone.getId(), receivedPhone.getId());
+        assertEquals(brandName, receivedPhone.getBrand());
+    }
+
+    @Test
+    public void testFindPhonesNoResults(){
         List<Phone> phones = jdbcPhoneDao.findAll(0, 10);
         assertEquals(0, phones.size());
     }
@@ -65,6 +86,7 @@ public class JdbcPhoneDaoIntTest extends AbstractPhoneTest{
         List<Phone> receivedPhoneList = jdbcPhoneDao.findAll(0, testPhones.size());
 
         assertEquals(testPhones.size(), receivedPhoneList.size());
+        receivedPhoneList.stream().map(Phone::getId).forEach(Assert::assertNotNull);
     }
 
     @Test
@@ -103,6 +125,6 @@ public class JdbcPhoneDaoIntTest extends AbstractPhoneTest{
 
         assertNotNull(mapPhoneIdToColors);
         assertEquals(2, mapPhoneIdToColors.keySet().size());
-        assertEquals(colors1.size() + colors2.size(), mapPhoneIdToColors.values().size());
+        assertEquals(colors1.size() + colors2.size(), mapPhoneIdToColors.values().stream().mapToInt(Collection::size).sum());
     }
 }

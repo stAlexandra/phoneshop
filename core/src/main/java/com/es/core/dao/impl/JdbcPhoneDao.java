@@ -59,14 +59,15 @@ public class JdbcPhoneDao implements PhoneDao {
     }
 
     public void save(final Phone phone) {
+        if(phone.getBrand() == null || phone.getModel() == null){
+            throw new IllegalArgumentException("Trying to save phone with NULL required fields.");
+        }
         KeyHolder keyHolder = new GeneratedKeyHolder();
-
         SqlParameterSource phoneParam = new BeanPropertySqlParameterSource(phone);
-
-        if(phone.getId() == null){          //insert
+        if(phone.getId() == null){
             jdbcTemplate.update(SQL_INSERT_PHONE, phoneParam, keyHolder);
             phone.setId(keyHolder.getKey().longValue());
-        } else {                              //update
+        } else {
             jdbcTemplate.update(SQL_UPDATE_PHONE, phoneParam);
         }
 
