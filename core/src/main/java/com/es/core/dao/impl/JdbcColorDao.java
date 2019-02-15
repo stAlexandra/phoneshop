@@ -12,13 +12,13 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
 public class JdbcColorDao implements ColorDao {
     private static final String SQL_GET_1_COLORSET = "SELECT * FROM colors INNER JOIN phone2color ON colors.id = phone2color.colorId WHERE phone2color.phoneId = :phoneId";
-    private static final String SQL_GET_MULTIPLE_COLORSETS = "SELECT * FROM colors AS c INNER JOIN phone2color AS p2c ON c.id = p2c.colorId WHERE p2c.phoneId IN (:phoneIds)";
-
+    private static final String SQL_GET_MULTIPLE_COLORSETS = "SELECT * FROM colors c INNER JOIN phone2color p2c ON c.id = p2c.colorId WHERE p2c.phoneId IN (:phoneIds)";
+    private static final String SQL_MERGE_INTO_COLORS = "MERGE INTO colors (code) KEY (code) VALUES(:code)";
+    
     @Resource
     private NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -53,27 +53,15 @@ public class JdbcColorDao implements ColorDao {
     }
 
     @Override
-    public void save(Long phoneId, Set<Color> colors) {
-        Set<Color> newColors = colors.stream().filter(color -> color.getId() == null).collect(Collectors.toSet());
-
+    public void save(Set<Color> colors) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        MapSqlParameterSource namedParams = new MapSqlParameterSource("phoneId", phoneId);
+        MapSqlParameterSource namedParams = new MapSqlParameterSource();
         for (Color color : colors) {
             namedParams.addValue("code", color.getCode());
 
-            jdbcTemplate.update("MERGE INTO colors (code) KEY (code) VALUES(:code)", namedParams, keyHolder);
+            jdbcTemplate.update(SQL_MERGE_INTO_COLORS, namedParams, keyHolder);
             color.setId(keyHolder.getKey().longValue());
         }
-
-        List<SqlParameterSource> batchValues = new ArrayList<>();
-        newColors.forEach(color -> {
-            MapSqlParameterSource params = new MapSqlParameterSource();
-            params.addValue("phoneId", phoneId);
-            params.addValue("colorId", color.getId());
-            batchValues.add(params);
-        });
-
-        jdbcTemplate.batchUpdate("INSERT INTO phone2color VALUES (:phoneId, :colorId)", batchValues.toArray(new SqlParameterSource[0]));
     }
 
 }

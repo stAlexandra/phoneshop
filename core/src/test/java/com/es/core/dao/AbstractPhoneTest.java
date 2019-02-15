@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 abstract class AbstractPhoneTest {
-    protected static List<Phone> getPhones(int numPhones){
+    protected List<Phone> getPhones(int numPhones){
         Random random = new Random();
         List<Phone> phoneList = new ArrayList<>();
         for(int i = 1; i<=numPhones; i++){
@@ -20,7 +20,7 @@ abstract class AbstractPhoneTest {
         return phoneList;
     }
 
-    protected static Phone getPhone(){
+    protected Phone getPhone(){
         Random random = new Random();
         Phone phone = new Phone();
         phone.setBrand("brand" + random.nextInt(100));

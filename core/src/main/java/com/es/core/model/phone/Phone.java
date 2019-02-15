@@ -279,13 +279,11 @@ public class Phone {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Phone phone = (Phone) o;
-        return Objects.equals(getId(), phone.getId()) &&
-                Objects.equals(getBrand(), phone.getBrand()) &&
-                Objects.equals(getModel(), phone.getModel());
+        return Objects.equals(getId(), phone.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getBrand(), getModel());
+        return Objects.hash(getId());
     }
 }

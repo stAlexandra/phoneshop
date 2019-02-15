@@ -15,8 +15,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(locations = "classpath:context/applicationContext-core.xml")
@@ -91,16 +91,16 @@ public class JdbcPhoneDaoIntTest extends AbstractPhoneTest{
 
     @Test
     public void testGetColorsForPhone(){
-        Set<Color> colors = new HashSet<>();
-        colors.add(new Color("1111"));
-        colors.add(new Color("2222"));
+        Set<Color> myColors = new HashSet<>();
+        myColors.add(new Color("1212"));
+        myColors.add(new Color("1313"));
         Phone phone = getPhone();
-        phone.setColors(colors);
+        phone.setColors(myColors);
         jdbcPhoneDao.save(phone);
 
         Phone receivedPhone = jdbcPhoneDao.get(phone.getId());
 
-        assertEquals(colors.size(), receivedPhone.getColors().size());
+        assertEquals(myColors.size(), receivedPhone.getColors().size());
         receivedPhone.getColors().forEach(color -> assertNotNull(color.getId()));
     }
 
@@ -126,5 +126,25 @@ public class JdbcPhoneDaoIntTest extends AbstractPhoneTest{
         assertNotNull(mapPhoneIdToColors);
         assertEquals(2, mapPhoneIdToColors.keySet().size());
         assertEquals(colors1.size() + colors2.size(), mapPhoneIdToColors.values().stream().mapToInt(Collection::size).sum());
+    }
+
+    @Test
+    public void testFindAllReturnsColors(){
+        Color color1 = new Color("111");
+        Color color2 = new Color("222");
+        Phone phone1 = getPhone();
+        phone1.setColors(Collections.singleton(color1));
+        Phone phone2 = getPhone();
+        phone2.setColors(Collections.singleton(color2));
+
+        jdbcPhoneDao.save(phone1);
+        jdbcPhoneDao.save(phone2);
+        List<Phone> phones = jdbcPhoneDao.findAll(0, 10);
+
+        assertNotNull(phones);
+        for(Phone phone : phones){
+            assertNotNull(phone.getColors());
+            assertThat(phone.getColors(), either(hasItem(color1)).or(hasItem(color2)));
+        }
     }
 }

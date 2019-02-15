@@ -9,5 +9,5 @@ import java.util.Set;
 public interface ColorDao {
     Set<Color> getColors(Long phoneId);
     Map<Long, Set<Color>> getColors(List<Long> phoneIds);
-    void save(Long phoneId, Set<Color> colors);
+    void save(Set<Color> colors);
 }

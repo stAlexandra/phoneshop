@@ -8,6 +8,7 @@ import com.es.core.model.phone.Color;
 import com.es.core.model.phone.Phone;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class JdbcPhoneDao implements PhoneDao {
@@ -28,6 +30,7 @@ public class JdbcPhoneDao implements PhoneDao {
     @Resource
     private PhoneRowMapper phoneRowMapper;
 
+    private static final String SQL_SELECT_PHONE = "SELECT * FROM phones WHERE id = :phoneId";
     private static final String SQL_INSERT_PHONE = "INSERT INTO phones VALUES (:id, :brand, :model, :price, :displaySizeInches, :weightGr," +
             ":lengthMm, :widthMm, :heightMm, :announced, :deviceType, :os, :displayResolution, :pixelDensity, " +
             ":displayTechnology, :backCameraMegapixels, :frontCameraMegapixels, :ramGb, :internalStorageGb, :batteryCapacityMah, " +
@@ -40,13 +43,15 @@ public class JdbcPhoneDao implements PhoneDao {
             " batteryCapacityMah=:batteryCapacityMah, talkTimeHours=:talkTimeHours, standByTimeHours=:standByTimeHours," +
             " bluetooth=:bluetooth, positioning=:positioning, imageUrl=:imageUrl, description=:description" +
             " WHERE id=:id";
+    private static final String SQL_INSERT_PHONE2COLOR = "INSERT INTO phone2color VALUES (:phoneId, :colorId)";
+    private static final String SQL_FIND_ALL = "SELECT * FROM phones OFFSET :offset LIMIT :limit";
 
 
     public Phone get(final Long key) throws PhoneNotFoundException {
         Map<String, Long> namedParameters = Collections.singletonMap("phoneId", key);
         Set<Color> colors = jdbcColorDao.getColors(key);
 
-        return jdbcTemplate.query("SELECT * FROM phones WHERE id = :phoneId", namedParameters,
+        return jdbcTemplate.query(SQL_SELECT_PHONE, namedParameters,
                 resultSet -> {
                     if(resultSet.next()){
                         Phone phone = phoneRowMapper.mapRow(resultSet, 1);
@@ -60,7 +65,7 @@ public class JdbcPhoneDao implements PhoneDao {
 
     public void save(final Phone phone) {
         if(phone.getBrand() == null || phone.getModel() == null){
-            throw new IllegalArgumentException("Trying to save phone with NULL required fields.");
+            throw new IllegalArgumentException("Trying to save phone with empty required fields.");
         }
         KeyHolder keyHolder = new GeneratedKeyHolder();
         SqlParameterSource phoneParam = new BeanPropertySqlParameterSource(phone);
@@ -71,10 +76,40 @@ public class JdbcPhoneDao implements PhoneDao {
             jdbcTemplate.update(SQL_UPDATE_PHONE, phoneParam);
         }
 
-        jdbcColorDao.save(phone.getId(), phone.getColors());
+        Set<Color> phoneColors = phone.getColors();
+        if(!phoneColors.isEmpty()) {
+            Set<Color> newColors = phoneColors.stream().filter(color -> color.getId() == null).collect(Collectors.toSet());
+            jdbcColorDao.save(phoneColors);
+            savePhone2Color(phone.getId(), newColors);
+        }
+    }
+
+    private void savePhone2Color(Long phoneId, Set<Color> colors) {
+        List<SqlParameterSource> batchValues = new ArrayList<>();
+        colors.forEach(color -> {
+            MapSqlParameterSource params = new MapSqlParameterSource();
+            params.addValue("phoneId", phoneId);
+            params.addValue("colorId", color.getId());
+            batchValues.add(params);
+        });
+
+        jdbcTemplate.batchUpdate(SQL_INSERT_PHONE2COLOR, batchValues.toArray(new SqlParameterSource[0]));
     }
 
     public List<Phone> findAll(int offset, int limit) {
-        return jdbcTemplate.query("SELECT * FROM phones OFFSET " + offset + " LIMIT " + limit, new BeanPropertyRowMapper<>(Phone.class));
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("offset", offset);
+        params.addValue("limit", limit);
+
+        List<Phone> phones = jdbcTemplate.query(SQL_FIND_ALL, params, new BeanPropertyRowMapper<>(Phone.class));
+        if(phones.isEmpty()) return phones;
+
+        Map<Long, Set<Color>> mapPhoneIdToColor = jdbcColorDao.getColors(phones.stream().map(Phone::getId).collect(Collectors.toList()));
+        phones.forEach(phone -> {
+            Set<Color> colors = mapPhoneIdToColor.get(phone.getId());
+            phone.setColors(colors);
+        });
+
+        return phones;
     }
 }
