@@ -40,13 +40,10 @@ public class JdbcColorDao implements ColorDao {
                 params, resultSet -> {
                     do {
                         Long phoneId = resultSet.getLong("phone2color.phoneId");
-                        if(phoneIdToColors.containsKey(phoneId)){
-                            phoneIdToColors.get(phoneId).add(colorRowMapper.mapRow(resultSet, 1));
-                        } else {
-                            Set<Color> colorSet = new HashSet<>();
-                            colorSet.add(colorRowMapper.mapRow(resultSet, 1));
-                            phoneIdToColors.put(phoneId, colorSet);
+                        if(!phoneIdToColors.containsKey(phoneId)){
+                            phoneIdToColors.put(phoneId, new HashSet<>());
                         }
+                        phoneIdToColors.get(phoneId).add(colorRowMapper.mapRow(resultSet, 1));
                     } while (resultSet.next());
                 });
         return phoneIdToColors;
