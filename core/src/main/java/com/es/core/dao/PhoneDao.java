@@ -8,4 +8,6 @@ public interface PhoneDao {
     Phone get(Long key);
     void save(Phone phone);
     List<Phone> findAll(int offset, int limit);
+    List<Phone> findAllValid(int offset, int limit);
+    int findValidPhonesTotalCount();
 }

@@ -3,7 +3,7 @@ package com.es.core.dao.impl;
 import com.es.core.dao.ColorDao;
 import com.es.core.dao.PhoneDao;
 import com.es.core.dao.mappers.PhoneRowMapper;
-import com.es.core.exception.PhoneNotFoundException;
+import com.es.core.exception.PhonesNotFoundException;
 import com.es.core.model.phone.Color;
 import com.es.core.model.phone.Phone;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -45,31 +45,32 @@ public class JdbcPhoneDao implements PhoneDao {
             " WHERE id=:id";
     private static final String SQL_INSERT_PHONE2COLOR = "INSERT INTO phone2color VALUES (:phoneId, :colorId)";
     private static final String SQL_FIND_ALL = "SELECT * FROM phones OFFSET :offset LIMIT :limit";
+    private static final String SQL_FIND_ALL_PRESENT_IN_STOCK = "SELECT * FROM phones ph LEFT OUTER JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 OFFSET :offset LIMIT :limit";
 
 
-    public Phone get(final Long key) throws PhoneNotFoundException {
+    public Phone get(final Long key) throws PhonesNotFoundException {
         Map<String, Long> namedParameters = Collections.singletonMap("phoneId", key);
         Set<Color> colors = jdbcColorDao.getColors(key);
 
         return jdbcTemplate.query(SQL_SELECT_PHONE, namedParameters,
                 resultSet -> {
-                    if(resultSet.next()){
+                    if (resultSet.next()) {
                         Phone phone = phoneRowMapper.mapRow(resultSet, 1);
                         phone.setColors(new HashSet<>(colors));
                         return phone;
                     } else {
-                        throw new PhoneNotFoundException(key);
+                        throw new PhonesNotFoundException(key);
                     }
                 });
     }
 
     public void save(final Phone phone) {
-        if(phone.getBrand() == null || phone.getModel() == null){
+        if (phone.getBrand() == null || phone.getModel() == null) {
             throw new IllegalArgumentException("Trying to save phone with empty required fields.");
         }
         KeyHolder keyHolder = new GeneratedKeyHolder();
         SqlParameterSource phoneParam = new BeanPropertySqlParameterSource(phone);
-        if(phone.getId() == null){
+        if (phone.getId() == null) {
             jdbcTemplate.update(SQL_INSERT_PHONE, phoneParam, keyHolder);
             phone.setId(keyHolder.getKey().longValue());
         } else {
@@ -77,11 +78,37 @@ public class JdbcPhoneDao implements PhoneDao {
         }
 
         Set<Color> phoneColors = phone.getColors();
-        if(!phoneColors.isEmpty()) {
+        if (!phoneColors.isEmpty()) {
             Set<Color> newColors = phoneColors.stream().filter(color -> color.getId() == null).collect(Collectors.toSet());
             jdbcColorDao.save(phoneColors);
             savePhone2Color(phone.getId(), newColors);
         }
+    }
+
+    public List<Phone> findAll(int offset, int limit) {
+        return findPhones(SQL_FIND_ALL, offset, limit);
+    }
+
+    public List<Phone> findAllValid(int offset, int limit) {
+        return findPhones(SQL_FIND_ALL_PRESENT_IN_STOCK, offset, limit);
+    }
+
+    public int findValidPhonesTotalCount() {
+        return jdbcTemplate.query("SELECT COUNT(phoneId) AS count FROM stocks WHERE stock - reserved > 0", resultSet ->
+                resultSet.next() ? resultSet.getInt("count") : 0);
+    }
+
+    private List<Phone> findPhones(String sql, int offset, int limit) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("offset", offset);
+        params.addValue("limit", limit);
+
+        List<Phone> phones = jdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(Phone.class));
+        if (phones.isEmpty()) {
+            throw new PhonesNotFoundException();
+        }
+        setPhoneColors(phones);
+        return phones;
     }
 
     private void savePhone2Color(Long phoneId, Set<Color> colors) {
@@ -96,20 +123,11 @@ public class JdbcPhoneDao implements PhoneDao {
         jdbcTemplate.batchUpdate(SQL_INSERT_PHONE2COLOR, batchValues.toArray(new SqlParameterSource[0]));
     }
 
-    public List<Phone> findAll(int offset, int limit) {
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("offset", offset);
-        params.addValue("limit", limit);
-
-        List<Phone> phones = jdbcTemplate.query(SQL_FIND_ALL, params, new BeanPropertyRowMapper<>(Phone.class));
-        if(phones.isEmpty()) return phones;
-
+    private void setPhoneColors(List<Phone> phones) {
         Map<Long, Set<Color>> mapPhoneIdToColor = jdbcColorDao.getColors(phones.stream().map(Phone::getId).collect(Collectors.toList()));
         phones.forEach(phone -> {
             Set<Color> colors = mapPhoneIdToColor.get(phone.getId());
             phone.setColors(colors);
         });
-
-        return phones;
     }
 }
