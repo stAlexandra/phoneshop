@@ -45,6 +45,9 @@ public class Color {
 
     @Override
     public String toString() {
-        return code;
+        return "Color{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                '}';
     }
 }

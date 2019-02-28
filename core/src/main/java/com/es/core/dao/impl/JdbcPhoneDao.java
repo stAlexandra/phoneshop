@@ -22,14 +22,6 @@ import java.util.stream.Collectors;
 
 @Component
 public class JdbcPhoneDao implements PhoneDao {
-
-    @Resource
-    private NamedParameterJdbcTemplate jdbcTemplate;
-    @Resource
-    private ColorDao jdbcColorDao;
-    @Resource
-    private PhoneRowMapper phoneRowMapper;
-
     private static final String SQL_SELECT_PHONE = "SELECT * FROM phones WHERE id = :phoneId";
     private static final String SQL_INSERT_PHONE = "INSERT INTO phones VALUES (:id, :brand, :model, :price, :displaySizeInches, :weightGr," +
             ":lengthMm, :widthMm, :heightMm, :announced, :deviceType, :os, :displayResolution, :pixelDensity, " +
@@ -45,8 +37,22 @@ public class JdbcPhoneDao implements PhoneDao {
             " WHERE id=:id";
     private static final String SQL_INSERT_PHONE2COLOR = "INSERT INTO phone2color VALUES (:phoneId, :colorId)";
     private static final String SQL_FIND_ALL = "SELECT * FROM phones OFFSET :offset LIMIT :limit";
-    private static final String SQL_FIND_ALL_PRESENT_IN_STOCK = "SELECT * FROM phones ph LEFT OUTER JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 OFFSET :offset LIMIT :limit";
+    private static final String SQL_FIND_ALL_PRESENT_IN_STOCK = "SELECT ph.* FROM phones ph RIGHT OUTER JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 OFFSET :offset LIMIT :limit";
+    private static final String SQL_FIND_VALID_QUERY = "SELECT ph.* FROM phones ph RIGHT OUTER JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 AND (ph.brand LIKE '%query%' OR ph.model LIKE '%query%') OFFSET :offset LIMIT :limit";
+    private static final String SQL_FIND_VALID_SORT = "SELECT ph.* FROM phones ph RIGHT OUTER JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 ORDER BY sortName sortOrder OFFSET :offset LIMIT :limit";
+    private static final String SQL_FIND_VALID_QUERY_SORT = "SELECT ph.* FROM phones ph RIGHT OUTER JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 AND (ph.brand LIKE '%query%' OR ph.model LIKE '%query%') ORDER BY sortName sortOrder OFFSET :offset LIMIT :limit";
+    private static final String SQL_COUNT_VALID_PHONES = "SELECT COUNT(phoneId) AS count FROM stocks WHERE stock - reserved > 0";
+    private static final String SQL_COUNT_VALID_PHONES_MATCHING_QUERY = "SELECT COUNT(id) AS count FROM phones ph LEFT OUTER JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 AND (ph.brand LIKE '%query%' OR ph.model LIKE '%query%')";
+    private static final String queryParam = "query";
+    private static final String sortNameParam = "sortName";
+    private static final String sortOrderParam = "sortOrder";
 
+    @Resource
+    private NamedParameterJdbcTemplate jdbcTemplate;
+    @Resource
+    private ColorDao jdbcColorDao;
+    @Resource
+    private PhoneRowMapper phoneRowMapper;
 
     public Phone get(final Long key) throws PhonesNotFoundException {
         Map<String, Long> namedParameters = Collections.singletonMap("phoneId", key);
@@ -93,9 +99,28 @@ public class JdbcPhoneDao implements PhoneDao {
         return findPhones(SQL_FIND_ALL_PRESENT_IN_STOCK, offset, limit);
     }
 
+    public List<Phone> findAllValid(int offset, int limit, String query) {
+        return findPhones(SQL_FIND_VALID_QUERY.replaceAll(queryParam, query), offset, limit);
+    }
+
+    public List<Phone> findAllValid(int offset, int limit, String sortName, String sortOrder) {
+        return findPhones(SQL_FIND_VALID_SORT.replaceAll(sortOrderParam, sortOrder).replaceAll(sortNameParam, sortName),
+                offset, limit);
+    }
+
+    public List<Phone> findAllValid(int offset, int limit, String query, String sortName, String sortOrder) {
+        return findPhones(SQL_FIND_VALID_QUERY_SORT.replaceAll(queryParam, query)
+                .replaceFirst(sortNameParam, sortName).replaceFirst(sortOrderParam, sortOrder), offset, limit);
+    }
+
     public int findValidPhonesTotalCount() {
-        return jdbcTemplate.query("SELECT COUNT(phoneId) AS count FROM stocks WHERE stock - reserved > 0", resultSet ->
+        return jdbcTemplate.query(SQL_COUNT_VALID_PHONES, resultSet ->
                 resultSet.next() ? resultSet.getInt("count") : 0);
+    }
+
+    public int findPhonesMatchingQueryTotalCount(String query) {
+        return jdbcTemplate.query(SQL_COUNT_VALID_PHONES_MATCHING_QUERY.replaceAll(queryParam, query),
+                Collections.singletonMap("query", query), resultSet -> resultSet.next() ? resultSet.getInt("count") : 0);
     }
 
     private List<Phone> findPhones(String sql, int offset, int limit) {
