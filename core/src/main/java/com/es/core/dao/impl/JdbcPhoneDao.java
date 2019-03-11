@@ -16,7 +16,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,15 +36,35 @@ public class JdbcPhoneDao implements PhoneDao {
             " WHERE id=:id";
     private static final String SQL_INSERT_PHONE2COLOR = "INSERT INTO phone2color VALUES (:phoneId, :colorId)";
     private static final String SQL_FIND_ALL = "SELECT * FROM phones OFFSET :offset LIMIT :limit";
-    private static final String SQL_FIND_ALL_PRESENT_IN_STOCK = "SELECT ph.* FROM phones ph RIGHT OUTER JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 OFFSET :offset LIMIT :limit";
-    private static final String SQL_FIND_VALID_QUERY = "SELECT ph.* FROM phones ph RIGHT OUTER JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 AND (ph.brand LIKE '%query%' OR ph.model LIKE '%query%') OFFSET :offset LIMIT :limit";
-    private static final String SQL_FIND_VALID_SORT = "SELECT ph.* FROM phones ph RIGHT OUTER JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 ORDER BY sortName sortOrder OFFSET :offset LIMIT :limit";
-    private static final String SQL_FIND_VALID_QUERY_SORT = "SELECT ph.* FROM phones ph RIGHT OUTER JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 AND (ph.brand LIKE '%query%' OR ph.model LIKE '%query%') ORDER BY sortName sortOrder OFFSET :offset LIMIT :limit";
-    private static final String SQL_COUNT_VALID_PHONES = "SELECT COUNT(phoneId) AS count FROM stocks WHERE stock - reserved > 0";
-    private static final String SQL_COUNT_VALID_PHONES_MATCHING_QUERY = "SELECT COUNT(id) AS count FROM phones ph LEFT OUTER JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 AND (ph.brand LIKE '%query%' OR ph.model LIKE '%query%')";
-    private static final String queryParam = "query";
-    private static final String sortNameParam = "sortName";
-    private static final String sortOrderParam = "sortOrder";
+    private static final String SQL_FIND_ALL_PRESENT_IN_STOCK = "SELECT ph.* FROM phones ph " +
+            "RIGHT OUTER JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 " +
+            "AND ph.price > 0 " +
+            "OFFSET :offset LIMIT :limit";
+    private static final String SQL_FIND_VALID_QUERY = "SELECT ph.* FROM phones ph " +
+            "RIGHT OUTER JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 " +
+            "AND ph.price > 0 " +
+            "AND (ph.brand ILIKE CONCAT('%', :query, '%') OR ph.model ILIKE CONCAT('%', :query, '%')) " +
+            "OFFSET :offset LIMIT :limit";
+    private static final String SQL_FIND_VALID_SORT = "SELECT ph.* FROM phones ph " +
+            "RIGHT OUTER JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 " +
+            "AND ph.price > 0 " +
+            "ORDER BY sortName sortOrder OFFSET :offset LIMIT :limit";
+    private static final String SQL_FIND_VALID_QUERY_SORT = "SELECT ph.* FROM phones ph " +
+            "RIGHT OUTER JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 " +
+            "AND ph.price > 0 " +
+            "AND (ph.brand ILIKE CONCAT('%', :query, '%') OR ph.model ILIKE CONCAT('%', :query, '%')) " +
+            "ORDER BY sortName sortOrder OFFSET :offset LIMIT :limit";
+    private static final String SQL_COUNT_VALID_PHONES = "SELECT COUNT(phoneId) AS count FROM stocks st " +
+            "LEFT OUTER JOIN phones ph ON ph.id = st.phoneId " +
+            "WHERE st.stock - st.reserved > 0 AND ph.price > 0";
+    private static final String SQL_COUNT_VALID_PHONES_MATCHING_QUERY = "SELECT COUNT(id) AS count FROM phones ph " +
+            "RIGHT OUTER JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 " +
+            "AND ph.price > 0 " +
+            "AND (ph.brand ILIKE CONCAT('%', :query, '%') OR ph.model ILIKE CONCAT('%', :query, '%'))";
+    private static final String QUERY_PARAM = "query";
+    private static final String SORT_NAME_PARAM = "sortName";
+    private static final String SORT_ORDER_PARAM = "sortOrder";
+    //CONCAT('%', :query, '%')
 
     @Resource
     private NamedParameterJdbcTemplate jdbcTemplate;
@@ -92,25 +111,28 @@ public class JdbcPhoneDao implements PhoneDao {
     }
 
     public List<Phone> findAll(int offset, int limit) {
-        return findPhones(SQL_FIND_ALL, offset, limit);
+        return findPhones(SQL_FIND_ALL, offset, limit, null);
     }
 
     public List<Phone> findAllValid(int offset, int limit) {
-        return findPhones(SQL_FIND_ALL_PRESENT_IN_STOCK, offset, limit);
+        return findPhones(SQL_FIND_ALL_PRESENT_IN_STOCK, offset, limit, null);
     }
 
     public List<Phone> findAllValid(int offset, int limit, String query) {
-        return findPhones(SQL_FIND_VALID_QUERY.replaceAll(queryParam, query), offset, limit);
+        MapSqlParameterSource params = new MapSqlParameterSource("query", query);
+        return findPhones(SQL_FIND_VALID_QUERY, offset, limit, params);
+
     }
 
     public List<Phone> findAllValid(int offset, int limit, String sortName, String sortOrder) {
-        return findPhones(SQL_FIND_VALID_SORT.replaceAll(sortOrderParam, sortOrder).replaceAll(sortNameParam, sortName),
-                offset, limit);
+        return findPhones(SQL_FIND_VALID_SORT.replaceFirst(SORT_ORDER_PARAM, sortOrder).replaceFirst(SORT_NAME_PARAM, sortName),
+                offset, limit, null);
     }
 
     public List<Phone> findAllValid(int offset, int limit, String query, String sortName, String sortOrder) {
-        return findPhones(SQL_FIND_VALID_QUERY_SORT.replaceAll(queryParam, query)
-                .replaceFirst(sortNameParam, sortName).replaceFirst(sortOrderParam, sortOrder), offset, limit);
+        return findPhones(SQL_FIND_VALID_QUERY_SORT.replaceFirst(SORT_NAME_PARAM, sortName)
+                        .replaceFirst(SORT_ORDER_PARAM, sortOrder),
+                offset, limit, new MapSqlParameterSource(QUERY_PARAM, query));
     }
 
     public int findValidPhonesTotalCount() {
@@ -119,20 +141,23 @@ public class JdbcPhoneDao implements PhoneDao {
     }
 
     public int findPhonesMatchingQueryTotalCount(String query) {
-        return jdbcTemplate.query(SQL_COUNT_VALID_PHONES_MATCHING_QUERY.replaceAll(queryParam, query),
-                Collections.singletonMap("query", query), resultSet -> resultSet.next() ? resultSet.getInt("count") : 0);
+        return jdbcTemplate.query(SQL_COUNT_VALID_PHONES_MATCHING_QUERY,
+                Collections.singletonMap(QUERY_PARAM, query),
+                resultSet -> resultSet.next() ? resultSet.getInt("count") : 0);
     }
 
-    private List<Phone> findPhones(String sql, int offset, int limit) {
-        MapSqlParameterSource params = new MapSqlParameterSource();
+    private List<Phone> findPhones(String sql, int offset, int limit, MapSqlParameterSource params) {
+        if(params == null) {
+            params = new MapSqlParameterSource();
+        }
         params.addValue("offset", offset);
         params.addValue("limit", limit);
 
         List<Phone> phones = jdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(Phone.class));
-        if (phones.isEmpty()) {
-            throw new PhonesNotFoundException();
+
+        if (!phones.isEmpty()) {
+            setPhoneColors(phones);
         }
-        setPhoneColors(phones);
         return phones;
     }
 
