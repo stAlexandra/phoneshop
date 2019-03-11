@@ -1,8 +1,13 @@
 package com.es.phoneshop.web.dataview;
 
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
+
 public class UpdateCartItemRequestData {
+    @NotNull
     private Long phoneId;
+    @NotNull @DecimalMin(value = "1", message = "Should be greater than or equal to 1")
     private Long quantity;
 
     public Long getPhoneId() {

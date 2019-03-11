@@ -3,6 +3,7 @@ package com.es.core.service.impl;
 import com.es.core.dao.PhoneDao;
 import com.es.core.model.phone.Phone;
 import com.es.core.service.PhoneService;
+import org.h2.util.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -22,25 +23,23 @@ public class PhoneServiceImpl implements PhoneService {
     private PhoneDao phoneDao;
 
     public Page<Phone> getPage(int currentPage, int pageSize, String sortName, String sortOrder) {
-        List<Phone> phonesOnPageList;
         int startItem = currentPage * pageSize;
         int totalSize = phoneDao.findValidPhonesTotalCount();
 
-        phonesOnPageList = phoneDao.findAllValid(startItem - 1, pageSize,
-                sortName == null ? defaultPhonesSortName : sortName,
-                sortOrder == null ? defaultPhonesSortOrder : sortOrder);
+        List<Phone> phonesOnPageList = phoneDao.findAllValid(startItem - 1, pageSize,
+                StringUtils.isNullOrEmpty(sortName) ? defaultPhonesSortName : sortName,
+                StringUtils.isNullOrEmpty(sortName) ? defaultPhonesSortOrder : sortOrder);
 
         return new PageImpl<>(phonesOnPageList, PageRequest.of(currentPage, pageSize), totalSize);
     }
 
     public Page<Phone> getPage(int currentPage, int pageSize, String query, String sortName, String sortOrder) {
-        List<Phone> phonesOnPageList;
         int totalSize = phoneDao.findPhonesMatchingQueryTotalCount(query);
         int startItem = currentPage * pageSize;
 
-        phonesOnPageList = phoneDao.findAllValid(startItem - 1, pageSize, query,
-                sortName == null ? defaultPhonesSortName : sortName,
-                sortOrder == null ? defaultPhonesSortOrder : sortOrder);
+        List<Phone> phonesOnPageList = phoneDao.findAllValid(startItem - 1, pageSize, query,
+                StringUtils.isNullOrEmpty(sortName) ? defaultPhonesSortName : sortName,
+                StringUtils.isNullOrEmpty(sortName) ? defaultPhonesSortOrder : sortOrder);
 
         return new PageImpl<>(phonesOnPageList, PageRequest.of(currentPage, pageSize), totalSize);
     }

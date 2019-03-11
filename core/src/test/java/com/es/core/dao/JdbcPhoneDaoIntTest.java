@@ -72,12 +72,6 @@ public class JdbcPhoneDaoIntTest extends AbstractPhoneTest {
         assertEquals(brandName, receivedPhone.getBrand());
     }
 
-    @Test//(expected = PhonesNotFoundException.class)
-    public void testFindPhonesNoResults() {
-        List<Phone> phones = jdbcPhoneDao.findAll(0, 10);
-        System.out.println(phones.size());
-    }
-
     @Test
     public void testFindAll() {
         List<Phone> receivedPhoneList = jdbcPhoneDao.findAll(0, 10);
@@ -116,10 +110,9 @@ public class JdbcPhoneDaoIntTest extends AbstractPhoneTest {
 
     @Test
     public void testFindAllWithPositiveStock() {
-        List<Phone> validPhonesList = jdbcPhoneDao.findAllValid(0, 10);
-        List<Phone> allPhonesList = jdbcPhoneDao.findAll(0, 10);
-        assertEquals(4, validPhonesList.size());
-        assertTrue(validPhonesList.size() <= allPhonesList.size());
+        int initValidPhonesListSize = jdbcPhoneDao.findAllValid(0, 10).size();
+        jdbcPhoneDao.save(getPhone());
+        assertEquals(initValidPhonesListSize, jdbcPhoneDao.findAllValid(0, 10).size());
     }
 
     @Test

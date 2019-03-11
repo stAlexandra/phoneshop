@@ -34,8 +34,8 @@ public class ProductListPageController {
     @RequestMapping(method = RequestMethod.GET)
     public String showProductListPage(Model model,
                                       @RequestParam(name = "page", defaultValue = DEFAULT_CURRENT_PAGE) Integer currentPageNum,
-                                      @RequestParam(name = "sort", required = false) String sortName,
-                                      @RequestParam(name = "order", required = false) String sortOrder) {
+                                      @RequestParam(name = "sort", defaultValue = "") String sortName,
+                                      @RequestParam(name = "order", defaultValue = "") String sortOrder) {
         Page<Phone> phonePage = phoneService.getPage(currentPageNum - 1, DEFAULT_PAGE_SIZE, sortName, sortOrder);
         int totalPages = phonePage.getTotalPages();
 
@@ -48,8 +48,8 @@ public class ProductListPageController {
     public String showProductListPage(Model model,
                                       @RequestParam(name = "page", defaultValue = DEFAULT_CURRENT_PAGE) Integer currentPageNum,
                                       @RequestParam(name = "query") String query,
-                                      @RequestParam(name = "sort", required = false) String sortName,
-                                      @RequestParam(name = "order", required = false) String sortOrder) {
+                                      @RequestParam(name = "sort", defaultValue = "") String sortName,
+                                      @RequestParam(name = "order", defaultValue = "") String sortOrder) {
         Page<Phone> phonePage = phoneService.getPage(currentPageNum - 1, DEFAULT_PAGE_SIZE, query, sortName, sortOrder);
         int totalPages = phonePage.getTotalPages();
 

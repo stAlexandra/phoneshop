@@ -15,6 +15,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping(value = "/ajaxCart")
@@ -22,18 +23,9 @@ public class AjaxCartController {
     @Resource
     private CartService cartService;
 
-    @Qualifier("cartItemRequestDataValidator")
-    @Autowired
-    private Validator validator;
-
-    @InitBinder
-    protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(validator);
-    }
-
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public UpdateCartItemResponseData addPhone(@Validated @RequestBody UpdateCartItemRequestData requestData, BindingResult bindingResult) {
+    public UpdateCartItemResponseData addPhone(@Valid @RequestBody UpdateCartItemRequestData requestData, BindingResult bindingResult) {
         UpdateCartItemResponseData responseData = new UpdateCartItemResponseData();
         if (bindingResult.hasErrors()) {
             responseData.setQuantityError(bindingResult.getFieldError("quantity"));

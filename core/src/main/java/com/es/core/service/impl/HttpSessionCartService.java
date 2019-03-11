@@ -6,6 +6,7 @@ import com.es.core.model.cart.CartItem;
 import com.es.core.model.phone.Phone;
 import com.es.core.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -18,7 +19,8 @@ public class HttpSessionCartService implements CartService {
     @Resource(name = "jdbcPhoneDao")
     private PhoneDao phoneDao;
 
-    @Autowired(required = false)
+    @Autowired
+    @Qualifier("cart")
     private Cart cart;
 
     @Override

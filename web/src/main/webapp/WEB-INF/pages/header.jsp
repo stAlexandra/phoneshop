@@ -10,7 +10,7 @@
                 <p>
                     <span id="numItems">${cartNumItems}</span> items <span id="totalPrice">${cartTotalPrice}</span>$
                 </p>
-                <input type="button" class="btn btn-outline-primary align-self-end" value="Go to cart">
+                <input type="button" class="btn btn-primary align-self-end" value="Go to cart">
             </div>
         </div>
     </div>
