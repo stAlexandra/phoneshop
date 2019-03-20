@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="row">
     <div class="col-10">
         <h1 class="display-3">Phonify</h1>
@@ -10,7 +11,7 @@
                 <p>
                     <span id="numItems">${cartNumItems}</span> items <span id="totalPrice">${cartTotalPrice}</span>$
                 </p>
-                <input type="button" class="btn btn-primary align-self-end" value="Go to cart">
+                <a class="btn btn-primary align-self-end" role="button" href="<c:url value="/cart"/>">Go to cart</a>
             </div>
         </div>
     </div>

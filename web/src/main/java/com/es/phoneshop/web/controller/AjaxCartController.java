@@ -4,26 +4,32 @@ import com.es.core.model.cart.Cart;
 import com.es.core.service.CartService;
 import com.es.phoneshop.web.dataview.UpdateCartItemRequestData;
 import com.es.phoneshop.web.dataview.UpdateCartItemResponseData;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Validator;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.WebDataBinder;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping(value = "/ajaxCart")
+@RequestMapping(value = "**/ajaxCart")
 public class AjaxCartController {
     @Resource
     private CartService cartService;
 
-    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ExceptionHandler(InvalidFormatException.class)
+    @ResponseBody
+    public UpdateCartItemResponseData handleInvalidFormatError(){
+        UpdateCartItemResponseData responseData = new UpdateCartItemResponseData();
+        FieldError quantityFieldError = new FieldError("updateCartItemRequestData", "quantity", "wrong format");
+        responseData.setQuantityError(quantityFieldError);
+        return responseData;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public UpdateCartItemResponseData addPhone(@Valid @RequestBody UpdateCartItemRequestData requestData, BindingResult bindingResult) {
         UpdateCartItemResponseData responseData = new UpdateCartItemResponseData();

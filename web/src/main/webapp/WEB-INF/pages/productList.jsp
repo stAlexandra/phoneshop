@@ -103,11 +103,13 @@
         <c:forEach var="phone" items="${phonePage.content}" varStatus="status">
             <tr class="row">
                 <td class="col">
-                    <img src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${phone.imageUrl}"
-                         class="img-thumbnail" alt="Phone preview" width="150" height="150">
+                    <a href="<c:url value="/productDetails/${phone.id}"/>">
+                        <img src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${phone.imageUrl}"
+                             class="img-thumbnail" alt="Phone preview" width="150" height="150">
+                    </a>
                 </td>
                 <td class="col">${phone.brand}</td>
-                <td class="col">${phone.model}</td>
+                <td class="col"><a href="<c:url value="/productDetails/${phone.id}"/>">${phone.model}</a></td>
                 <td class="col">
                     <c:forEach var="color" items="${phone.colors}">
                         ${color.code}
@@ -116,8 +118,8 @@
                 <td class="col">${phone.displaySizeInches}"</td>
                 <td class="col">$ ${phone.price}</td>
                 <td class="col">
-                    <input type="number" id="quantity${phone.id}" name="quantity" class="form-control">
-                    <div id="quantityError${phone.id}" name="quantityError" class="text-danger"></div>
+                    <input id="quantity${phone.id}" name="quantity" type="text" class="form-control">
+                    <div id="quantityError${phone.id}" class="text-danger"></div>
                 </td>
                 <td class="col">
                     <button id="addToCartButton" type="button" class="btn btn-outline-primary"
@@ -131,12 +133,12 @@
     </table>
     <nav aria-label="Product list pages">
         <ul class="pagination pagination-lg justify-content-end">
-                <c:choose>
-                    <c:when test="${phonePage.hasPrevious()}">
-                        <li class="page-item"></c:when>
-                    <c:otherwise>
-                        <li class="page-item disabled">
-                    </c:otherwise>
+            <c:choose>
+            <c:when test="${phonePage.hasPrevious()}">
+            <li class="page-item"></c:when>
+                <c:otherwise>
+            <li class="page-item disabled">
+                </c:otherwise>
                 </c:choose>
                 <a class="page-link" href="<c:url value="">
                             <c:param name="page" value="1"/>
@@ -150,13 +152,13 @@
                                 <c:param name="order" value="${param.order}"/>
                             </c:if>
                         </c:url>">&larr;</a>
-                </li>
-                <c:choose>
-                    <c:when test="${phonePage.hasPrevious()}">
-                        <li class="page-item"></c:when>
-                    <c:otherwise>
-                        <li class="page-item disabled"></c:otherwise>
-                    </c:choose>
+            </li>
+            <c:choose>
+            <c:when test="${phonePage.hasPrevious()}">
+            <li class="page-item"></c:when>
+                <c:otherwise>
+            <li class="page-item disabled"></c:otherwise>
+                </c:choose>
                 <a class="page-link" href="<c:url value="">
                             <c:param name="page" value="${phonePage.number}"/>
                             <c:if test="${not empty param.query}">
@@ -169,7 +171,7 @@
                                 <c:param name="order" value="${param.order}"/>
                             </c:if>
                         </c:url>">&laquo;</a>
-                </li>
+            </li>
 
             <c:forEach var="i" begin="${beginPage}" end="${endPage}" varStatus="status">
                 <c:choose>
@@ -198,14 +200,14 @@
             </c:forEach>
 
             <c:choose>
-                    <c:when test="${phonePage.hasNext()}">
-                        <li class="page-item">
-                    </c:when>
-                    <c:otherwise>
-                        <li class="page-item disabled">
-                    </c:otherwise>
-            </c:choose>
-                    <a class="page-link" href="<c:url value="">
+            <c:when test="${phonePage.hasNext()}">
+            <li class="page-item">
+                </c:when>
+                <c:otherwise>
+            <li class="page-item disabled">
+                </c:otherwise>
+                </c:choose>
+                <a class="page-link" href="<c:url value="">
                             <c:param name="page" value="${phonePage.number + 2}"/>
                             <c:if test="${not empty param.query}">
                                 <c:param name="query" value="${param.query}"/>
@@ -220,13 +222,13 @@
             </li>
 
             <c:choose>
-                <c:when test="${phonePage.hasNext()}">
-                    <li class="page-item">
+            <c:when test="${phonePage.hasNext()}">
+            <li class="page-item">
                 </c:when>
                 <c:otherwise>
-                    <li class="page-item disabled">
+            <li class="page-item disabled">
                 </c:otherwise>
-            </c:choose>
+                </c:choose>
                 <a class="page-link" href="<c:url value="">
                             <c:param name="page" value="${lastPage}"/>
                             <c:if test="${not empty param.query}">

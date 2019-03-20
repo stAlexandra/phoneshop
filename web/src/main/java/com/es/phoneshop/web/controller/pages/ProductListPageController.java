@@ -1,11 +1,12 @@
 package com.es.phoneshop.web.controller.pages;
 
-import com.es.core.model.cart.Cart;
 import com.es.core.model.phone.Phone;
 import com.es.core.service.CartService;
 import com.es.core.service.PhoneService;
 import com.es.core.util.PageIndexUtil;
+import com.es.phoneshop.web.util.MiniCartModelAttributeSetter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,17 +19,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping(value = "/productList")
 public class ProductListPageController {
     private static final String DEFAULT_CURRENT_PAGE = "1";
-    private static final int DEFAULT_PAGE_SIZE = 10;
-    private static final int DEFAULT_NUM_PAGE_INDEXES = 9;
     private static final String VIEW_NAME = "productList";
+
+    private final int defaultPageSize;
+    private final int defaultNumPageIndexes;
 
     private PhoneService phoneService;
     private CartService cartService;
 
     @Autowired
-    public ProductListPageController(PhoneService phoneService, CartService cartService) {
+    public ProductListPageController(PhoneService phoneService, CartService cartService,
+                                     @Value("${plp.defaultPageSize}") int pageSize,
+                                     @Value("${plp.defaultNumPageIndexes}") int numPageIndexes) {
         this.phoneService = phoneService;
         this.cartService = cartService;
+        this.defaultPageSize = pageSize;
+        this.defaultNumPageIndexes = numPageIndexes;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -36,11 +42,11 @@ public class ProductListPageController {
                                       @RequestParam(name = "page", defaultValue = DEFAULT_CURRENT_PAGE) Integer currentPageNum,
                                       @RequestParam(name = "sort", defaultValue = "") String sortName,
                                       @RequestParam(name = "order", defaultValue = "") String sortOrder) {
-        Page<Phone> phonePage = phoneService.getPage(currentPageNum - 1, DEFAULT_PAGE_SIZE, sortName, sortOrder);
+        Page<Phone> phonePage = phoneService.getPage(currentPageNum - 1, defaultPageSize, sortName, sortOrder);
         int totalPages = phonePage.getTotalPages();
 
         addPageInfoAttributes(model, phonePage, currentPageNum, totalPages);
-        addMiniCartInfoAttributes(model, cartService.getCart());
+        MiniCartModelAttributeSetter.addMiniCartInfoAttributes(model, cartService.getCart());
         return VIEW_NAME;
     }
 
@@ -50,23 +56,18 @@ public class ProductListPageController {
                                       @RequestParam(name = "query") String query,
                                       @RequestParam(name = "sort", defaultValue = "") String sortName,
                                       @RequestParam(name = "order", defaultValue = "") String sortOrder) {
-        Page<Phone> phonePage = phoneService.getPage(currentPageNum - 1, DEFAULT_PAGE_SIZE, query, sortName, sortOrder);
+        Page<Phone> phonePage = phoneService.getPage(currentPageNum - 1, defaultPageSize, query, sortName, sortOrder);
         int totalPages = phonePage.getTotalPages();
 
         addPageInfoAttributes(model, phonePage, currentPageNum, totalPages);
-        addMiniCartInfoAttributes(model, cartService.getCart());
+        MiniCartModelAttributeSetter.addMiniCartInfoAttributes(model, cartService.getCart());
         return VIEW_NAME;
     }
 
-    private void addPageInfoAttributes(Model model, Page<Phone> phonePage, int current, int total){
+    private void addPageInfoAttributes(Model model, Page<Phone> phonePage, int current, int total) {
         model.addAttribute("phonePage", phonePage);
-        model.addAttribute("beginPage", PageIndexUtil.getBegin(current, Math.min(DEFAULT_NUM_PAGE_INDEXES, total), total));
-        model.addAttribute("endPage", PageIndexUtil.getEnd(current, Math.min(DEFAULT_NUM_PAGE_INDEXES, total), total));
+        model.addAttribute("beginPage", PageIndexUtil.getBegin(current, Math.min(defaultNumPageIndexes, total), total));
+        model.addAttribute("endPage", PageIndexUtil.getEnd(current, Math.min(defaultNumPageIndexes, total), total));
         model.addAttribute("lastPage", total);
-    }
-
-    private void addMiniCartInfoAttributes(Model model, Cart cart){
-        model.addAttribute("cartNumItems", cart.getItems().size());
-        model.addAttribute("cartTotalPrice", cart.getTotalPrice());
     }
 }

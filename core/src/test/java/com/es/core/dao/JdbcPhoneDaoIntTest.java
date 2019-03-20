@@ -6,8 +6,8 @@ import com.es.core.exception.PhonesNotFoundException;
 import com.es.core.model.phone.Color;
 import com.es.core.model.phone.Phone;
 import org.junit.Assert;
-import org.junit.runner.RunWith;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
@@ -16,8 +16,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(locations = "classpath:context/applicationContext-core.xml")

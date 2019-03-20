@@ -17,8 +17,10 @@ import java.util.List;
 public class PhoneServiceImpl implements PhoneService {
     @Value("${phones.defaultSortName}")
     private String defaultPhonesSortName;
+
     @Value("${phones.defaultSortOrder}")
     private String defaultPhonesSortOrder;
+
     @Resource(name = "jdbcPhoneDao")
     private PhoneDao phoneDao;
 
