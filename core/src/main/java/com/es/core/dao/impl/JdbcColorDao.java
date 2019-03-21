@@ -57,7 +57,9 @@ public class JdbcColorDao implements ColorDao {
             namedParams.addValue("code", color.getCode());
 
             jdbcTemplate.update(SQL_MERGE_INTO_COLORS, namedParams, keyHolder);
-            color.setId(keyHolder.getKey().longValue());
+            if(!keyHolder.getKeyList().isEmpty()) {
+                color.setId(keyHolder.getKey().longValue());
+            }
         }
     }
 

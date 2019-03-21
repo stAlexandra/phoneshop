@@ -2,34 +2,35 @@ package com.es.core.dao;
 
 import com.es.core.dao.impl.JdbcColorDao;
 import com.es.core.dao.impl.JdbcPhoneDao;
-import com.es.core.exception.PhoneNotFoundException;
+import com.es.core.exception.PhonesNotFoundException;
 import com.es.core.model.phone.Color;
 import com.es.core.model.phone.Phone;
 import org.junit.Assert;
-import org.junit.runner.RunWith;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(locations = "classpath:context/applicationContext-core.xml")
+@Sql("classpath:db/testdata-phones.sql")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class JdbcPhoneDaoIntTest extends AbstractPhoneTest{
-
+public class JdbcPhoneDaoIntTest extends AbstractPhoneTest {
     @Autowired
-    JdbcPhoneDao jdbcPhoneDao;
+    private JdbcPhoneDao jdbcPhoneDao;
     @Autowired
-    JdbcColorDao jdbcColorDao;
+    private JdbcColorDao jdbcColorDao;
 
-    @Test(expected = PhoneNotFoundException.class)
-    public void testGetPhoneNotExist(){
+    @Test(expected = PhonesNotFoundException.class)
+    public void testGetPhoneNotExist() {
         jdbcPhoneDao.get(12345L);
     }
 
@@ -44,14 +45,14 @@ public class JdbcPhoneDaoIntTest extends AbstractPhoneTest{
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testSaveEmptyPhone(){
+    public void testSaveEmptyPhone() {
         Phone phone = new Phone();
 
         jdbcPhoneDao.save(phone);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testSavePhoneWithoutRequiredFields(){
+    public void testSavePhoneWithoutRequiredFields() {
         Phone phone = new Phone();
         phone.setModel("model");
 
@@ -60,91 +61,64 @@ public class JdbcPhoneDaoIntTest extends AbstractPhoneTest{
 
     @Test
     public void testUpdate() {
-        Phone givenPhone = getPhone();
-        jdbcPhoneDao.save(givenPhone);
+        Phone phone = jdbcPhoneDao.get(1000L);
 
         String brandName = "NewBrandName";
-        givenPhone.setBrand(brandName);
-        jdbcPhoneDao.save(givenPhone);
+        phone.setBrand(brandName);
+        jdbcPhoneDao.save(phone);
 
-        Phone receivedPhone = jdbcPhoneDao.get(givenPhone.getId());
-        assertEquals(givenPhone.getId(), receivedPhone.getId());
+        Phone receivedPhone = jdbcPhoneDao.get(1000L);
+        assertEquals(phone.getId(), receivedPhone.getId());
         assertEquals(brandName, receivedPhone.getBrand());
     }
 
     @Test
-    public void testFindPhonesNoResults(){
-        List<Phone> phones = jdbcPhoneDao.findAll(0, 10);
-        assertEquals(0, phones.size());
-    }
+    public void testFindAll() {
+        List<Phone> receivedPhoneList = jdbcPhoneDao.findAll(0, 10);
 
-    @Test
-    public void testSaveListFindAll() {
-        List<Phone> testPhones = getPhones(5);
-        testPhones.forEach(phone -> jdbcPhoneDao.save(phone));
-
-        List<Phone> receivedPhoneList = jdbcPhoneDao.findAll(0, testPhones.size());
-
-        assertEquals(testPhones.size(), receivedPhoneList.size());
+        assertNotNull(receivedPhoneList);
         receivedPhoneList.stream().map(Phone::getId).forEach(Assert::assertNotNull);
     }
 
     @Test
-    public void testGetColorsForPhone(){
-        Set<Color> myColors = new HashSet<>();
-        myColors.add(new Color("1212"));
-        myColors.add(new Color("1313"));
-        Phone phone = getPhone();
-        phone.setColors(myColors);
-        jdbcPhoneDao.save(phone);
+    public void testGetColorsForPhone() {
+        Phone receivedPhone = jdbcPhoneDao.get(1001L);
+        Set<Color> colors = receivedPhone.getColors();
 
-        Phone receivedPhone = jdbcPhoneDao.get(phone.getId());
-
-        assertEquals(myColors.size(), receivedPhone.getColors().size());
-        receivedPhone.getColors().forEach(color -> assertNotNull(color.getId()));
+        assertEquals(1, colors.size());
+        assertEquals("White", colors.iterator().next().getCode());
     }
 
     @Test
-    public void testGetColorsForManyPhones(){
-        Set<Color> colors1 = new HashSet<>();
-        colors1.add(new Color("1111"));
-        colors1.add(new Color("2222"));
-        Set<Color> colors2 = new HashSet<>();
-        colors2.add(new Color("3333"));
-        colors2.add(new Color("4444"));
-
-        Phone phone1 = getPhone();
-        phone1.setColors(colors1);
-        Phone phone2 = getPhone();
-        phone2.setColors(colors2);
-
-        jdbcPhoneDao.save(phone1);
-        jdbcPhoneDao.save(phone2);
-
-        Map<Long, Set<Color>> mapPhoneIdToColors = jdbcColorDao.getColors(Arrays.asList(phone1.getId(), phone2.getId()));
+    public void testGetColorsForManyPhones() {
+        Map<Long, Set<Color>> mapPhoneIdToColors = jdbcColorDao.getColors(Arrays.asList(1002L, 1006L));
 
         assertNotNull(mapPhoneIdToColors);
         assertEquals(2, mapPhoneIdToColors.keySet().size());
-        assertEquals(colors1.size() + colors2.size(), mapPhoneIdToColors.values().stream().mapToInt(Collection::size).sum());
+        assertEquals(3, mapPhoneIdToColors.values().stream().mapToInt(Collection::size).sum());
     }
 
     @Test
-    public void testFindAllReturnsColors(){
-        Color color1 = new Color("111");
-        Color color2 = new Color("222");
-        Phone phone1 = getPhone();
-        phone1.setColors(Collections.singleton(color1));
-        Phone phone2 = getPhone();
-        phone2.setColors(Collections.singleton(color2));
-
-        jdbcPhoneDao.save(phone1);
-        jdbcPhoneDao.save(phone2);
+    public void testFindAllReturnsColors() {
         List<Phone> phones = jdbcPhoneDao.findAll(0, 10);
 
         assertNotNull(phones);
-        for(Phone phone : phones){
+        for (Phone phone : phones) {
             assertNotNull(phone.getColors());
-            assertThat(phone.getColors(), either(hasItem(color1)).or(hasItem(color2)));
         }
     }
+
+    @Test
+    public void testFindAllWithPositiveStock() {
+        int initValidPhonesListSize = jdbcPhoneDao.findAllValid(0, 10).size();
+        jdbcPhoneDao.save(getPhone());
+        assertEquals(initValidPhonesListSize, jdbcPhoneDao.findAllValid(0, 10).size());
+    }
+
+    @Test
+    public void testFindValidPhonesTotalCount() {
+        assertEquals(jdbcPhoneDao.findAllValid(0, 10).size(), jdbcPhoneDao.findValidPhonesTotalCount());
+    }
+
+
 }

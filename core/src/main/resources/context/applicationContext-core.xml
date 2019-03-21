@@ -15,7 +15,7 @@
                 <value>classpath:conf/application.properties</value>
             </list>
         </property>
-        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="ignoreUnresolvablePlaceholders" value="false"/>
     </bean>
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -32,4 +32,7 @@
     <jdbc:initialize-database enabled="${db.insertSchema}" data-source="dataSource">
         <jdbc:script location="classpath:db/schema.sql" />
     </jdbc:initialize-database>
+
+    <bean id="cart" class="com.es.core.model.cart.Cart">
+    </bean>
 </beans>
