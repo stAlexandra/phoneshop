@@ -1,25 +1,49 @@
 package com.es.phoneshop.web.controller.pages;
 
 import com.es.core.service.CartService;
+import com.es.phoneshop.web.dataview.UpdateCartItemRequestData;
+import com.es.phoneshop.web.dataview.UpdateCartRequestData;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
-@RequestMapping(value = "/cart")
 public class CartPageController {
-    @Resource
+    @Resource(name = "httpSessionCartService")
     private CartService cartService;
 
-    @RequestMapping(method = RequestMethod.GET)
-    public void getCart() {
-        cartService.getCart();
+    @GetMapping(value = "/cart")
+    public String getCart(Model model) {
+        model.addAttribute("cart", cartService.getCart());
+        model.addAttribute("updateCartRequestData", new UpdateCartRequestData());
+        return "cart";
     }
 
-    @RequestMapping(method = RequestMethod.PUT)
-    public void updateCart() {
-        cartService.update(null);
+    @PutMapping(value = "/cart")
+    public String updateCart(@Valid @ModelAttribute UpdateCartRequestData updateCartRequestData, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()){
+            return "cart";
+        }
+        Map<Long, Long> phoneIdToQuantity = new HashMap<>();
+        for(UpdateCartItemRequestData cartItem : updateCartRequestData.getCartItemDataList()){
+            phoneIdToQuantity.put(cartItem.getPhoneId(), cartItem.getQuantity());
+        }
+        cartService.update(phoneIdToQuantity);
+
+        return "redirect:/cart";
     }
+
+    @DeleteMapping(value = "/cart/{id:[\\d]+}")
+    public String deleteItem(@PathVariable("id") Long phoneId, ModelMap model){
+        cartService.remove(phoneId);
+        return "redirect:/cart";
+    }
+
 }
