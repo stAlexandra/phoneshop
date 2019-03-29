@@ -1,49 +1,58 @@
 package com.es.phoneshop.web.controller.pages;
 
+import com.es.core.model.cart.Cart;
 import com.es.core.service.CartService;
 import com.es.phoneshop.web.dataview.UpdateCartItemRequestData;
 import com.es.phoneshop.web.dataview.UpdateCartRequestData;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.util.HashMap;
+import java.math.BigDecimal;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
+@RequestMapping("/cart")
 public class CartPageController {
-    @Resource(name = "httpSessionCartService")
+    private static final String VIEW_NAME = "cart";
+
+    @Autowired
     private CartService cartService;
 
-    @GetMapping(value = "/cart")
+    @GetMapping
     public String getCart(Model model) {
-        model.addAttribute("cart", cartService.getCart());
-        model.addAttribute("updateCartRequestData", new UpdateCartRequestData());
-        return "cart";
+        Cart cart = cartService.getCart();
+        model.addAttribute("cart", cart);
+        model.addAttribute("updateCartRequestData", new UpdateCartRequestData(cart));
+        return VIEW_NAME;
     }
 
-    @PutMapping(value = "/cart")
-    public String updateCart(@Valid @ModelAttribute UpdateCartRequestData updateCartRequestData, BindingResult bindingResult) {
+    @PutMapping
+    public ModelAndView updateCart(@Valid @ModelAttribute UpdateCartRequestData updateCartRequestData, BindingResult bindingResult,
+                                   ModelMap model) {
         if(bindingResult.hasErrors()){
-            return "cart";
+            cartService.getCart().setTotalPrice(BigDecimal.ZERO);
+            model.addAttribute("cart", cartService.getCart());
+            model.addAttribute("updateCartRequestData", updateCartRequestData);
+            return new ModelAndView(VIEW_NAME, model, HttpStatus.BAD_REQUEST);
         }
-        Map<Long, Long> phoneIdToQuantity = new HashMap<>();
-        for(UpdateCartItemRequestData cartItem : updateCartRequestData.getCartItemDataList()){
-            phoneIdToQuantity.put(cartItem.getPhoneId(), cartItem.getQuantity());
-        }
+        Map<Long, Long> phoneIdToQuantity = updateCartRequestData.getCartItemDataList().stream()
+                .collect(Collectors.toMap(UpdateCartItemRequestData::getPhoneId, UpdateCartItemRequestData::getQuantity));
         cartService.update(phoneIdToQuantity);
-
-        return "redirect:/cart";
+        return new ModelAndView("redirect:/" + VIEW_NAME);
     }
 
-    @DeleteMapping(value = "/cart/{id:[\\d]+}")
-    public String deleteItem(@PathVariable("id") Long phoneId, ModelMap model){
+    @DeleteMapping(path = "/{id}")
+    public String deleteItem(@PathVariable("id") Long phoneId){
         cartService.remove(phoneId);
-        return "redirect:/cart";
+        return "redirect:/" + VIEW_NAME;
     }
 
 }

@@ -3,13 +3,20 @@ package com.es.phoneshop.web.dataview;
 import javax.validation.constraints.*;
 
 public class UpdateCartItemRequestData {
-    @NotNull
     private Long phoneId;
 
     @NotNull
     @Min(value = 1L)
     @Max(value = 20L)
     private Long quantity;
+
+    public UpdateCartItemRequestData() {
+    }
+
+    public UpdateCartItemRequestData(Long phoneId, Long quantity) {
+        this.phoneId = phoneId;
+        this.quantity = quantity;
+    }
 
     public Long getPhoneId() {
         return phoneId;

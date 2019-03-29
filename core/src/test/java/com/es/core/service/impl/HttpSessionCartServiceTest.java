@@ -25,7 +25,7 @@ public class HttpSessionCartServiceTest {
     private HttpSessionCartService cartService;
 
     @Spy
-    private Cart cart = new Cart();
+    private Cart cart;
 
     @Mock
     private PhoneDao phoneDao;

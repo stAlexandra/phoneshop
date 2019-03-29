@@ -1,8 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<tags:master pageTitle="Product Details">
+<tags:master pageTitle="Product Details" showMiniCart="${true}">
     <a class="btn btn-outline-primary" href="<c:url value="/productList"/>" role="button">Back to product list</a>
     <p></p>
     <div class="row justify-content-start">
@@ -13,12 +15,17 @@
             <p class="lead">${phone.description}</p>
             <div class="card col-5">
                 <div class="card-body">
-                    <h3><strong>Price: </strong><span>${phone.price}$</span></h3>
+                    <h3>
+                        <strong>Price: </strong>
+                        <span><fmt:formatNumber value="${phone.price}" type="currency" currencyCode="USD"/></span>
+                    </h3>
                     <div class="input-group">
-                        <input class="form-control" id="quantity${phone.id}"/>
-                        <span class="input-group-btn"><button class="btn btn-primary" onclick="addToCart(${phone.id})">Add to cart</button></span>
+                        <input class="form-control" id="quantity${phone.id}" value="1"/>
+                        <div id="quantityError${phone.id}" name="quantityError" class="text-danger"></div>
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" onclick="addToCart(${phone.id})">Add to cart</button>
+                        </span>
                     </div>
-                    <div id="quantityError${phone.id}" name="quantityError" class="text-danger"></div>
                 </div>
             </div>
         </div>

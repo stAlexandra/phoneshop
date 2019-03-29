@@ -4,24 +4,19 @@ function addToCart(phoneId) {
         quantity: $("#quantity" + phoneId).val()
     };
 
+
     $.ajax({
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
         method: "POST",
         url: "ajaxCart",
         dataType: "json",
-        contentType: "application/json;charset=UTF-8",
-        data: JSON.stringify(cartItemInfo)
+        data: cartItemInfo
     }).done(function (response) {
-        if(response.quantityError == null){
-            document.getElementById("numItems").innerHTML = response.numItems;
-            document.getElementById("totalPrice").innerHTML = response.totalPrice;
-            document.getElementById("quantity" + phoneId).value = "";
-            document.getElementById("quantityError" + phoneId).innerText = "";
-        } else {
-            document.getElementById("quantityError" + phoneId).innerText = response.quantityError.defaultMessage;
-        }
+        document.getElementById("numItems").innerHTML = response.numItems;
+        document.getElementById("totalPrice").innerHTML = response.totalPrice
+            .toLocaleString("en-US", {style: "currency", currency: "USD", minimumFractionDigits: 2});
+        document.getElementById("quantity" + phoneId).value = "1";
+        document.getElementById("quantityError" + phoneId).innerText = "";
+    }).fail(function (response) {
+        document.getElementById("quantityError" + phoneId).innerText = response.responseJSON.quantityErrorMessage;
     })
 }
