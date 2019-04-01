@@ -4,6 +4,7 @@ import com.es.core.dao.PhoneDao;
 import com.es.core.model.phone.Phone;
 import com.es.core.service.PhoneService;
 import org.h2.util.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -21,7 +22,7 @@ public class PhoneServiceImpl implements PhoneService {
     @Value("${phones.defaultSortOrder}")
     private String defaultPhonesSortOrder;
 
-    @Resource(name = "jdbcPhoneDao")
+    @Autowired
     private PhoneDao phoneDao;
 
     public Page<Phone> getPage(int currentPage, int pageSize, String sortName, String sortOrder) {

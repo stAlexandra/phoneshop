@@ -1,8 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<tags:master pageTitle="Product List">
+<tags:master pageTitle="Product List" showMiniCart="${true}">
     <form method="get">
         <div class="input-group">
             <input class="form-control col-3" name="query" value="${param.query}"/>
@@ -116,9 +117,9 @@
                     </c:forEach>
                 </td>
                 <td class="col">${phone.displaySizeInches}"</td>
-                <td class="col">$ ${phone.price}</td>
+                <td class="col"><fmt:formatNumber value="${phone.price}" type="currency" currencyCode="USD"/></td>
                 <td class="col">
-                    <input id="quantity${phone.id}" name="quantity" type="text" class="form-control">
+                    <input id="quantity${phone.id}" name="quantity" type="text" value="1" class="form-control">
                     <div id="quantityError${phone.id}" class="text-danger"></div>
                 </td>
                 <td class="col">

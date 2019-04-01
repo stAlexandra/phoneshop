@@ -1,13 +1,11 @@
 package com.es.phoneshop.web.dataview;
 
-import org.springframework.validation.FieldError;
-
 import java.math.BigDecimal;
 
 public class UpdateCartItemResponseData {
     private int numItems;
-    private BigDecimal totalPrice;
-    private FieldError quantityError;
+    private BigDecimal totalPrice = BigDecimal.ZERO;
+    private String quantityErrorMessage;
 
     public int getNumItems() {
         return numItems;
@@ -25,11 +23,11 @@ public class UpdateCartItemResponseData {
         this.totalPrice = totalPrice;
     }
 
-    public FieldError getQuantityError() {
-        return quantityError;
+    public String getQuantityErrorMessage() {
+        return quantityErrorMessage;
     }
 
-    public void setQuantityError(FieldError quantityError) {
-        this.quantityError = quantityError;
+    public void setQuantityErrorMessage(String quantityErrorMessage) {
+        this.quantityErrorMessage = quantityErrorMessage;
     }
 }

@@ -8,12 +8,12 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.util.*;
 
-@Component
+@Repository
 public class JdbcColorDao implements ColorDao {
     private static final String SQL_GET_1_COLORSET = "SELECT * FROM colors INNER JOIN phone2color ON colors.id = phone2color.colorId WHERE phone2color.phoneId = :phoneId";
     private static final String SQL_GET_MULTIPLE_COLORSETS = "SELECT * FROM colors c INNER JOIN phone2color p2c ON c.id = p2c.colorId WHERE p2c.phoneId IN (:phoneIds)";

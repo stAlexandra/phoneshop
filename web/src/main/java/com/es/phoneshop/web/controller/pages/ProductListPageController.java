@@ -4,19 +4,18 @@ import com.es.core.model.phone.Phone;
 import com.es.core.service.CartService;
 import com.es.core.service.PhoneService;
 import com.es.core.util.PageIndexUtil;
-import com.es.phoneshop.web.util.MiniCartModelAttributeSetter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping(value = "/productList")
+@RequestMapping("/productList")
 public class ProductListPageController {
     private static final String DEFAULT_CURRENT_PAGE = "1";
     private static final String VIEW_NAME = "productList";
@@ -37,7 +36,7 @@ public class ProductListPageController {
         this.defaultNumPageIndexes = numPageIndexes;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public String showProductListPage(Model model,
                                       @RequestParam(name = "page", defaultValue = DEFAULT_CURRENT_PAGE) Integer currentPageNum,
                                       @RequestParam(name = "sort", defaultValue = "") String sortName,
@@ -46,11 +45,11 @@ public class ProductListPageController {
         int totalPages = phonePage.getTotalPages();
 
         addPageInfoAttributes(model, phonePage, currentPageNum, totalPages);
-        MiniCartModelAttributeSetter.addMiniCartInfoAttributes(model, cartService.getCart());
+        model.addAttribute("cart", cartService.getCart());
         return VIEW_NAME;
     }
 
-    @RequestMapping(params = {"query"}, method = RequestMethod.GET)
+    @GetMapping(params = {"query"})
     public String showProductListPage(Model model,
                                       @RequestParam(name = "page", defaultValue = DEFAULT_CURRENT_PAGE) Integer currentPageNum,
                                       @RequestParam(name = "query") String query,
@@ -60,7 +59,7 @@ public class ProductListPageController {
         int totalPages = phonePage.getTotalPages();
 
         addPageInfoAttributes(model, phonePage, currentPageNum, totalPages);
-        MiniCartModelAttributeSetter.addMiniCartInfoAttributes(model, cartService.getCart());
+        model.addAttribute("cart", cartService.getCart());
         return VIEW_NAME;
     }
 
