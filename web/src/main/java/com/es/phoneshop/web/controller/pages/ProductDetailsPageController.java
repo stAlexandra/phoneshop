@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/productDetails")
@@ -27,10 +26,8 @@ public class ProductDetailsPageController {
     }
 
     @ExceptionHandler(PhonesNotFoundException.class)
-    public ModelAndView handlePhonesNotFoundException(PhonesNotFoundException e) {
-        ModelAndView modelAndView = new ModelAndView(PHONE_NOT_FOUND_VIEW_NAME);
-        modelAndView.addObject("errorMsg", e.getMessage());
-        return modelAndView;
+    public String handlePhonesNotFoundException(PhonesNotFoundException e) {
+        return PHONE_NOT_FOUND_VIEW_NAME;
     }
 
     @GetMapping(path = "/{id}")

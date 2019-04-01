@@ -4,7 +4,6 @@ import com.es.core.model.cart.Cart;
 import com.es.core.service.CartService;
 import com.es.phoneshop.web.dataview.UpdateCartItemRequestData;
 import com.es.phoneshop.web.dataview.UpdateCartItemResponseData;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -18,13 +17,6 @@ import javax.validation.Valid;
 public class AjaxCartController {
     @Resource
     private CartService cartService;
-
-    @ExceptionHandler(InvalidFormatException.class)
-    public UpdateCartItemResponseData handleInvalidFormatException(){
-        UpdateCartItemResponseData responseData = new UpdateCartItemResponseData();
-        responseData.setQuantityErrorMessage("wrong format");
-        return responseData;
-    }
 
     @PostMapping
     public ResponseEntity<UpdateCartItemResponseData> addPhone(@Valid UpdateCartItemRequestData requestData, BindingResult bindingResult) {
