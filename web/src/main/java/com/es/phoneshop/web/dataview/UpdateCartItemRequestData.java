@@ -1,6 +1,8 @@
 package com.es.phoneshop.web.dataview;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 public class UpdateCartItemRequestData {
     private Long phoneId;

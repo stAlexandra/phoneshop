@@ -14,7 +14,12 @@
 
     <bean id="messageSource"
           class="org.springframework.context.support.ResourceBundleMessageSource">
-        <property name="basename" value="messages/messages" />
+        <property name="basenames">
+            <list>
+                <value>messages/messages</value>
+                <value>conf.application</value>
+            </list>
+        </property>
     </bean>
 
     <context:annotation-config/>

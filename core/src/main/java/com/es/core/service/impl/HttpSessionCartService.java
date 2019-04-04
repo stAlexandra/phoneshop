@@ -60,6 +60,19 @@ public class HttpSessionCartService implements CartService {
         return isRemoved;
     }
 
+    @Override
+    public boolean removeAll(List<CartItem> cartItems) {
+        boolean isRemoved = cart.getItems().removeAll(cartItems);
+        recalculateCart();
+        return isRemoved;
+    }
+
+    @Override
+    public void clearCart() {
+        cart.getItems().clear();
+        recalculateCart();
+    }
+
     private void recalculateCart() {
         BigDecimal totalPrice = cart.getItems().stream()
                 .map(cartItem -> cartItem.getPhone().getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())))

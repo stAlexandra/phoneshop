@@ -4,7 +4,7 @@
 
 <tags:master pageTitle="Phone Not Found">
     <p></p>
-    <h3>${errorMsg}</h3>
+    <h3>Phone is not found!</h3>
     <a class="btn btn-primary" href="<c:url value="/productList"/>" role="button">Back to product list</a>
     <p></p>
 </tags:master>

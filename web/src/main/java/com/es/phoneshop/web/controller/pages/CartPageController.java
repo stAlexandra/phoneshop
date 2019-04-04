@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.math.BigDecimal;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -37,10 +36,8 @@ public class CartPageController {
     @PutMapping
     public ModelAndView updateCart(@Valid @ModelAttribute UpdateCartRequestData updateCartRequestData, BindingResult bindingResult,
                                    ModelMap model) {
-        if(bindingResult.hasErrors()){
-            cartService.getCart().setTotalPrice(BigDecimal.ZERO);
+        if (bindingResult.hasErrors()) {
             model.addAttribute("cart", cartService.getCart());
-            model.addAttribute("updateCartRequestData", updateCartRequestData);
             return new ModelAndView(VIEW_NAME, model, HttpStatus.BAD_REQUEST);
         }
         Map<Long, Long> phoneIdToQuantity = updateCartRequestData.getCartItemDataList().stream()
@@ -50,7 +47,7 @@ public class CartPageController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public String deleteItem(@PathVariable("id") Long phoneId){
+    public String deleteItem(@PathVariable("id") Long phoneId) {
         cartService.remove(phoneId);
         return "redirect:/" + VIEW_NAME;
     }
