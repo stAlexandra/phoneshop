@@ -24,7 +24,7 @@ public class JdbcStockDaoTest {
     private static final long PHONE_ID = 1000L;
 
     @Autowired
-    JdbcStockDao jdbcStockDao;
+    private JdbcStockDao jdbcStockDao;
 
     @Test
     public void get() {
