@@ -1,15 +1,15 @@
 package com.es.core.service;
 
-import com.es.core.model.cart.Cart;
 import com.es.core.model.stock.Stock;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 public interface StockService {
-    Map<Long, Integer> getPhoneIdToAvailableQuantityMap(Cart cart);
+    List<Stock> getStocks(List<Long> phoneIds);
 
-    Map<Long, Stock> getStocks(List<Long> phoneIds);
+    Map<Long, Stock> getStocksMap(List<Long> phoneIds);
 
-    void updateStock(Stock stock);
+    void updateStocks(Collection<Stock> stockList);
 }

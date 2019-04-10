@@ -27,3 +27,7 @@ insert into stocks (phoneId, stock, reserved) values (1003, 13, 2);
 insert into stocks (phoneId, stock, reserved) values (1004, 0, 3);
 insert into stocks (phoneId, stock, reserved) values (1005, 0, 0);
 insert into stocks (phoneId, stock, reserved) values (1006, 16, 16);
+
+insert into orders (id, secureId, subtotal, deliveryPrice, totalPrice, firstName, lastName, deliveryAddress, contactPhoneNo, status) values (1000, '985828284', 300, 5, 305, 'Sasha', 'St', 'address', '37529', 'NEW');
+insert into orderItems (phoneId, orderId, quantity) values (1000, 1000, 1);
+insert into orderItems (phoneId, orderId, quantity) values (1001, 1000, 1);

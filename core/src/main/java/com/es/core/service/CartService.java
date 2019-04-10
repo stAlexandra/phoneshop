@@ -1,9 +1,8 @@
 package com.es.core.service;
 
 import com.es.core.model.cart.Cart;
-import com.es.core.model.cart.CartItem;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 public interface CartService {
@@ -15,7 +14,7 @@ public interface CartService {
 
     boolean remove(Long phoneId);
 
-    boolean removeAll(List<CartItem> cartItems);
+    void remove(Collection<Long> phoneIdList);
 
     void clearCart();
 }

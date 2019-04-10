@@ -23,7 +23,7 @@ public class Order
     private String deliveryAddress;
     private String contactPhoneNo;
 
-    private OrderStatus status;
+    private OrderStatus status = OrderStatus.NEW;
 
     public Long getId() {
         return id;

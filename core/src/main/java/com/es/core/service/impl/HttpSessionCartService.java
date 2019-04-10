@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -61,10 +62,10 @@ public class HttpSessionCartService implements CartService {
     }
 
     @Override
-    public boolean removeAll(List<CartItem> cartItems) {
-        boolean isRemoved = cart.getItems().removeAll(cartItems);
+    public void remove(Collection<Long> phoneIdList) {
+        List<CartItem> remainedItems = cart.getItems().stream().filter(item -> !phoneIdList.contains(item.getPhone().getId())).collect(Collectors.toList());
+        cart.setItems(remainedItems);
         recalculateCart();
-        return isRemoved;
     }
 
     @Override

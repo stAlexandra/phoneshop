@@ -5,7 +5,7 @@
 
 <tags:master pageTitle="Order Overview">
    <p></p>
-   <h3 class="text-success">${thankYouMessage}</h3>
+   <h3 class="text-success">Thank you for your order!</h3>
    <p></p>
    <h5><b>Order number: ${order.id}</b></h5>
    <p></p>

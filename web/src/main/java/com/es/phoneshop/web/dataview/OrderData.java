@@ -1,26 +1,21 @@
-package com.es.core.model.order;
+package com.es.phoneshop.web.dataview;
 
+import java.util.Map;
 
-import org.hibernate.validator.constraints.NotBlank;
+public class OrderData {
 
-public class CustomerInfo {
     private String firstName;
+
 
     private String lastName;
 
+
     private String deliveryAddress;
+
 
     private String contactPhoneNo;
 
-    public CustomerInfo() {
-    }
-
-    public CustomerInfo(String firstName, String lastName, String deliveryAddress, String contactPhoneNo) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.deliveryAddress = deliveryAddress;
-        this.contactPhoneNo = contactPhoneNo;
-    }
+    private Map<Long, Integer> phoneIdToQuantity;
 
     public String getFirstName() {
         return firstName;
@@ -52,5 +47,24 @@ public class CustomerInfo {
 
     public void setContactPhoneNo(String contactPhoneNo) {
         this.contactPhoneNo = contactPhoneNo;
+    }
+
+    public Map<Long, Integer> getPhoneIdToQuantity() {
+        return phoneIdToQuantity;
+    }
+
+    public void setPhoneIdToQuantity(Map<Long, Integer> phoneIdToQuantity) {
+        this.phoneIdToQuantity = phoneIdToQuantity;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderData{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", deliveryAddress='" + deliveryAddress + '\'' +
+                ", contactPhoneNo='" + contactPhoneNo + '\'' +
+                ", phoneIdToQuantity=" + phoneIdToQuantity +
+                '}';
     }
 }

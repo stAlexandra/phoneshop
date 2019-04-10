@@ -66,8 +66,8 @@ create table orders (
   lastName VARCHAR(50),
   deliveryAddress VARCHAR(254),
   contactPhoneNo VARCHAR(30),
-  UNIQUE (secureId),
-  status ENUM('NEW', 'DELIVERED', 'REJECTED') NOT NULL
+  status VARCHAR(30) NOT NULL,
+  UNIQUE (secureId)
 );
 
 create table orderItems (

@@ -1,17 +1,19 @@
 package com.es.phoneshop.web.controller.pages;
 
-import com.es.core.exception.OutOfStockException;
 import com.es.core.model.order.CustomerInfo;
 import com.es.core.model.order.Order;
 import com.es.core.service.CartService;
 import com.es.core.service.OrderService;
+import com.es.phoneshop.web.dataview.OrderData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/order")
@@ -19,39 +21,41 @@ public class OrderPageController {
     private static final String VIEW_NAME = "order";
     private static final String ORDER_OVERVIEW = "orderOverview/";
     private static final String CART_ATTRIBUTE = "cart";
-    private static final String CUSTOMER_INFO_ATTRIBUTE = "customerInfo";
-    private static final String OUT_OF_STOCK_PHONES_ATTRIBUTE = "outOfStockPhones";
+    private static final String ORDER_DATA_ATTRIBUTE = "orderData";
+
     private final OrderService orderService;
     private final CartService cartService;
+    private final Validator orderDataValidator;
 
     @Autowired
-    public OrderPageController(OrderService orderService, CartService cartService) {
+    public OrderPageController(OrderService orderService, CartService cartService, Validator orderDataValidator) {
         this.orderService = orderService;
         this.cartService = cartService;
+        this.orderDataValidator = orderDataValidator;
+    }
+
+    @InitBinder("orderData")
+    private void initBinder(WebDataBinder binder) {
+        binder.setValidator(orderDataValidator);
     }
 
     @GetMapping
-    public String getOrder(@RequestParam(value = OUT_OF_STOCK_PHONES_ATTRIBUTE, required = false) String outOfStockPhones,
-                           Model model) {
+    public String getOrder(Model model) {
         model.addAttribute(CART_ATTRIBUTE, cartService.getCart());
-        model.addAttribute(OUT_OF_STOCK_PHONES_ATTRIBUTE, outOfStockPhones);
-        model.addAttribute(CUSTOMER_INFO_ATTRIBUTE, new CustomerInfo());
+        model.addAttribute(ORDER_DATA_ATTRIBUTE, new OrderData());
         return VIEW_NAME;
     }
 
     @PostMapping
-    public String placeOrder(@Valid @ModelAttribute CustomerInfo customerInfo, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
+    public String placeOrder(@Validated @ModelAttribute OrderData orderData, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+        if(bindingResult.hasErrors()) {
             model.addAttribute(CART_ATTRIBUTE, cartService.getCart());
             return VIEW_NAME;
         }
-        try {
-            Order order = orderService.createOrder(cartService.getCart(), customerInfo);
-            orderService.placeOrder(order);
-            return "redirect:/" + ORDER_OVERVIEW + order.getSecureId();
-        } catch (OutOfStockException e) {
-            model.addAttribute(OUT_OF_STOCK_PHONES_ATTRIBUTE, e.getMessage());
-            return "redirect:/" + VIEW_NAME;
-        }
+        CustomerInfo customerInfo = new CustomerInfo(orderData.getFirstName(), orderData.getLastName(),
+                orderData.getDeliveryAddress(), orderData.getContactPhoneNo());
+        Order order = orderService.createOrder(cartService.getCart(), customerInfo);
+        orderService.placeOrder(order);
+        return "redirect:/" + ORDER_OVERVIEW + order.getSecureId();
     }
 }

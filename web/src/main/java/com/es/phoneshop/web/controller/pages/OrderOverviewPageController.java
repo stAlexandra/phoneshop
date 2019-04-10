@@ -23,7 +23,6 @@ public class OrderOverviewPageController {
     public String showOrderOverview(@PathVariable("secureId") String secureId, Model model) {
         Order order = orderService.getOrderBySecureId(secureId);
         model.addAttribute("order", order);
-        model.addAttribute("thankYouMessage", "Thank you for your order!");
         return "orderOverview";
     }
 }
