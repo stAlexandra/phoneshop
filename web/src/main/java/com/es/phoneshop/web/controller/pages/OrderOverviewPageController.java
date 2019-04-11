@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/orderOverview/*")
 public class OrderOverviewPageController {
+    private static final String VIEW_NAME = "orderOverview";
+    private static final String ORDER_ATTRIBUTE = "order";
     private OrderService orderService;
 
     @Autowired
@@ -20,9 +22,9 @@ public class OrderOverviewPageController {
     }
 
     @GetMapping("/{secureId}")
-    public String showOrderOverview(@PathVariable("secureId") String secureId, Model model) {
+    public String showOrderOverview(@PathVariable String secureId, Model model) {
         Order order = orderService.getOrderBySecureId(secureId);
-        model.addAttribute("order", order);
-        return "orderOverview";
+        model.addAttribute(ORDER_ATTRIBUTE, order);
+        return VIEW_NAME;
     }
 }

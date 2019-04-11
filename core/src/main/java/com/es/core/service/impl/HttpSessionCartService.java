@@ -32,7 +32,8 @@ public class HttpSessionCartService implements CartService {
     public void addPhone(Long phoneId, Long quantity) {
         Optional<CartItem> optionalCartItem = cart
                 .getItems().stream()
-                .filter(item -> phoneId.equals(item.getPhone().getId())).findAny();
+                .filter(item -> phoneId.equals(item.getPhone().getId()))
+                .findAny();
 
         if (optionalCartItem.isPresent()) {
             CartItem cartItem = optionalCartItem.get();
@@ -46,8 +47,8 @@ public class HttpSessionCartService implements CartService {
 
     @Override
     public void update(Map<Long, Long> phoneIdToQuantity) {
-        List<CartItem> updatedCartItems = cart.getItems().stream().filter(item -> phoneIdToQuantity
-                .containsKey(item.getPhone().getId()))
+        List<CartItem> updatedCartItems = cart.getItems().stream()
+                .filter(item -> phoneIdToQuantity.containsKey(item.getPhone().getId()))
                 .peek(item -> item.setQuantity(phoneIdToQuantity.get(item.getPhone().getId())))
                 .collect(Collectors.toList());
         cart.setItems(updatedCartItems);
@@ -63,7 +64,9 @@ public class HttpSessionCartService implements CartService {
 
     @Override
     public void remove(Collection<Long> phoneIdList) {
-        List<CartItem> remainedItems = cart.getItems().stream().filter(item -> !phoneIdList.contains(item.getPhone().getId())).collect(Collectors.toList());
+        List<CartItem> remainedItems = cart.getItems().stream()
+                .filter(item -> !phoneIdList.contains(item.getPhone().getId()))
+                .collect(Collectors.toList());
         cart.setItems(remainedItems);
         recalculateCart();
     }

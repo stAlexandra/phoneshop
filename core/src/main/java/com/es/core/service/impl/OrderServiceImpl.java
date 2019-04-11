@@ -22,18 +22,18 @@ import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
-    @Value("${delivery.price}")
     private BigDecimal deliveryPrice;
-
     private OrderDao orderDao;
     private StockService stockService;
     private CartService cartService;
 
     @Autowired
-    public OrderServiceImpl(OrderDao orderDao, StockService stockService, CartService cartService) {
+    public OrderServiceImpl(OrderDao orderDao, StockService stockService, CartService cartService,
+                            @Value("${delivery.price}") BigDecimal deliveryPrice) {
         this.orderDao = orderDao;
         this.stockService = stockService;
         this.cartService = cartService;
+        this.deliveryPrice = deliveryPrice;
     }
 
     @Override
@@ -57,7 +57,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void placeOrder(Order order) {
         Map<Long, Stock> phoneIdToStock = stockService.getStocksMap(order.getOrderItems().stream()
-                .map(item -> item.getPhone().getId()).collect(Collectors.toList()));
+                .map(item -> item.getPhone().getId())
+                .collect(Collectors.toList()));
 
         order.getOrderItems().forEach(orderItem -> {
             Stock stock = phoneIdToStock.get(orderItem.getPhone().getId());
@@ -79,13 +80,15 @@ public class OrderServiceImpl implements OrderService {
     private void setCartInfoToOrder(Order order, Cart cart) {
         order.setSubtotal(cart.getTotalPrice());
 
-        List<OrderItem> orderItems = cart.getItems().stream().map(cartItem -> {
-            OrderItem orderItem = new OrderItem();
-            orderItem.setPhone(cartItem.getPhone());
-            orderItem.setQuantity(cartItem.getQuantity().intValue());
-            orderItem.setOrder(order);
-            return orderItem;
-        }).collect(Collectors.toList());
+        List<OrderItem> orderItems = cart.getItems().stream()
+                .map(cartItem -> {
+                    OrderItem orderItem = new OrderItem();
+                    orderItem.setPhone(cartItem.getPhone());
+                    orderItem.setQuantity(cartItem.getQuantity().intValue());
+                    orderItem.setOrder(order);
+                    return orderItem;
+                })
+                .collect(Collectors.toList());
         order.setOrderItems(orderItems);
     }
 }
