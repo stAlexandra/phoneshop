@@ -37,28 +37,28 @@ public class JdbcPhoneDao implements PhoneDao {
     private static final String SQL_INSERT_PHONE2COLOR = "INSERT INTO phone2color VALUES (:phoneId, :colorId)";
     private static final String SQL_FIND_ALL = "SELECT * FROM phones OFFSET :offset LIMIT :limit";
     private static final String SQL_FIND_ALL_PRESENT_IN_STOCK = "SELECT ph.* FROM phones ph " +
-            "RIGHT OUTER JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 " +
+            "JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 " +
             "AND ph.price > 0 " +
             "OFFSET :offset LIMIT :limit";
     private static final String SQL_FIND_VALID_QUERY = "SELECT ph.* FROM phones ph " +
-            "RIGHT OUTER JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 " +
+            "JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 " +
             "AND ph.price > 0 " +
             "AND (ph.brand ILIKE CONCAT('%', :query, '%') OR ph.model ILIKE CONCAT('%', :query, '%')) " +
             "OFFSET :offset LIMIT :limit";
     private static final String SQL_FIND_VALID_SORT = "SELECT ph.* FROM phones ph " +
-            "RIGHT OUTER JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 " +
+            "JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 " +
             "AND ph.price > 0 " +
             "ORDER BY &sortName &sortOrder OFFSET :offset LIMIT :limit";
     private static final String SQL_FIND_VALID_QUERY_SORT = "SELECT * FROM phones ph " +
-            "RIGHT OUTER JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 " +
+            "JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 " +
             "AND ph.price > 0 " +
             "AND (ph.brand ILIKE CONCAT('%', :query, '%') OR ph.model ILIKE CONCAT('%', :query, '%')) " +
             "ORDER BY &sortName &sortOrder OFFSET :offset LIMIT :limit";
     private static final String SQL_COUNT_VALID_PHONES = "SELECT COUNT(phoneId) AS count FROM stocks st " +
-            "LEFT OUTER JOIN phones ph ON ph.id = st.phoneId " +
+            "JOIN phones ph ON ph.id = st.phoneId " +
             "WHERE st.stock - st.reserved > 0 AND ph.price > 0";
     private static final String SQL_COUNT_VALID_PHONES_MATCHING_QUERY = "SELECT COUNT(id) AS count FROM phones ph " +
-            "RIGHT OUTER JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 " +
+            "JOIN stocks st ON ph.id = st.phoneId WHERE st.stock - st.reserved > 0 " +
             "AND ph.price > 0 " +
             "AND (ph.brand LIKE CONCAT('%', :query, '%') OR ph.model LIKE CONCAT('%', :query, '%'))";
     private static final String PHONE_ID_PARAM = "phoneId";

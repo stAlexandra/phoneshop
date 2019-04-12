@@ -15,7 +15,7 @@ public class UpdateCartRequestData {
         this.cartItemDataList = new ArrayList<>();
     }
 
-    public UpdateCartRequestData(Cart cart){
+    public UpdateCartRequestData(Cart cart) {
         this.cartItemDataList = new ArrayList<>();
         cart.getItems().forEach(item ->
                 this.cartItemDataList.add(new UpdateCartItemRequestData(item.getPhone().getId(), item.getQuantity())));

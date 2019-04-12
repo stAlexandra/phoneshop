@@ -18,6 +18,7 @@
         <property name="locations">
             <list>
                 <value>classpath:conf/application.properties</value>
+                <value>classpath:messages/messages.properties</value>
             </list>
         </property>
         <property name="ignoreUnresolvablePlaceholders" value="false"/>

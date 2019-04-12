@@ -9,11 +9,13 @@ import java.sql.SQLException;
 
 @Component
 public class PhoneRowMapper implements RowMapper<Phone> {
+    private static final String TABLE_NAME = "phones";
+
     @Override
     public Phone mapRow(ResultSet resultSet, int i) throws SQLException {
         Phone phone = new Phone();
 
-        phone.setId(resultSet.getLong("id"));
+        phone.setId(resultSet.getLong(TABLE_NAME + ".id"));
         phone.setBrand(resultSet.getString("brand"));
         phone.setModel(resultSet.getString("model"));
         phone.setPrice(resultSet.getBigDecimal("price"));

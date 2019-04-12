@@ -6,6 +6,7 @@ import java.util.List;
 public class Order
 {
     private Long id;
+    private String secureId;
     private List<OrderItem> orderItems;
     /**
      *  A sum of exception item prices;
@@ -22,7 +23,7 @@ public class Order
     private String deliveryAddress;
     private String contactPhoneNo;
 
-    private OrderStatus status;
+    private OrderStatus status = OrderStatus.NEW;
 
     public Long getId() {
         return id;
@@ -30,6 +31,14 @@ public class Order
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getSecureId() {
+        return secureId;
+    }
+
+    public void setSecureId(String secureId) {
+        this.secureId = secureId;
     }
 
     public List<OrderItem> getOrderItems() {

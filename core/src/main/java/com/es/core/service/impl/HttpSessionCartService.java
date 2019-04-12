@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -31,7 +32,8 @@ public class HttpSessionCartService implements CartService {
     public void addPhone(Long phoneId, Long quantity) {
         Optional<CartItem> optionalCartItem = cart
                 .getItems().stream()
-                .filter(item -> phoneId.equals(item.getPhone().getId())).findAny();
+                .filter(item -> phoneId.equals(item.getPhone().getId()))
+                .findAny();
 
         if (optionalCartItem.isPresent()) {
             CartItem cartItem = optionalCartItem.get();
@@ -45,8 +47,8 @@ public class HttpSessionCartService implements CartService {
 
     @Override
     public void update(Map<Long, Long> phoneIdToQuantity) {
-        List<CartItem> updatedCartItems = cart.getItems().stream().filter(item -> phoneIdToQuantity
-                .containsKey(item.getPhone().getId()))
+        List<CartItem> updatedCartItems = cart.getItems().stream()
+                .filter(item -> phoneIdToQuantity.containsKey(item.getPhone().getId()))
                 .peek(item -> item.setQuantity(phoneIdToQuantity.get(item.getPhone().getId())))
                 .collect(Collectors.toList());
         cart.setItems(updatedCartItems);
@@ -58,6 +60,21 @@ public class HttpSessionCartService implements CartService {
         boolean isRemoved = cart.getItems().removeIf(item -> phoneId.equals(item.getPhone().getId()));
         recalculateCart();
         return isRemoved;
+    }
+
+    @Override
+    public void remove(Collection<Long> phoneIdList) {
+        List<CartItem> remainedItems = cart.getItems().stream()
+                .filter(item -> !phoneIdList.contains(item.getPhone().getId()))
+                .collect(Collectors.toList());
+        cart.setItems(remainedItems);
+        recalculateCart();
+    }
+
+    @Override
+    public void clearCart() {
+        cart.getItems().clear();
+        recalculateCart();
     }
 
     private void recalculateCart() {

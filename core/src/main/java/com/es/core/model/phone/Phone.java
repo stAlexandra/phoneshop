@@ -279,8 +279,9 @@ public class Phone {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Phone phone = (Phone) o;
-        return getBrand().equals(phone.getBrand()) &&
-                getModel().equals(phone.getModel());
+
+        return Objects.equals(getBrand(), phone.getBrand()) &&
+                Objects.equals(getModel(), phone.getModel());
     }
 
     @Override
