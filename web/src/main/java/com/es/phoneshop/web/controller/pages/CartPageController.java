@@ -36,6 +36,7 @@ public class CartPageController {
     @PutMapping
     public ModelAndView updateCart(@Valid @ModelAttribute UpdateCartRequestData updateCartRequestData, BindingResult bindingResult,
                                    ModelMap model) {
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("cart", cartService.getCart());
             return new ModelAndView(VIEW_NAME, model, HttpStatus.BAD_REQUEST);
