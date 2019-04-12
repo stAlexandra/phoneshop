@@ -10,10 +10,12 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.*;
 
+@Transactional
 @Repository
 public class JdbcStockDao implements StockDao {
     private static final String SQL_GET_STOCK = "SELECT * FROM stocks st JOIN phones ph ON st.phoneId = ph.id " +
@@ -32,6 +34,7 @@ public class JdbcStockDao implements StockDao {
     private PhoneRowMapper phoneRowMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public Stock get(Long phoneId) {
         Map<String, Long> params = Collections.singletonMap("phoneId", phoneId);
         return jdbcTemplate.query(SQL_GET_STOCK, params, resultSet -> {
@@ -46,6 +49,7 @@ public class JdbcStockDao implements StockDao {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Stock> getStocks(List<Long> phoneIds) {
         MapSqlParameterSource params = new MapSqlParameterSource("phoneIds", phoneIds);
         List<Stock> stockList = new ArrayList<>();

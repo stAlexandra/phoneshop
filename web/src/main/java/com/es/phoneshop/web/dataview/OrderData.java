@@ -1,18 +1,20 @@
 package com.es.phoneshop.web.dataview;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import java.util.Map;
 
 public class OrderData {
-
+    @NotBlank
     private String firstName;
 
-
+    @NotBlank
     private String lastName;
 
-
+    @NotBlank
     private String deliveryAddress;
 
-
+    @NotBlank
     private String contactPhoneNo;
 
     private Map<Long, Integer> phoneIdToQuantity;

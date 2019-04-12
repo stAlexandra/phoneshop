@@ -10,10 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/order")
@@ -36,7 +37,7 @@ public class OrderPageController {
 
     @InitBinder("orderData")
     private void initBinder(WebDataBinder binder) {
-        binder.setValidator(orderDataValidator);
+        binder.addValidators(orderDataValidator);
     }
 
     @GetMapping
@@ -47,7 +48,7 @@ public class OrderPageController {
     }
 
     @PostMapping
-    public String placeOrder(@Validated @ModelAttribute OrderData orderData, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+    public String placeOrder(@Valid @ModelAttribute OrderData orderData, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
         if(bindingResult.hasErrors()) {
             model.addAttribute(CART_ATTRIBUTE, cartService.getCart());
             return VIEW_NAME;

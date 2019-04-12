@@ -71,10 +71,10 @@ create table orders (
 );
 
 create table orderItems (
-  id BIGINT AUTO_INCREMENT primary key,
   phoneId BIGINT NOT NULL,
   orderId BIGINT NOT NULL,
   quantity SMALLINT NOT NULL,
+  UNIQUE (phoneId, orderId),
   CONSTRAINT FK_orderItems_phoneId FOREIGN KEY (phoneId) REFERENCES phones (id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT FK_orderItems_orderId FOREIGN KEY (orderId) REFERENCES orders (id) ON DELETE CASCADE ON UPDATE CASCADE
 );

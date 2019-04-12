@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -10,7 +10,6 @@
     <h1>Order</h1>
     <a class="btn btn-outline-primary" href="<c:url value="/cart"/>" role="button">Back to cart</a>
     <p></p>
-    <h5 class="text-danger">${outOfStockErrorMessage}</h5>
     <c:choose>
         <c:when test="${empty cart.items}">
             <p></p>
@@ -51,8 +50,8 @@
                             <td class="col">${item.phone.displaySizeInches}"</td>
                             <td class="col">${item.quantity}
                                 <c:set value="${item.phone.id}" var="phoneId"/>
-                                <input type="hidden" name="phoneIdToQuantity[${phoneId}]" value="${item.quantity}">
-                                <br/><form:errors path="phoneIdToQuantity[${phoneId}]" cssClass="text-danger"/>
+                                <form:hidden path="phoneIdToQuantity[${phoneId}]" value="${item.quantity}"/><br/>
+                                <form:errors path="phoneIdToQuantity[${phoneId}]" cssClass="text-danger"/>
                             </td>
                             <td class="col">
                                 <fmt:formatNumber value="${item.phone.price}" type="currency" currencyCode="USD"/>

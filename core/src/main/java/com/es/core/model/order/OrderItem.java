@@ -5,18 +5,9 @@ import com.es.core.model.phone.Phone;
 import java.util.Objects;
 
 public class OrderItem {
-    private Long id;
     private Phone phone;
     private Order order;
     private Integer quantity;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Phone getPhone() {
         return phone;

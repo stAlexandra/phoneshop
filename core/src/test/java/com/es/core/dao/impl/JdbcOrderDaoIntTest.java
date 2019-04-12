@@ -60,7 +60,6 @@ public class JdbcOrderDaoIntTest {
         jdbcOrderDao.save(order);
 
         assertNotNull(order.getId());
-        order.getOrderItems().forEach(orderItem -> assertNotNull(orderItem.getId()));
     }
 
     @Test
@@ -71,6 +70,5 @@ public class JdbcOrderDaoIntTest {
         assertNotNull(order.getId());
         assertEquals(secureId, order.getSecureId());
         assertNotNull(order.getOrderItems());
-        order.getOrderItems().forEach(orderItem -> assertNotNull(orderItem.getId()));
     }
 }

@@ -12,6 +12,7 @@ import com.es.core.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -53,7 +54,7 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Override
     public void placeOrder(Order order) {
         Map<Long, Stock> phoneIdToStock = stockService.getStocksMap(order.getOrderItems().stream()

@@ -8,15 +8,22 @@ import com.es.core.model.order.Order;
 import com.es.core.model.order.OrderItem;
 import com.es.core.model.order.OrderStatus;
 import com.es.core.model.phone.Phone;
-import org.springframework.jdbc.core.namedparam.*;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.Types;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
+@Transactional
 @Repository
 public class JdbcOrderDao implements OrderDao {
     private static final String SQL_INSERT_ORDER = "INSERT INTO orders (secureId, subtotal, deliveryPrice, totalPrice, firstName, lastName, " +
@@ -27,7 +34,6 @@ public class JdbcOrderDao implements OrderDao {
             "WHERE secureId = :secureId";
     private static final String SQL_UPDATE_ORDER_STATUS = "UPDATE orders SET status = :status WHERE id = :id";
     private static final String SQL_INSERT_ORDER_ITEM = "INSERT INTO orderItems (phoneId, orderId, quantity) VALUES (:phoneId, :orderId, :quantity)";
-    private static final String SQL_GET_ORDER_ITEMS_ID = "SELECT id FROM orderItems WHERE orderItems.orderId = :orderId";
 
     @Resource
     private NamedParameterJdbcTemplate jdbcTemplate;
@@ -55,6 +61,7 @@ public class JdbcOrderDao implements OrderDao {
         saveOrderItems(order.getOrderItems(), order.getId());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Order get(String secureId) {
         Map<String, String> params = Collections.singletonMap("secureId", secureId);
@@ -95,12 +102,5 @@ public class JdbcOrderDao implements OrderDao {
         }).toArray(MapSqlParameterSource[]::new);
 
         jdbcTemplate.batchUpdate(SQL_INSERT_ORDER_ITEM, batchParamSources);
-
-        jdbcTemplate.query(SQL_GET_ORDER_ITEMS_ID, Collections.singletonMap("orderId", orderId), resultSet -> {
-            for (int i = 0; !resultSet.isAfterLast() && i < orderItems.size(); i++) {
-                orderItems.get(i).setId(resultSet.getLong("id"));
-                resultSet.next();
-            }
-        });
     }
 }

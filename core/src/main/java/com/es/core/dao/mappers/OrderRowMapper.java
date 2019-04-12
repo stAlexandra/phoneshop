@@ -24,11 +24,7 @@ public class OrderRowMapper implements RowMapper<Order> {
         order.setTotalPrice(resultSet.getBigDecimal("totalPrice"));
         order.setDeliveryAddress(resultSet.getString("deliveryAddress"));
         order.setContactPhoneNo(resultSet.getString("contactPhoneNo"));
-        try {
-            order.setStatus(OrderStatus.valueOf(resultSet.getString("status")));
-        } catch (IllegalArgumentException ex){
-            order.setStatus(OrderStatus.NONE);
-        }
+        order.setStatus(OrderStatus.valueOf(resultSet.getString("status")));
         return order;
     }
 }
