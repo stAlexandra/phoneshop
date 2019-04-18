@@ -65,7 +65,7 @@ public class JdbcOrderDaoIntTest {
     @Test
     public void getBySecureId() {
         String secureId = "985828284";
-        Order order = jdbcOrderDao.get(secureId);
+        Order order = jdbcOrderDao.getBySecureId(secureId);
 
         assertNotNull(order.getId());
         assertEquals(secureId, order.getSecureId());

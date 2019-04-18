@@ -82,6 +82,7 @@
     <spring:eval var="deliveredStatus" expression="T(com.es.core.model.order.OrderStatus).DELIVERED"/>
     <spring:eval var="rejectedStatus" expression="T(com.es.core.model.order.OrderStatus).REJECTED"/>
     <form:form>
+        <input type="hidden" name="_method" value="PUT">
         <a href="<c:url value="/admin/orders"/>" role="button" class="btn btn-outline-primary btn-lg">Back</a>
         <button class="btn btn-success btn-lg" name="orderStatus" value="${deliveredStatus}">Delivered</button>
         <button class="btn btn-danger btn-lg" name="orderStatus" value="${rejectedStatus}">Rejected</button>

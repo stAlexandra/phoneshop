@@ -40,12 +40,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order getOrderBySecureId(String secureId) {
-        return orderDao.get(secureId);
+        return orderDao.getBySecureId(secureId);
     }
 
     @Override
     public Order getOrderById(Long id) {
-        return orderDao.get(id);
+        return orderDao.getById(id);
     }
 
     @Override

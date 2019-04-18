@@ -84,14 +84,14 @@ public class JdbcOrderDao implements OrderDao {
 
     @Transactional(readOnly = true)
     @Override
-    public Order get(String secureId) {
+    public Order getBySecureId(String secureId) {
         MapSqlParameterSource params = new MapSqlParameterSource(SECURE_ID_PARAM, secureId);
         return getOrder(SQL_GET_ORDER_BY_SECURE_ID, params);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Order get(Long id) {
+    public Order getById(Long id) {
         MapSqlParameterSource params = new MapSqlParameterSource(ORDER_ID_PARAM, id);
         return getOrder(SQL_GET_ORDER_BY_ID, params);
     }

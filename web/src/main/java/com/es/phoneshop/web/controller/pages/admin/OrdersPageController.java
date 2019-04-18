@@ -8,8 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.List;
 
 @Controller
@@ -17,7 +15,6 @@ import java.util.List;
 public class OrdersPageController {
     private static final String VIEW_NAME = "admin/orders";
     private static final String ORDERS_ATTRIBUTE = "orderList";
-    private static final String DATE_FORMATTER_ATTRIBUTE = "dateFormatter";
 
     private final OrderService orderService;
 
@@ -29,8 +26,6 @@ public class OrdersPageController {
     @GetMapping
     public String showOrders(Model model){
         List<Order> orderList = orderService.getAllOrdersSortedByDate();
-        DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
-        model.addAttribute(DATE_FORMATTER_ATTRIBUTE, formatter);
         model.addAttribute(ORDERS_ATTRIBUTE, orderList);
         return VIEW_NAME;
     }

@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface OrderDao {
     void save(Order order);
-    Order get(String secureId);
-    Order get(Long id);
+    Order getBySecureId(String secureId);
+    Order getById(Long id);
     List<Order> getAll(String sortName, String sortOrder);
     void updateOrderStatus(Long id, OrderStatus orderStatus);
 }

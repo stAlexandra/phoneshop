@@ -27,7 +27,10 @@
                 <td class="col">${order.firstName} ${order.lastName}</td>
                 <td class="col">${order.contactPhoneNo}</td>
                 <td class="col">${order.deliveryAddress}"</td>
-                <td class="col">${order.orderDate.format(dateFormatter)}</td>
+                <td class="col">
+                    <fmt:parseDate value="${order.orderDate}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
+                    <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${parsedDateTime}" />
+                </td>
                 <td class="col">
                     <fmt:formatNumber value="${order.totalPrice}" type="currency" currencyCode="USD"/>
                 </td>

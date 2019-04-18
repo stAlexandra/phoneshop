@@ -26,7 +26,7 @@ public class OrderDetailsPageController {
         return VIEW_NAME;
     }
 
-    @PostMapping
+    @PutMapping
     public String updateStatus(@PathVariable Long id, @RequestParam OrderStatus orderStatus){
         orderService.updateOrderStatus(id, orderStatus);
         return "redirect:/admin/orders/{id}";
