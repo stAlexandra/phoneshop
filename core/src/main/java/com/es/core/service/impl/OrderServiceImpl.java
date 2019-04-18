@@ -5,6 +5,7 @@ import com.es.core.model.cart.Cart;
 import com.es.core.model.order.CustomerInfo;
 import com.es.core.model.order.Order;
 import com.es.core.model.order.OrderItem;
+import com.es.core.model.order.OrderStatus;
 import com.es.core.model.stock.Stock;
 import com.es.core.service.CartService;
 import com.es.core.service.OrderService;
@@ -43,6 +44,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public Order getOrderById(Long id) {
+        return orderDao.get(id);
+    }
+
+    @Override
     public Order createOrder(Cart cart, CustomerInfo customerInfo) {
         Order order = new Order();
         setCartInfoToOrder(order, cart);
@@ -69,6 +75,16 @@ public class OrderServiceImpl implements OrderService {
         cartService.clearCart();
 
         orderDao.save(order);
+    }
+
+    @Override
+    public List<Order> getAllOrdersSortedByDate() {
+        return orderDao.getAll("orderDate", "desc");
+    }
+
+    @Override
+    public void updateOrderStatus(Long id, OrderStatus status) {
+        orderDao.updateOrderStatus(id, status);
     }
 
     private void setCustomerInfoToOrder(Order order, CustomerInfo customerInfo) {

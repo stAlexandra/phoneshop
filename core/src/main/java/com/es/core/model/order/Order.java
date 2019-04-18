@@ -1,12 +1,14 @@
 package com.es.core.model.order;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class Order
 {
     private Long id;
     private String secureId;
+    private LocalDateTime orderDate;
     private List<OrderItem> orderItems;
     /**
      *  A sum of exception item prices;
@@ -39,6 +41,14 @@ public class Order
 
     public void setSecureId(String secureId) {
         this.secureId = secureId;
+    }
+
+    public LocalDateTime getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(LocalDateTime orderDate) {
+        this.orderDate = orderDate;
     }
 
     public List<OrderItem> getOrderItems() {

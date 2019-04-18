@@ -47,8 +47,8 @@
                                 </a>
                             </td>
                             <td class="col">${item.phone.brand}</td>
-                            <td class="col"><a
-                                    href="<c:url value="/productDetails/${item.phone.id}"/>">${item.phone.model}</a>
+                            <td class="col">
+                                <a href="<c:url value="/productDetails/${item.phone.id}"/>">${item.phone.model}</a>
                             </td>
                             <td class="col">
                                 <c:forEach var="color" items="${item.phone.colors}">
@@ -59,10 +59,6 @@
                             <td class="col"><fmt:formatNumber value="${item.phone.price}" type="currency"
                                                               currencyCode="USD"/></td>
                             <td class="col">
-                                    <%--<input type="text" name="cartItemDataList[${status.index}].quantity" value="${item.quantity}" class="form-control">--%>
-                                    <%--<input type="hidden" name="cartItemDataList[${status.index}].phoneId" value="${item.phone.id}"/>--%>
-                                    <%--<div id="cartItemDataList[${status.index}].quantity.errors" class="text-danger"></div>--%>
-
                                 <c:set var="i" value="${status.index}"/>
                                 <form:input path="cartItemDataList[${i}].quantity" cssClass="form-control"/>
                                 <form:hidden path="cartItemDataList[${i}].phoneId"/>

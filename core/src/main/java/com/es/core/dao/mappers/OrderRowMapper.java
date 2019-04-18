@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 @Component
 public class OrderRowMapper implements RowMapper<Order> {
@@ -17,6 +18,9 @@ public class OrderRowMapper implements RowMapper<Order> {
         Order order = new Order();
         order.setId(resultSet.getLong(TABLE_NAME + ".id"));
         order.setSecureId(resultSet.getString("secureId"));
+        LocalDateTime localDateTime = LocalDateTime.of(resultSet.getDate("orderDate").toLocalDate(),
+                resultSet.getTime("orderDate").toLocalTime());
+        order.setOrderDate(localDateTime);
         order.setFirstName(resultSet.getString("firstName"));
         order.setLastName(resultSet.getString("lastName"));
         order.setSubtotal(resultSet.getBigDecimal("subtotal"));

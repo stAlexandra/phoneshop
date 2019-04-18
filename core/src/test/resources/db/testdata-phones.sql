@@ -12,6 +12,7 @@ insert into phones (id, brand, model, price, displaySizeInches, weightGr, length
 insert into phones (id, brand, model, price, displaySizeInches, weightGr, lengthMm, widthMm, heightMm, announced, deviceType, os, displayResolution, pixelDensity, displayTechnology, backCameraMegapixels, frontCameraMegapixels, ramGb, internalStorageGb, batteryCapacityMah, talkTimeHours, standByTimeHours, bluetooth, positioning, imageUrl, description) values ('1006', 'ARCHOS', 'ARCHOS 101 XS 2', 270, 10.1, 482, 273.0, 169.0, 10.1, '2013-11-06 00:00:00', 'Tablet', 'Android (4.2)', '1280 x  800', 149, 'IPS LCD', 2.0, 2.0, 2.0, 16.0, null, null, null, 'Yes', 'GPS, A-GPS', 'manufacturer/ARCHOS/ARCHOS 101 XS 2.jpg', 'The Archos 101 XS 2 can be used as a stand-alone tablet, but it comes bundled with a hardware keyboard, in which it can be docked. The tablet comes with a quad-core 1.6GHz processor and 2GB of RAM, 16 gigs of storage, 10.1'''' display with 1280 x 800 px resolution, and Android 4.2 out of the box.');
 
 insert into phone2color (phoneId, colorId) values (1000, 1000);
+insert into phone2color (phoneId, colorId) values (1000, 1001);
 insert into phone2color (phoneId, colorId) values (1001, 1001);
 insert into phone2color (phoneId, colorId) values (1002, 1000);
 insert into phone2color (phoneId, colorId) values (1003, 1003);
@@ -28,6 +29,9 @@ insert into stocks (phoneId, stock, reserved) values (1004, 0, 3);
 insert into stocks (phoneId, stock, reserved) values (1005, 0, 0);
 insert into stocks (phoneId, stock, reserved) values (1006, 16, 16);
 
-insert into orders (id, secureId, subtotal, deliveryPrice, totalPrice, firstName, lastName, deliveryAddress, contactPhoneNo, status) values (1000, '985828284', 300, 5, 305, 'Sasha', 'St', 'address', '37529', 'NEW');
+insert into orders (id, secureId, orderDate, subtotal, deliveryPrice, totalPrice, firstName, lastName, deliveryAddress, contactPhoneNo, status) values (1000, '985828284', NOW(), 300, 5, 305, 'Sasha', 'St', 'address', '37529', 'NEW');
 insert into orderItems (phoneId, orderId, quantity) values (1000, 1000, 1);
 insert into orderItems (phoneId, orderId, quantity) values (1001, 1000, 1);
+insert into orders (id, secureId, orderDate, subtotal, deliveryPrice, totalPrice, firstName, lastName, deliveryAddress, contactPhoneNo, status) values (1001, '111111111', NOW(), 369, 1, 370, 'Alex', 'St', 'address', '37529', 'NEW');
+insert into orderItems (phoneId, orderId, quantity) values (1002, 1001, 1);
+insert into orderItems (phoneId, orderId, quantity) values (1003, 1001, 1);
