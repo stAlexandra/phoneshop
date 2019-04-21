@@ -21,6 +21,7 @@ import javax.annotation.Resource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -43,7 +44,7 @@ public class JdbcOrderDao implements OrderDao {
     private static final String SQL_GET_ALL_ORDERS_SORTED = "SELECT * FROM orders o " +
             "JOIN orderItems oI ON o.id = oI.orderId JOIN phones ph ON oI.phoneId = ph.id " +
             "LEFT JOIN phone2color ph2c ON ph.id = ph2c.phoneId LEFT JOIN colors c ON ph2c.colorId = c.id " +
-            "ORDER BY &sortName &sortOrder";
+            "ORDER BY {0} {1}";
     private static final String SQL_UPDATE_ORDER_STATUS = "UPDATE orders SET status = :status WHERE id = :orderId";
     private static final String SQL_INSERT_ORDER_ITEM = "INSERT INTO orderItems (phoneId, orderId, quantity) VALUES (:phoneId, :orderId, :quantity)";
     private static final String ORDERS_ID_COL = "orders.id";
@@ -53,8 +54,6 @@ public class JdbcOrderDao implements OrderDao {
     private static final String ORDER_ID_PARAM = "orderId";
     private static final String STATUS_PARAM = "status";
     private static final String QUANTITY_PARAM = "quantity";
-    private static final String SORT_NAME_REPLACE_WORD = "&sortName";
-    private static final String SORT_ORDER_REPLACE_WORD = "&sortOrder";
 
     @Resource
     private NamedParameterJdbcTemplate jdbcTemplate;
@@ -99,18 +98,18 @@ public class JdbcOrderDao implements OrderDao {
     @Transactional(readOnly = true)
     @Override
     public List<Order> getAll(String sortName, String sortOrder) {
-        String sqlWithParams = SQL_GET_ALL_ORDERS_SORTED.replaceAll(SORT_NAME_REPLACE_WORD, sortName)
-                .replaceAll(SORT_ORDER_REPLACE_WORD, sortOrder);
+        String sqlWithParams = MessageFormat.format(SQL_GET_ALL_ORDERS_SORTED, sortName, sortOrder);
 
         return jdbcTemplate.query(sqlWithParams, resultSet -> {
             List<Order> orders = new ArrayList<>();
-            resultSet.next();
-            while (!resultSet.isAfterLast()) {
-                Order order = orderRowMapper.mapRow(resultSet, resultSet.getRow());
+            if (resultSet.next()) {
+                while (!resultSet.isAfterLast()) {
+                    Order order = orderRowMapper.mapRow(resultSet, resultSet.getRow());
 
-                List<OrderItem> orderItems = retrieveOrderItems(resultSet, order);
-                order.setOrderItems(orderItems);
-                orders.add(order);
+                    List<OrderItem> orderItems = retrieveOrderItems(resultSet, order);
+                    order.setOrderItems(orderItems);
+                    orders.add(order);
+                }
             }
             return orders;
         });
@@ -127,10 +126,12 @@ public class JdbcOrderDao implements OrderDao {
 
     private Order getOrder(String sqlGetOrder, SqlParameterSource parameterSource) {
         return jdbcTemplate.query(sqlGetOrder, parameterSource, resultSet -> {
-            resultSet.next();
-            Order order = orderRowMapper.mapRow(resultSet, 1);
-            List<OrderItem> orderItems = retrieveOrderItems(resultSet, order);
-            order.setOrderItems(orderItems);
+            Order order = new Order();
+            if (resultSet.next()) {
+                order = orderRowMapper.mapRow(resultSet, 1);
+                List<OrderItem> orderItems = retrieveOrderItems(resultSet, order);
+                order.setOrderItems(orderItems);
+            }
             return order;
         });
     }
