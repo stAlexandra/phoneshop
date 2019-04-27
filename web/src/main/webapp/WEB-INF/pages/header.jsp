@@ -8,14 +8,13 @@
         <div class="col-auto"><a href="<c:url value="/admin/orders"/>">Admin</a></div>
     </sec:authorize>
     <sec:authorize access="!isAuthenticated()">
-        <%--<div class="col-auto"><a href="<c:url value="/login"/>">Login</a></div>--%>
-        <div class="col-auto"><button class="btn" formaction="<c:url value="/login"/>">Login</button></div>
+        <div class="col-auto"><a href="<c:url value="/login"/>" class="btn btn-outline-secondary">Login</a></div>
     </sec:authorize>
     <sec:authorize access="isAuthenticated()">
         <div class="col-auto"><sec:authentication property="name"/></div>
         <c:url value="/logout" var="logoutUrl"/>
         <form:form action="${logoutUrl}" method="POST">
-            <div class="col-auto"><input type="submit" class="btn" value="Logout"/></div>
+            <div class="col-auto"><input type="submit" class="btn btn-outline-secondary" value="Logout"/></div>
         </form:form>
     </sec:authorize>
 </div>
