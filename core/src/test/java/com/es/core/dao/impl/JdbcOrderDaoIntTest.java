@@ -14,9 +14,9 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
+import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(locations = "classpath:context/applicationContext-core.xml")
@@ -65,10 +65,18 @@ public class JdbcOrderDaoIntTest {
     @Test
     public void getBySecureId() {
         String secureId = "985828284";
-        Order order = jdbcOrderDao.get(secureId);
+        Order order = jdbcOrderDao.getBySecureId(secureId);
 
         assertNotNull(order.getId());
         assertEquals(secureId, order.getSecureId());
-        assertNotNull(order.getOrderItems());
+        assertFalse(order.getOrderItems().isEmpty());
+    }
+
+    @Test
+    public void getAll() {
+        List<Order> orders = jdbcOrderDao.getAll("orderDate", "desc");
+
+        assertTrue(!orders.isEmpty());
+        orders.forEach(order -> assertFalse(order.getOrderItems().isEmpty()));
     }
 }

@@ -40,7 +40,7 @@ public class OrderServiceImplTest {
     public void getOrderBySecureId() {
         String secureId = "secureId";
         orderService.getOrderBySecureId(secureId);
-        verify(orderDao).get(secureId);
+        verify(orderDao).getBySecureId(secureId);
     }
 
     @Test
