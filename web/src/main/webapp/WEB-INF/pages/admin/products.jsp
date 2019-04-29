@@ -20,14 +20,14 @@
     <c:forEach var="phone" items="${phonePage.content}" varStatus="status">
     <tr class="row">
         <td class="col">
-            <a href="<c:url value="admin/products/${phone.id}"/>">
+            <a href="<c:url value="/admin/products/${phone.id}"/>">
                 <img src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${item.phone.imageUrl}"
                      class="img-thumbnail" alt="Phone preview" width="150" height="150">
             </a>
         </td>
         <td class="col">${phone.brand}</td>
         <td class="col">
-            <a href="<c:url value="admin/products/${phone.id}"/>">${phone.model}</a>
+            <a href="<c:url value="/admin/products/${phone.id}"/>">${phone.model}</a>
         </td>
         <td class="col">
             <c:forEach var="color" items="${phone.colors}">

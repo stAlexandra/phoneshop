@@ -1,6 +1,7 @@
 package com.es.core.service.impl;
 
 import com.es.core.dao.PhoneDao;
+import com.es.core.exception.PhonesNotFoundException;
 import com.es.core.model.phone.Phone;
 import com.es.core.service.PhoneService;
 import org.h2.util.StringUtils;
@@ -45,5 +46,9 @@ public class PhoneServiceImpl implements PhoneService {
                 StringUtils.isNullOrEmpty(sortName) ? defaultPhonesSortOrder : sortOrder);
 
         return new PageImpl<>(phonesOnPageList, PageRequest.of(currentPage, pageSize), totalSize);
+    }
+
+    public Phone getPhone(Long phoneId) throws PhonesNotFoundException {
+        return phoneDao.get(phoneId);
     }
 }

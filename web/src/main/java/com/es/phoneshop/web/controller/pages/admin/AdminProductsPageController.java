@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/admin/products")
-public class ProductsPageController {
+public class AdminProductsPageController {
     private static final int CURRENT_PAGE_NUM = 1;
     private static final int PAGE_SIZE = 10;
     private static final String PHONE_PAGE_ATTRIBUTE = "phonePage";
