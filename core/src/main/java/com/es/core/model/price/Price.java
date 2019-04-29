@@ -1,8 +1,18 @@
 package com.es.core.model.price;
 
+import java.math.BigDecimal;
+
 public class Price {
     private String currencyName;
-    private String value;
+    private BigDecimal value;
+
+    public Price() {
+    }
+
+    public Price(String currencyName, BigDecimal value) {
+        this.currencyName = currencyName;
+        this.value = value;
+    }
 
     public String getCurrencyName() {
         return currencyName;
@@ -12,11 +22,11 @@ public class Price {
         this.currencyName = currencyName;
     }
 
-    public String getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
     }
 }

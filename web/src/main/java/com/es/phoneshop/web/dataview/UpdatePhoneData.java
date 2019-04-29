@@ -17,7 +17,7 @@ public class UpdatePhoneData {
     private BigDecimal widthMm;
 
     @NotEmpty
-    @Size(min = 3)
+    @Size(min = 1)
     private List<Price> priceList;
 
     public List<Price> getPriceList() {
