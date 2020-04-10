@@ -2,6 +2,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
 <div class="row justify-content-end">
     <sec:authorize access="hasRole('ROLE_ADMIN')">
@@ -18,11 +19,20 @@
         </form:form>
     </sec:authorize>
 </div>
-<div class="row">
-    <div class="col-10">
-        <h1 class="display-3">Phonify</h1>
+<div class="row justify-content-between">
+    <div class="col-5">
+        <h2 class="display-3">Phonify</h2>
     </div>
-    <c:if test="${param.showMiniCart}">
-        <jsp:include page="minicart.jsp"/>
-    </c:if>
+    <div class="col-3">
+        <c:if test="${param.showMiniCart}">
+            <jsp:include page="minicart.jsp"/>
+        </c:if>
+    </div>
+    <sec:authorize access="isAuthenticated()">
+        <c:if test="${not param.hideUserPanel}">
+            <div class="col-4">
+                <tags:userPanel/>
+            </div>
+        </c:if>
+    </sec:authorize>
 </div>

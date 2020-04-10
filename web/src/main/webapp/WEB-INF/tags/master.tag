@@ -4,7 +4,7 @@
 
 <%@attribute name="pageTitle" type="java.lang.String" required="false" %>
 <%@attribute name="showMiniCart" type="java.lang.Boolean" required="false" %>
-
+<%@attribute name="hideUserPanel" type="java.lang.Boolean" required="false" %>
 <html>
 <head>
     <title>${pageTitle}</title>
@@ -16,15 +16,16 @@
     <sec:csrfMetaTags />
 </head>
 <body>
-<div class="container-fluid">
+<div class="container">
     <jsp:include page="/WEB-INF/pages/header.jsp">
         <jsp:param name="showMiniCart" value="${showMiniCart}"/>
+        <jsp:param name="hideUserPanel" value="${hideUserPanel}"/>
     </jsp:include>
     <jsp:doBody/>
     <jsp:include page="/WEB-INF/pages/footer.jsp"/>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script type="text/javascript" language="javascript">
+<script type="text/javascript">
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
     $(document).ajaxSend(function(e,xhr,options) {

@@ -8,6 +8,7 @@
         <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/order/**" access="isAuthenticated()"/>
         <intercept-url pattern="/orderOverview/**" access="isAuthenticated()"/>
+        <intercept-url pattern="/my-profile/**" access="isAuthenticated()"/>
         <form-login/>
         <logout logout-success-url="/productList"/>
     </http>
@@ -17,6 +18,7 @@
             <user-service>
                 <user name="admin" password="admin" authorities="ROLE_ADMIN"/>
                 <user name="customer" password="customer" authorities="ROLE_USER"/>
+                <user name="test" password="test" authorities="ROLE_USER"/>
             </user-service>
         </authentication-provider>
     </authentication-manager>
