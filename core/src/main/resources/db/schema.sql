@@ -4,6 +4,8 @@ drop table if exists stocks;
 drop table if exists phones;
 drop table if exists orderItems;
 drop table if exists orders;
+drop table if exists users;
+drop table if exists authorities;
 
 create table colors (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -79,3 +81,16 @@ create table orderItems (
   CONSTRAINT FK_orderItems_phoneId FOREIGN KEY (phoneId) REFERENCES phones (id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT FK_orderItems_orderId FOREIGN KEY (orderId) REFERENCES orders (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+create table users (
+  username VARCHAR(50) not null primary key,
+  password VARCHAR(100) not null,
+  enabled boolean not null
+);
+
+create table authorities (
+  username VARCHAR(50) not null,
+  authority VARCHAR(50) not null,
+  constraint fk_authorities_users foreign key(username) references users(username)
+);
+create unique index ix_auth_username on authorities (username,authority);
