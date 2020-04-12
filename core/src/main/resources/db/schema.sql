@@ -6,6 +6,9 @@ drop table if exists orderItems;
 drop table if exists orders;
 drop table if exists users;
 drop table if exists authorities;
+drop table if exists discounts;
+drop table if exists discounts2userLevel;
+
 
 create table colors (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -85,7 +88,8 @@ create table orderItems (
 create table users (
   username VARCHAR(50) not null primary key,
   password VARCHAR(100) not null,
-  enabled boolean not null
+  enabled boolean not null,
+  level SMALLINT
 );
 
 create table authorities (
@@ -94,3 +98,19 @@ create table authorities (
   constraint fk_authorities_users foreign key(username) references users(username)
 );
 create unique index ix_auth_username on authorities (username,authority);
+
+CREATE TABLE discounts (
+   id BIGINT AUTO_INCREMENT primary key,
+   value FLOAT,
+   valueType VARCHAR(30) NOT NULL ,
+   applicableFor VARCHAR(30) NOT NULL ,
+   enabled BOOLEAN NOT NULL
+);
+
+CREATE TABLE discounts2userLevel (
+    discountId BIGINT,
+    userLevel SMALLINT,
+    UNIQUE (userLevel),
+    CONSTRAINT FK_discounts2userLevel_discountId FOREIGN KEY (discountId) REFERENCES discounts (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT FK_discounts2userLevel_userLevel FOREIGN KEY (userLevel) REFERENCES users (level) ON DELETE CASCADE ON UPDATE CASCADE
+)

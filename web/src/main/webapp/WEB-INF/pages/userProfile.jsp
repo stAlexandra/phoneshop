@@ -10,9 +10,9 @@
             <img src="https://i.pinimg.com/originals/13/a4/11/13a411076cdee39085cad97da215d9be.png" width="200"
                  height="200" class="align-self-start mr-3" alt="Profile photo">
             <div class="media-body mt-3 ml-4">
-                <h1>User Name</h1>
+                <h1>${user.name}</h1>
                 <p>
-                    <span class="h3">Level 10 Discount 10%</span>
+                    <span class="h3">Level ${user.level} Discount ${levelDiscount}%</span>
                 </p>
             </div>
         </div>
