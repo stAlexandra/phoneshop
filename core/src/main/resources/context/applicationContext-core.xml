@@ -39,6 +39,8 @@
 
     <jdbc:initialize-database enabled="${db.insertSchema}" data-source="dataSource">
         <jdbc:script location="classpath:db/schema.sql" />
+        <jdbc:script location="${db.productdata-location}" />
+        <jdbc:script location="${db.userdata-location}"/>
     </jdbc:initialize-database>
 
     <bean id="cart" class="com.es.core.model.cart.Cart">

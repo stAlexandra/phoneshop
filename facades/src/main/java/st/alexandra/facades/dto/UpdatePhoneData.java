@@ -1,4 +1,4 @@
-package com.es.phoneshop.web.dataview;
+package st.alexandra.facades.dto;
 
 import com.es.core.model.price.Price;
 import org.hibernate.validator.constraints.NotEmpty;

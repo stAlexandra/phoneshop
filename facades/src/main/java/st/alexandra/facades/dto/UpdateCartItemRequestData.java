@@ -1,4 +1,4 @@
-package com.es.phoneshop.web.dataview;
+package st.alexandra.facades.dto;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;

@@ -2,8 +2,8 @@ package com.es.phoneshop.web.controller.pages;
 
 import com.es.core.model.cart.Cart;
 import com.es.core.service.CartService;
-import com.es.phoneshop.web.dataview.UpdateCartItemRequestData;
-import com.es.phoneshop.web.dataview.UpdateCartRequestData;
+import st.alexandra.facades.dto.UpdateCartItemRequestData;
+import st.alexandra.facades.dto.UpdateCartRequestData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;

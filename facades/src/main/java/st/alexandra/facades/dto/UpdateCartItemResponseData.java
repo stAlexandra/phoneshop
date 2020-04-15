@@ -1,4 +1,4 @@
-package com.es.phoneshop.web.dataview;
+package st.alexandra.facades.dto;
 
 import java.math.BigDecimal;
 

@@ -4,7 +4,7 @@ import com.es.core.exception.PhonesNotFoundException;
 import com.es.core.model.phone.Phone;
 import com.es.core.service.PhoneService;
 import com.es.core.service.PriceService;
-import com.es.phoneshop.web.dataview.UpdatePhoneData;
+import st.alexandra.facades.dto.UpdatePhoneData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;

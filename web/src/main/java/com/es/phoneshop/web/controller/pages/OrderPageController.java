@@ -4,7 +4,7 @@ import com.es.core.model.order.CustomerInfo;
 import com.es.core.model.order.Order;
 import com.es.core.service.CartService;
 import com.es.core.service.OrderService;
-import com.es.phoneshop.web.dataview.OrderData;
+import st.alexandra.facades.dto.OrderData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/order")
@@ -27,6 +28,9 @@ public class OrderPageController {
     private final OrderService orderService;
     private final CartService cartService;
     private final Validator orderDataValidator;
+
+//    @Resource
+//    private PromotionsFacade promotionsFacade;
 
     @Autowired
     public OrderPageController(OrderService orderService, CartService cartService, Validator orderDataValidator) {
@@ -58,5 +62,16 @@ public class OrderPageController {
         Order order = orderService.createOrder(cartService.getCart(), customerInfo);
         orderService.placeOrder(order);
         return "redirect:/" + ORDER_OVERVIEW + order.getSecureId();
+    }
+
+    @PostMapping("/activateCoupon")
+    public String activateCoupon(@RequestAttribute String couponCode, @RequestAttribute String orderId, Principal principal, Model model, RedirectAttributes redirectAttributes) {
+        boolean activated = true;//promotionsFacade.activateOrderCoupon(orderId, principal.getName());
+        if (activated) {
+            model.addAttribute("couponActivatedMsg", "Your coupon is successfully activated!");
+        } else {
+            model.addAttribute("couponNotActivatedMsg", "We can't find coupon for this code. Please check again.");
+        }
+        return "";
     }
 }

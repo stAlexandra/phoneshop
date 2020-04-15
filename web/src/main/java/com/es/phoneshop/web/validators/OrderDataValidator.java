@@ -2,7 +2,7 @@ package com.es.phoneshop.web.validators;
 
 import com.es.core.model.stock.Stock;
 import com.es.core.service.StockService;
-import com.es.phoneshop.web.dataview.OrderData;
+import st.alexandra.facades.dto.OrderData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
