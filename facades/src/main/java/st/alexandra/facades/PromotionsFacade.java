@@ -1,5 +1,5 @@
 package st.alexandra.facades;
 
 public interface PromotionsFacade {
-    boolean activateOrderCoupon(Long orderId, String userName);
+    boolean activateCartCoupon(String userName, String couponCode);
 }

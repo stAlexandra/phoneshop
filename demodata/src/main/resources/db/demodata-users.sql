@@ -6,8 +6,13 @@ insert into authorities(username, authority) values ( 'admin', 'ADMIN' );
 insert into authorities(username, authority) values ( 'customer', 'CUSTOMER' );
 insert into authorities(username, authority) values ( 'test', 'CUSTOMER' );
 
+-- Discounts
 insert into discounts(id, value, valueType, applicableFor, enabled) values ( 1000, 0, 'PERCENTAGE', 'CART', true );
 insert into discounts(id, value, valueType, applicableFor, enabled) values ( 1001, 1, 'PERCENTAGE', 'CART', true );
+
+-- Coupons
+insert into discounts(id, value, valueType, applicableFor, enabled, code) values ( 1002, 0.50, 'PERCENTAGE', 'CART', true, 'TEST_PERCENTAGE');
+insert into discounts(id, value, valueType, applicableFor, enabled, code) values ( 1003, 10, 'AMOUNT', 'CART', true, 'TEST_AMOUNT');
 
 insert into discounts2userLevel(discountId, userLevel) values ( 1000, 0 );
 insert into discounts2userLevel(discountId, userLevel) values ( 1001, 1 );

@@ -104,7 +104,8 @@ CREATE TABLE discounts (
    value FLOAT,
    valueType VARCHAR(30) NOT NULL ,
    applicableFor VARCHAR(30) NOT NULL ,
-   enabled BOOLEAN NOT NULL
+   enabled BOOLEAN NOT NULL,
+   code VARCHAR(30)
 );
 
 CREATE TABLE discounts2userLevel (

@@ -17,4 +17,7 @@ public interface CartService {
     void remove(Collection<Long> phoneIdList);
 
     void clearCart();
+
+    void recalculateCart();
+
 }

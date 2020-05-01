@@ -80,42 +80,47 @@
                     </tr>
                     </tbody>
                 </table>
-                <table class="table">
-                    <tr class="row">
-                        <td class="col-1"><form:label path="firstName"><b>First name*:</b></form:label></td>
-                        <td class="col-2">
-                            <form:input path="firstName" cssClass="form-control"/>
-                            <form:errors path="firstName" cssClass="text-danger"/>
-                        </td>
-                    </tr>
-                    <tr class="row">
-                        <td class="col-1"><form:label path="lastName"><b>Last name*:</b></form:label></td>
-                        <td class="col-2">
-                            <form:input path="lastName" cssClass="form-control"/>
-                            <form:errors path="lastName" cssClass="text-danger"/>
-                        </td>
+                <br/><br/>
+                <div class="row">
+                    <div class="col-6">
+                        <table class="table">
+                            <tr class="row">
+                                <td class="col-4"><form:label path="firstName"><b>First name*:</b></form:label></td>
+                                <td class="col-8">
+                                    <form:input path="firstName" cssClass="form-control"/>
+                                    <form:errors path="firstName" cssClass="text-danger"/>
+                                </td>
+                            </tr>
+                            <tr class="row">
+                                <td class="col-4"><form:label path="lastName"><b>Last name*:</b></form:label></td>
+                                <td class="col-8">
+                                    <form:input path="lastName" cssClass="form-control"/>
+                                    <form:errors path="lastName" cssClass="text-danger"/>
+                                </td>
 
-                    </tr>
-                    <tr class="row">
-                        <td class="col-1"><form:label path="deliveryAddress"><b>Address*:</b></form:label></td>
-                        <td class="col-2">
-                            <form:input path="deliveryAddress" cssClass="form-control"/>
-                            <form:errors path="deliveryAddress" cssClass="text-danger"/>
-                        </td>
-                    </tr>
-                    <tr class="row">
-                        <td class="col-1"><form:label path="contactPhoneNo"><b>Phone*:</b></form:label></td>
-                        <td class="col-2">
-                            <form:input path="contactPhoneNo" cssClass="form-control"/>
-                            <form:errors path="contactPhoneNo" cssClass="text-danger"/>
-                        </td>
-                    </tr>
-                    <tr class="row">
-                        <td class="col-2 offset-1">
-                            <input type="submit" class="btn btn-success btn-lg btn-block" value="Submit"/>
-                        </td>
-                    </tr>
-                </table>
+                            </tr>
+                            <tr class="row">
+                                <td class="col-4"><form:label path="deliveryAddress"><b>Address*:</b></form:label></td>
+                                <td class="col-8">
+                                    <form:input path="deliveryAddress" cssClass="form-control"/>
+                                    <form:errors path="deliveryAddress" cssClass="text-danger"/>
+                                </td>
+                            </tr>
+                            <tr class="row">
+                                <td class="col-4"><form:label path="contactPhoneNo"><b>Phone*:</b></form:label></td>
+                                <td class="col-8">
+                                    <form:input path="contactPhoneNo" cssClass="form-control"/>
+                                    <form:errors path="contactPhoneNo" cssClass="text-danger"/>
+                                </td>
+                            </tr>
+                            <tr class="row">
+                                <td class="col-8 offset-4">
+                                    <input type="submit" class="btn btn-success btn-lg btn-block" value="Submit"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
             </form:form>
         </c:otherwise>
     </c:choose>

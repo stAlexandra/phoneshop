@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public class Discount {
     private Long id;
-    private BigDecimal value;
+    private BigDecimal value = BigDecimal.ZERO;
     private DiscountValueType valueType;
     private DiscountApplicableFor applicableFor;
     private boolean enabled;

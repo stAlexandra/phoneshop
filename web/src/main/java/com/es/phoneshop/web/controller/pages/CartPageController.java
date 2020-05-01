@@ -2,8 +2,6 @@ package com.es.phoneshop.web.controller.pages;
 
 import com.es.core.model.cart.Cart;
 import com.es.core.service.CartService;
-import st.alexandra.facades.dto.UpdateCartItemRequestData;
-import st.alexandra.facades.dto.UpdateCartRequestData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -12,8 +10,11 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import st.alexandra.facades.dto.UpdateCartItemRequestData;
+import st.alexandra.facades.dto.UpdateCartRequestData;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -26,10 +27,14 @@ public class CartPageController {
     private CartService cartService;
 
     @GetMapping
-    public String getCart(Model model) {
+    public String getCart(Model model, Principal principal, @RequestParam(required = false) Boolean couponActivated) {
         Cart cart = cartService.getCart();
         model.addAttribute("cart", cart);
         model.addAttribute("updateCartRequestData", new UpdateCartRequestData(cart));
+
+        if (couponActivated != null) {
+            addCouponInfo(couponActivated, model);
+        }
         return VIEW_NAME;
     }
 
@@ -53,4 +58,11 @@ public class CartPageController {
         return "redirect:/" + VIEW_NAME;
     }
 
+    private void addCouponInfo(boolean couponActivated, Model model) {
+        if (couponActivated) {
+            model.addAttribute("couponActivatedMsg", "Coupon is successfully activated.");
+        } else {
+            model.addAttribute("couponErrorMsg", "Coupon could not be activated.");
+        }
+    }
 }

@@ -1,5 +1,7 @@
 package com.es.core.service;
 
-public interface DiscountService {
+import com.es.core.model.discount.Discount;
 
+public interface DiscountService {
+    boolean applyDiscount(Discount discount);
 }

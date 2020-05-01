@@ -8,15 +8,7 @@
     <form id="deleteForm" method="post">
         <input type="hidden" name="_method" value="DELETE"/>
     </form>
-    <p></p>
-    <div class="row">
-        <div class="col">
-            <a class="btn btn-outline-primary" href="<c:url value="/productList"/>" role="button">
-                Back to product list
-            </a>
-        </div>
-    </div>
-    <br/>
+    <tags:backToProductList/>
     <c:choose>
         <c:when test="${empty cart.items}">
             <h3 class="text-center">Your cart is empty!</h3>
@@ -73,10 +65,22 @@
                             </td>
                         </tr>
                     </c:forEach>
-                    <tr class="row table-info justify-content-end">
-                        <td class="col-3">
+                    <tr class="row justify-content-end">
+                        <td class="col-6">
+                            <b>Subtotal: </b><fmt:formatNumber value="${cart.subtotalPrice}" type="currency"
+                                                               currencySymbol="$"/>
+                        </td>
+                    </tr>
+                    <tr class="row  justify-content-end">
+                        <td class="col-6 table-success">
+                            <b>Discount: </b><fmt:formatNumber value="${cart.totalDiscount}" type="currency"
+                                                               currencySymbol="$"/>
+                        </td>
+                    </tr>
+                    <tr class="row justify-content-end">
+                        <td class="col-6 table-info">
                             <b>TOTAL PRICE: </b><fmt:formatNumber value="${cart.totalPrice}" type="currency"
-                                                                  currencyCode="USD"/>
+                                                                  currencySymbol="$"/>
                         </td>
                     </tr>
                     </tbody>
@@ -92,6 +96,7 @@
                     </div>
                 </div>
             </form:form>
+            <tags:couponsCard/>
         </c:otherwise>
     </c:choose>
 </tags:master>

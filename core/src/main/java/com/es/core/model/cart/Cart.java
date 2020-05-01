@@ -8,10 +8,13 @@ import java.util.Objects;
 public class Cart {
     private List<CartItem> items;
     private BigDecimal totalPrice;
+    private BigDecimal totalDiscount;
+    private BigDecimal subtotalPrice;
 
     public Cart() {
         this.items = new ArrayList<>();
         this.totalPrice = BigDecimal.ZERO;
+        this.totalDiscount = BigDecimal.ZERO;
     }
 
     public List<CartItem> getItems() {
@@ -28,6 +31,22 @@ public class Cart {
 
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public BigDecimal getTotalDiscount() {
+        return totalDiscount;
+    }
+
+    public void setTotalDiscount(BigDecimal totalDiscount) {
+        this.totalDiscount = totalDiscount;
+    }
+
+    public BigDecimal getSubtotalPrice() {
+        return subtotalPrice;
+    }
+
+    public void setSubtotalPrice(BigDecimal subtotalPrice) {
+        this.subtotalPrice = subtotalPrice;
     }
 
     @Override

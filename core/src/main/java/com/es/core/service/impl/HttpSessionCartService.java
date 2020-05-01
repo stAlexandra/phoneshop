@@ -77,10 +77,14 @@ public class HttpSessionCartService implements CartService {
         recalculateCart();
     }
 
-    private void recalculateCart() {
-        BigDecimal totalPrice = cart.getItems().stream()
+    public void recalculateCart() {
+        BigDecimal totalItemsPrice = cart.getItems().stream()
                 .map(cartItem -> cartItem.getPhone().getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())))
                 .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
-        cart.setTotalPrice(totalPrice);
+        cart.setSubtotalPrice(totalItemsPrice);
+        BigDecimal totalDiscounts = cart.getTotalDiscount();
+        if (totalItemsPrice.compareTo(totalDiscounts) > 0) {
+            cart.setTotalPrice(totalItemsPrice.subtract(totalDiscounts));
+        }
     }
 }

@@ -4,7 +4,6 @@ import com.es.core.model.order.CustomerInfo;
 import com.es.core.model.order.Order;
 import com.es.core.service.CartService;
 import com.es.core.service.OrderService;
-import st.alexandra.facades.dto.OrderData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,24 +12,26 @@ import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import st.alexandra.facades.PromotionsFacade;
+import st.alexandra.facades.dto.OrderData;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.security.Principal;
 
 @Controller
 @RequestMapping("/order")
 public class OrderPageController {
     private static final String VIEW_NAME = "order";
     private static final String ORDER_OVERVIEW = "orderOverview/";
+    private static final String ORDER = "order/";
+    private static final String REDIRECT_PREFIX = "redirect:/";
+
     private static final String CART_ATTRIBUTE = "cart";
     private static final String ORDER_DATA_ATTRIBUTE = "orderData";
 
     private final OrderService orderService;
     private final CartService cartService;
     private final Validator orderDataValidator;
-
-//    @Resource
-//    private PromotionsFacade promotionsFacade;
 
     @Autowired
     public OrderPageController(OrderService orderService, CartService cartService, Validator orderDataValidator) {
@@ -61,17 +62,7 @@ public class OrderPageController {
                 orderData.getDeliveryAddress(), orderData.getContactPhoneNo());
         Order order = orderService.createOrder(cartService.getCart(), customerInfo);
         orderService.placeOrder(order);
-        return "redirect:/" + ORDER_OVERVIEW + order.getSecureId();
+        return REDIRECT_PREFIX + ORDER_OVERVIEW + order.getSecureId();
     }
 
-    @PostMapping("/activateCoupon")
-    public String activateCoupon(@RequestAttribute String couponCode, @RequestAttribute String orderId, Principal principal, Model model, RedirectAttributes redirectAttributes) {
-        boolean activated = true;//promotionsFacade.activateOrderCoupon(orderId, principal.getName());
-        if (activated) {
-            model.addAttribute("couponActivatedMsg", "Your coupon is successfully activated!");
-        } else {
-            model.addAttribute("couponNotActivatedMsg", "We can't find coupon for this code. Please check again.");
-        }
-        return "";
-    }
 }
