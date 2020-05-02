@@ -1,4 +1,4 @@
-package com.es.core.service.impl;
+package com.es.core.service.checkout;
 
 import com.es.core.dao.OrderDao;
 import com.es.core.model.cart.Cart;
@@ -7,9 +7,6 @@ import com.es.core.model.order.Order;
 import com.es.core.model.order.OrderItem;
 import com.es.core.model.order.OrderStatus;
 import com.es.core.model.stock.Stock;
-import com.es.core.service.CartService;
-import com.es.core.service.OrderService;
-import com.es.core.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

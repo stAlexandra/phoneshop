@@ -1,7 +1,7 @@
 package com.es.phoneshop.web.controller.pages.admin;
 
 import com.es.core.model.phone.Phone;
-import com.es.core.service.PhoneService;
+import com.es.core.service.product.PhoneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;

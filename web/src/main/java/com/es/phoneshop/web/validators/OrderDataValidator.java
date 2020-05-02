@@ -1,12 +1,12 @@
 package com.es.phoneshop.web.validators;
 
 import com.es.core.model.stock.Stock;
-import com.es.core.service.StockService;
-import st.alexandra.facades.dto.OrderData;
+import com.es.core.service.checkout.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import st.alexandra.facades.dto.OrderData;
 
 import java.util.ArrayList;
 import java.util.List;

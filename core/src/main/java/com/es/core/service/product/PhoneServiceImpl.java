@@ -1,9 +1,8 @@
-package com.es.core.service.impl;
+package com.es.core.service.product;
 
 import com.es.core.dao.PhoneDao;
 import com.es.core.exception.PhonesNotFoundException;
 import com.es.core.model.phone.Phone;
-import com.es.core.service.PhoneService;
 import org.h2.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,7 +11,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 @Service

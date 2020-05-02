@@ -1,4 +1,4 @@
-package com.es.core.service;
+package com.es.core.service.product;
 
 import com.es.core.model.phone.Phone;
 import org.springframework.data.domain.Page;

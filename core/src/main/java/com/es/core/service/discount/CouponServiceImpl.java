@@ -1,4 +1,4 @@
-package com.es.core.service.businesslogic;
+package com.es.core.service.discount;
 
 import com.es.core.dao.CouponDao;
 import com.es.core.model.discount.Coupon;

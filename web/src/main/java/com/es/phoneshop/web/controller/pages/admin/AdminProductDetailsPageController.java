@@ -2,9 +2,8 @@ package com.es.phoneshop.web.controller.pages.admin;
 
 import com.es.core.exception.PhonesNotFoundException;
 import com.es.core.model.phone.Phone;
-import com.es.core.service.PhoneService;
 import com.es.core.service.PriceService;
-import st.alexandra.facades.dto.UpdatePhoneData;
+import com.es.core.service.product.PhoneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -13,6 +12,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import st.alexandra.facades.dto.UpdatePhoneData;
 
 import javax.validation.Valid;
 

@@ -2,7 +2,7 @@ package com.es.phoneshop.web.controller.pages;
 
 import com.es.core.dao.PhoneDao;
 import com.es.core.exception.PhonesNotFoundException;
-import com.es.core.service.CartService;
+import com.es.core.service.checkout.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

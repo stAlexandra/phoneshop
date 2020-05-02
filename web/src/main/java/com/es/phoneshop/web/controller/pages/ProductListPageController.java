@@ -1,8 +1,8 @@
 package com.es.phoneshop.web.controller.pages;
 
 import com.es.core.model.phone.Phone;
-import com.es.core.service.CartService;
-import com.es.core.service.PhoneService;
+import com.es.core.service.checkout.CartService;
+import com.es.core.service.product.PhoneService;
 import com.es.core.util.PageIndexUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller

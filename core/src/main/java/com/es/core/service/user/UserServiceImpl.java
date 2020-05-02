@@ -1,8 +1,7 @@
-package com.es.core.service.impl;
+package com.es.core.service.user;
 
 import com.es.core.dao.UserDao;
 import com.es.core.model.user.User;
-import com.es.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

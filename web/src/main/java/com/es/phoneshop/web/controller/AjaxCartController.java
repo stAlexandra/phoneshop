@@ -1,15 +1,15 @@
 package com.es.phoneshop.web.controller;
 
 import com.es.core.model.cart.Cart;
-import com.es.core.service.CartService;
-import st.alexandra.facades.dto.UpdateCartItemRequestData;
-import st.alexandra.facades.dto.UpdateCartItemResponseData;
+import com.es.core.service.checkout.CartService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import st.alexandra.facades.dto.UpdateCartItemRequestData;
+import st.alexandra.facades.dto.UpdateCartItemResponseData;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;

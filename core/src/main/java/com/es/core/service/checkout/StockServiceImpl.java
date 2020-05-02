@@ -1,8 +1,7 @@
-package com.es.core.service.impl;
+package com.es.core.service.checkout;
 
 import com.es.core.dao.StockDao;
 import com.es.core.model.stock.Stock;
-import com.es.core.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

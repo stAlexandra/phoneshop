@@ -1,10 +1,9 @@
-package com.es.core.service.impl;
+package com.es.core.service.checkout;
 
 import com.es.core.dao.PhoneDao;
 import com.es.core.model.cart.Cart;
 import com.es.core.model.cart.CartItem;
 import com.es.core.model.phone.Phone;
-import com.es.core.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

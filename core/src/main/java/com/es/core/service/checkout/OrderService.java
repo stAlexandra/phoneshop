@@ -1,4 +1,4 @@
-package com.es.core.service;
+package com.es.core.service.checkout;
 
 import com.es.core.model.cart.Cart;
 import com.es.core.model.order.CustomerInfo;

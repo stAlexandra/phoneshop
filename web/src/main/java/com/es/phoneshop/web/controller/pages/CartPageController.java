@@ -1,7 +1,7 @@
 package com.es.phoneshop.web.controller.pages;
 
 import com.es.core.model.cart.Cart;
-import com.es.core.service.CartService;
+import com.es.core.service.checkout.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;

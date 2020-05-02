@@ -1,8 +1,8 @@
 package com.es.phoneshop.web.controller.pages;
 
 import com.es.core.model.user.User;
-import com.es.core.service.UserService;
-import com.es.core.service.businesslogic.UserLevelDiscountService;
+import com.es.core.service.user.UserLevelDiscountService;
+import com.es.core.service.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;

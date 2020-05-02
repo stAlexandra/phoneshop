@@ -1,4 +1,4 @@
-package com.es.core.service;
+package com.es.core.service.user;
 
 import com.es.core.model.user.User;
 
