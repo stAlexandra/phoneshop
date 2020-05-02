@@ -14,8 +14,8 @@ import javax.annotation.Resource;
 @Transactional
 @Repository
 public class JdbcUserDao implements UserDao {
-    private static final String SQL_INSERT_USER = "insert into users (username, enabled, level) values ( :name, :enabled, :level )";
-    private static final String SQL_GET_USER_BY_NAME = "select * from users where username = :name";
+    private static final String SQL_INSERT_USER = "INSERT INTO users (username, enabled, level) VALUES ( :name, :enabled, :level )";
+    private static final String SQL_GET_USER_BY_NAME = "SELECT * FROM users WHERE username = :name";
 
     @Resource
     private NamedParameterJdbcTemplate jdbcTemplate;
@@ -24,6 +24,7 @@ public class JdbcUserDao implements UserDao {
     private UserRowMapper userRowMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public User get(String name) {
         MapSqlParameterSource params = new MapSqlParameterSource("name", name);
         return jdbcTemplate.queryForObject(SQL_GET_USER_BY_NAME, params, userRowMapper);

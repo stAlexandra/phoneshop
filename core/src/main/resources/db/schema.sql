@@ -4,10 +4,11 @@ drop table if exists stocks;
 drop table if exists phones;
 drop table if exists orderItems;
 drop table if exists orders;
+drop table if exists discounts2userLevel;
+drop table if exists discounts2users;
+drop table if exists discounts;
 drop table if exists users;
 drop table if exists authorities;
-drop table if exists discounts;
-drop table if exists discounts2userLevel;
 
 
 create table colors (
@@ -114,4 +115,12 @@ CREATE TABLE discounts2userLevel (
     UNIQUE (userLevel),
     CONSTRAINT FK_discounts2userLevel_discountId FOREIGN KEY (discountId) REFERENCES discounts (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT FK_discounts2userLevel_userLevel FOREIGN KEY (userLevel) REFERENCES users (level) ON DELETE CASCADE ON UPDATE CASCADE
-)
+);
+
+CREATE TABLE discounts2users (
+    discountId BIGINT,
+    username VARCHAR(50),
+    UNIQUE (username, discountId),
+    CONSTRAINT FK_discounts2user_discountId FOREIGN KEY (discountId) REFERENCES discounts (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT FK_discounts2user_username FOREIGN KEY (username) REFERENCES users (username) ON DELETE CASCADE ON UPDATE CASCADE
+);

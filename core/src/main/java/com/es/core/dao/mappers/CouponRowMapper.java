@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+//TODO check if needed
 @Component
 public class CouponRowMapper implements RowMapper<Coupon> {
     private final DiscountRowMapper discountRowMapper;

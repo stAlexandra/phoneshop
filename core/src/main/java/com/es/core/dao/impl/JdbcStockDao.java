@@ -43,7 +43,7 @@ public class JdbcStockDao implements StockDao {
                 stock.setPhone(phoneRowMapper.mapRow(resultSet, 1));
                 return stock;
             } else {
-                throw new ItemNotFoundException(phoneId);
+                throw new ItemNotFoundException(phoneId.toString());
             }
         });
     }

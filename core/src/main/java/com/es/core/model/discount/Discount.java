@@ -1,6 +1,7 @@
 package com.es.core.model.discount;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class Discount {
     private Long id;
@@ -47,5 +48,18 @@ public class Discount {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Discount)) return false;
+        Discount discount = (Discount) o;
+        return Objects.equals(id, discount.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

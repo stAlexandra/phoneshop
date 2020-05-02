@@ -13,15 +13,17 @@ public final class DbContract {
 
     public static class DiscountsTable {
         public static final String TABLE = "discounts";
+        public static final String ID = "id";
         public static final String VALUE = "value";
         public static final String VALUE_TYPE = "valueType";
         public static final String APPLICABLE_FOR = "applicableFor";
         public static final String ENABLED = "enabled";
     }
 
-    public static class Discounts2UserLevelTable {
-        public static final String TABLE = "discounts2userLevel";
-        public static final String DISCOUNT_ID = "discountId";
-        public static final String USER_LEVEL = "userLevel";
-    }
+    // TODO: check if needed
+//    public static class Discounts2UserLevelTable {
+//        public static final String TABLE = "discounts2userLevel";
+//        public static final String DISCOUNT_ID = "discountId";
+//        public static final String USER_LEVEL = "userLevel";
+//    }
 }

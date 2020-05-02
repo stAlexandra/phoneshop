@@ -16,6 +16,7 @@ public class DiscountRowMapper implements RowMapper<Discount> {
     @Override
     public Discount mapRow(ResultSet resultSet, int i) throws SQLException {
         Discount discount = new Discount();
+        discount.setId(resultSet.getLong(TABLE + "." + ID));
         discount.setValue(resultSet.getBigDecimal(VALUE));
         discount.setValueType(DiscountValueType.valueOf(resultSet.getString(VALUE_TYPE)));
         discount.setApplicableFor(DiscountApplicableFor.valueOf(resultSet.getString(APPLICABLE_FOR)));
