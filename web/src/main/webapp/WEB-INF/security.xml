@@ -5,11 +5,13 @@
              xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
     <http use-expressions="true">
+        <intercept-url pattern="/login*" access="isAnonymous()"/>
         <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/order/**" access="isAuthenticated()"/>
         <intercept-url pattern="/orderOverview/**" access="isAuthenticated()"/>
         <intercept-url pattern="/my-profile/**" access="isAuthenticated()"/>
-        <form-login/>
+
+        <form-login authentication-success-handler-ref="customAuthenticationSuccessHandler"/>
         <logout logout-success-url="/productList"/>
     </http>
 
@@ -31,4 +33,7 @@
 
     <beans:bean id="encoder"
                 class="org.springframework.security.authentication.encoding.ShaPasswordEncoder"/>
+
+    <beans:bean id="customAuthenticationSuccessHandler"
+                class="com.es.phoneshop.web.util.CustomAuthenticationSuccessHandler"/>
 </beans:beans>

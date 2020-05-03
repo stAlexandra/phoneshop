@@ -17,7 +17,12 @@ public class UserDiscountsServiceImpl implements UserDiscountsService {
 
     @Override
     public void addDiscount(User user, Discount discount) {
-        userDiscountsDao.save(user.getName(), discount);
+        if (discount != null) {
+            userDiscountsDao.save(user.getName(), discount);
+        } else {
+            // TODO logger
+            System.out.println("Discount could not be null");
+        }
     }
 
     @Override

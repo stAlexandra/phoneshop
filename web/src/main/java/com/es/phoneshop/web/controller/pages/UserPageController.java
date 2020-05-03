@@ -23,11 +23,9 @@ public class UserPageController {
 
     @GetMapping("/my-profile")
     public ModelAndView getMyProfilePage(Principal principal){
-        User user = userService.getUserByName(principal.getName());
-
         ModelAndView modelAndView = new ModelAndView(VIEW_NAME);
+        User user = userService.getUserByName(principal.getName());
         modelAndView.addObject("user", user);
-
         if (user != null) {
             Double levelDiscount = userLevelDiscountService.getDiscountPercentage(user.getLevel()).orElse(Double.MIN_VALUE);
             modelAndView.addObject("levelDiscount", levelDiscount);
