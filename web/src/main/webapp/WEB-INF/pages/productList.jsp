@@ -117,7 +117,7 @@
                     </c:forEach>
                 </td>
                 <td class="col">${phone.displaySizeInches}"</td>
-                <td class="col"><fmt:formatNumber value="${phone.price}" type="currency" currencyCode="USD"/></td>
+                <td class="col"><fmt:formatNumber value="${phone.price}" type="currency" currencySymbol="$"/></td>
                 <td class="col">
                     <input id="quantity${phone.id}" name="quantity" type="text" value="1" class="form-control">
                     <div id="quantityError${phone.id}" class="text-danger"></div>

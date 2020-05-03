@@ -3,8 +3,12 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
-<tags:master pageTitle="My Profile" hideUserPanel="${true}" showMiniCart="${true}">
-    <br/><br/>
+<tags:master pageTitle="My Profile" hideUserPanel="${true}" showMiniCart="${false}">
+    <div class="row justify-content-end">
+        <div class="col-auto">
+            <tags:backToProductList/>
+        </div>
+    </div>
     <div id="userinfo">
         <div class="media">
             <img src="https://i.pinimg.com/originals/13/a4/11/13a411076cdee39085cad97da215d9be.png" width="200"

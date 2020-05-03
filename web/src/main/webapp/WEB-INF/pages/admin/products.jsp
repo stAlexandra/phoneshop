@@ -36,7 +36,7 @@
         </td>
         <td class="col">${phone.displaySizeInches}"</td>
         <td class="col"><fmt:formatNumber value="${phone.price}" type="currency"
-                                          currencyCode="USD"/></td>
+                                          currencySymbol="$"/></td>
     </tr>
     </c:forEach>
 </tags:master>

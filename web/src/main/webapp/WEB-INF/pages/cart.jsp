@@ -49,7 +49,7 @@
                             </td>
                             <td class="col">${item.phone.displaySizeInches}"</td>
                             <td class="col"><fmt:formatNumber value="${item.phone.price}" type="currency"
-                                                              currencyCode="USD"/></td>
+                                                              currencySymbol="$"/></td>
                             <td class="col">
                                 <c:set var="i" value="${status.index}"/>
                                 <form:input path="cartItemDataList[${i}].quantity" cssClass="form-control"/>

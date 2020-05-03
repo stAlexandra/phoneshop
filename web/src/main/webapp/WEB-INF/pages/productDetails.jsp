@@ -17,7 +17,7 @@
                 <div class="card-body">
                     <h3>
                         <strong>Price: </strong>
-                        <span><fmt:formatNumber value="${phone.price}" type="currency" currencyCode="USD"/></span>
+                        <span><fmt:formatNumber value="${phone.price}" type="currency" currencySymbol="$"/></span>
                     </h3>
                     <div class="input-group">
                         <input class="form-control" id="quantity${phone.id}" value="1"/>

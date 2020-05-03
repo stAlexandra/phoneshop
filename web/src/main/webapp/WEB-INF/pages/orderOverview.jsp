@@ -38,26 +38,26 @@
                         <td class="col">${item.phone.displaySizeInches}"</td>
                         <td class="col">${item.quantity}</td>
                         <td class="col">
-                            <fmt:formatNumber value="${item.phone.price}" type="currency" currencyCode="USD"/>
+                            <fmt:formatNumber value="${item.phone.price}" type="currency" currencySymbol="$"/>
                         </td>
                     </tr>
                 </c:forEach>
                 <tr class="row justify-content-end">
                     <td class="col-2 table-info"><b>Subtotal: </b></td>
                     <td class="col-2 table-info">
-                        <fmt:formatNumber value="${order.subtotal}" type="currency" currencyCode="USD"/>
+                        <fmt:formatNumber value="${order.subtotal}" type="currency" currencySymbol="$"/>
                     </td>
                 </tr>
                 <tr class="row justify-content-end">
                     <td class="col-2 table-info"><b>Delivery: </b></td>
                     <td class="col-2 table-info">
-                        <fmt:formatNumber value="${order.deliveryPrice}" type="currency" currencyCode="USD"/>
+                        <fmt:formatNumber value="${order.deliveryPrice}" type="currency" currencySymbol="$"/>
                     </td>
                 </tr>
                 <tr class="row justify-content-end">
                     <td class="col-2 table-success"><b>TOTAL PRICE: </b></td>
                     <td class="col-2 table-success">
-                        <fmt:formatNumber value="${order.totalPrice}" type="currency" currencyCode="USD"/>
+                        <fmt:formatNumber value="${order.totalPrice}" type="currency" currencySymbol="$"/>
                     </td>
                 </tr>
                 </tbody>

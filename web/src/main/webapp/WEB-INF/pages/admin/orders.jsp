@@ -32,7 +32,7 @@
                     <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${parsedDateTime}" />
                 </td>
                 <td class="col">
-                    <fmt:formatNumber value="${order.totalPrice}" type="currency" currencyCode="USD"/>
+                    <fmt:formatNumber value="${order.totalPrice}" type="currency" currencySymbol="$"/>
                 </td>
                 <td class="col">${order.status}</td>
             </tr>

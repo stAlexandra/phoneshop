@@ -8,7 +8,7 @@
             <h5>My cart</h5>
             <span id="numItems">${cart.items.size()}</span> items
             <span id="totalPrice"><fmt:formatNumber value="${cart.totalPrice}" type="currency"
-                                                    currencyCode="USD"/></span>
+                                                    currencySymbol="$"/></span>
         </div>
         <div class="col-4">
             <a class="btn btn-primary" role="button" href="<c:url value="/cart"/>">

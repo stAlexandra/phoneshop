@@ -54,28 +54,34 @@
                                 <form:errors path="phoneIdToQuantity[${phoneId}]" cssClass="text-danger"/>
                             </td>
                             <td class="col">
-                                <fmt:formatNumber value="${item.phone.price}" type="currency" currencyCode="USD"/>
+                                <fmt:formatNumber value="${item.phone.price}" type="currency" currencySymbol="$"/>
                             </td>
                         </tr>
                     </c:forEach>
                     <tr class="row justify-content-end">
-                        <td class="col-2 table-info"><b>Subtotal: </b></td>
-                        <td class="col-2 table-info">
-                            <fmt:formatNumber value="${cart.totalPrice}" type="currency" currencyCode="USD"/>
+                        <td class="col-2"><b>Subtotal: </b></td>
+                        <td class="col-2">
+                            <fmt:formatNumber value="${cart.subtotalPrice}" type="currency" currencySymbol="$"/>
                         </td>
                     </tr>
                     <tr class="row justify-content-end">
-                        <td class="col-2 table-info"><b>Delivery: </b></td>
-                        <td class="col-2 table-info">
+                        <td class="col-2"><b>Delivery: </b></td>
+                        <td class="col-2">
                             <spring:message code="delivery.price" var="deliveryPrice"/>
-                            <fmt:formatNumber value="${deliveryPrice}" type="currency" currencyCode="USD"/>
+                            <fmt:formatNumber value="${deliveryPrice}" type="currency" currencySymbol="$"/>
                         </td>
                     </tr>
                     <tr class="row justify-content-end">
-                        <td class="col-2 table-success"><b>TOTAL PRICE: </b></td>
+                        <td class="col-2 table-success"><b>Discount: </b></td>
                         <td class="col-2 table-success">
+                            <fmt:formatNumber value="${cart.totalDiscount}" type="currency" currencySymbol="$"/>
+                        </td>
+                    </tr>
+                    <tr class="row justify-content-end">
+                        <td class="col-2 table-info"><b>TOTAL PRICE: </b></td>
+                        <td class="col-2 table-info">
                             <fmt:formatNumber value="${cart.totalPrice + deliveryPrice}" type="currency"
-                                              currencyCode="USD"/>
+                                              currencySymbol="$"/>
                         </td>
                     </tr>
                     </tbody>
