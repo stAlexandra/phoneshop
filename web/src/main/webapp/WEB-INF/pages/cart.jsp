@@ -66,20 +66,23 @@
                         </tr>
                     </c:forEach>
                     <tr class="row justify-content-end">
-                        <td class="col-6">
-                            <b>Subtotal: </b><fmt:formatNumber value="${cart.subtotalPrice}" type="currency"
+                        <td class="col-2"><b>Subtotal: </b></td>
+                        <td class="col-3">
+                            <fmt:formatNumber value="${cart.subtotalPrice}" type="currency"
                                                                currencySymbol="$"/>
                         </td>
                     </tr>
                     <tr class="row  justify-content-end">
-                        <td class="col-6 table-success">
-                            <b>Discount: </b><fmt:formatNumber value="${cart.totalDiscount}" type="currency"
+                        <td class="col-2 table-success"><b>Discount: </b></td>
+                        <td class="col-3 table-success">
+                            <fmt:formatNumber value="${cart.totalDiscount}" type="currency"
                                                                currencySymbol="$"/>
                         </td>
                     </tr>
                     <tr class="row justify-content-end">
-                        <td class="col-6 table-info">
-                            <b>TOTAL PRICE: </b><fmt:formatNumber value="${cart.totalPrice}" type="currency"
+                        <td class="col-2 table-info"><b>TOTAL PRICE: </b></td>
+                        <td class="col-3 table-info">
+                            <fmt:formatNumber value="${cart.totalPrice}" type="currency"
                                                                   currencySymbol="$"/>
                         </td>
                     </tr>

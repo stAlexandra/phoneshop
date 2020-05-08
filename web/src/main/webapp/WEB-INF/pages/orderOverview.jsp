@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
-<tags:master pageTitle="Order Overview">
+<tags:master pageTitle="Order Overview" hideUserPanel="${true}">
     <p></p>
     <c:choose>
         <c:when test="${empty order.orderItems}">
