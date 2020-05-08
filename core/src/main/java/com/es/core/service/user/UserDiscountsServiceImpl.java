@@ -6,6 +6,8 @@ import com.es.core.model.user.User;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class UserDiscountsServiceImpl implements UserDiscountsService {
@@ -35,4 +37,17 @@ public class UserDiscountsServiceImpl implements UserDiscountsService {
         Collection<Discount> discounts = userDiscountsDao.getByUserName(user.getName());
         return discounts.contains(discount);
     }
+
+    @Override
+    public Set<Discount> getActiveDiscounts(String userName) {
+        Collection<Discount> discounts = userDiscountsDao.getByUserName(userName);
+        return new HashSet<>(discounts);
+    }
+
+    @Override
+    public Set<Discount> getActiveDiscounts(User user) {
+        Collection<Discount> discounts = userDiscountsDao.getByUserName(user.getName());
+        return new HashSet<>(discounts);
+    }
+
 }

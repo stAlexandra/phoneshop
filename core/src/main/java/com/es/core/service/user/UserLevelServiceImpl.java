@@ -9,10 +9,12 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.Optional;
 
 @Service
-public class UserLevelDiscountServiceImpl implements UserLevelDiscountService {
+public class UserLevelServiceImpl implements UserLevelService {
     @Resource
     private UserLevelDiscountDao userLevelToDiscountDao;
     @Resource
@@ -26,15 +28,15 @@ public class UserLevelDiscountServiceImpl implements UserLevelDiscountService {
             if (discount == null) return Optional.empty();
 
             if (DiscountValueType.PERCENTAGE.equals(discount.getValueType())) {
-                return Optional.of(discount.getValue().doubleValue());
+                BigDecimal discountValue = discount.getValue().multiply(new BigDecimal(100d), new MathContext(2));
+                return Optional.of(discountValue.doubleValue());
             } else return Optional.empty();
         }
         return levelDiscount;
     }
 
     @Override
-    public boolean activateLevelDiscountForUser(@NotNull User user) {
-        // TODO check if user can activate level discount twice
+    public boolean addLevelDiscountForUser(@NotNull User user) {
         Discount discount = userLevelToDiscountDao.getByUserLevel(user.getLevel());
         try {
             userDiscountsService.addDiscount(user, discount);

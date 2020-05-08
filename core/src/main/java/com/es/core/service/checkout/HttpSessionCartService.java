@@ -4,14 +4,12 @@ import com.es.core.dao.PhoneDao;
 import com.es.core.model.cart.Cart;
 import com.es.core.model.cart.CartItem;
 import com.es.core.model.phone.Phone;
+import com.es.core.util.DiscountUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -81,9 +79,17 @@ public class HttpSessionCartService implements CartService {
                 .map(cartItem -> cartItem.getPhone().getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())))
                 .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
         cart.setSubtotalPrice(totalItemsPrice);
-        BigDecimal totalDiscounts = cart.getTotalDiscount();
-        if (totalItemsPrice.compareTo(totalDiscounts) > 0) {
-            cart.setTotalPrice(totalItemsPrice.subtract(totalDiscounts));
+
+        BigDecimal totalDiscount = cart.getDiscounts().stream()
+                .filter(Objects::nonNull)
+                .map(discount -> DiscountUtil.getAbsoluteDiscountValue(totalItemsPrice, discount))
+                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
+        cart.setTotalDiscount(totalDiscount);
+
+        if (totalItemsPrice.compareTo(totalDiscount) > 0) {
+            cart.setTotalPrice(totalItemsPrice.subtract(totalDiscount));
+        } else {
+            cart.setTotalPrice(totalItemsPrice);
         }
     }
 }

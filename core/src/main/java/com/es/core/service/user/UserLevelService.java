@@ -4,7 +4,7 @@ import com.es.core.model.user.User;
 
 import java.util.Optional;
 
-public interface UserLevelDiscountService {
+public interface UserLevelService {
     Optional<Double> getDiscountPercentage(Integer userLevel);
-    boolean activateLevelDiscountForUser(User user);
+    boolean addLevelDiscountForUser(User user);
 }

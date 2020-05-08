@@ -1,5 +1,6 @@
 package com.es.phoneshop.web.util;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
@@ -7,7 +8,6 @@ import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import st.alexandra.facades.PromotionsFacade;
 
-import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +18,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     @Value("${base.path}")
     private String basePath;
 
-    @Resource
+    @Autowired
     private PromotionsFacade promotionsFacade;
 
     @Override
@@ -29,7 +29,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
     protected void handle(HttpServletRequest request,
                           HttpServletResponse response, Authentication authentication) throws IOException {
-        activateInitialDiscounts(authentication);
+        addInitialDiscounts(authentication);
         response.sendRedirect(basePath + "/my-profile"); // TODO check if can send response without redirect
     }
 
@@ -41,11 +41,11 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
     }
 
-    private void activateInitialDiscounts(Authentication authentication) {
+    private void addInitialDiscounts(Authentication authentication) {
         if (authentication.getPrincipal() instanceof User) {
             String userName = ((User) authentication.getPrincipal()).getUsername();
             if (userName != null) {
-                promotionsFacade.activateUserLevelDiscount(userName);
+                promotionsFacade.addUserLevelDiscount(userName);
             }
         }
     }

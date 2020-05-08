@@ -1,20 +1,22 @@
 package com.es.core.model.cart;
 
+import com.es.core.model.discount.Discount;
+
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Cart {
     private List<CartItem> items;
     private BigDecimal totalPrice;
     private BigDecimal totalDiscount;
     private BigDecimal subtotalPrice;
+    private Set<Discount> discounts;
 
     public Cart() {
         this.items = new ArrayList<>();
         this.totalPrice = BigDecimal.ZERO;
         this.totalDiscount = BigDecimal.ZERO;
+        this.discounts = new HashSet<>();
     }
 
     public List<CartItem> getItems() {
@@ -47,6 +49,14 @@ public class Cart {
 
     public void setSubtotalPrice(BigDecimal subtotalPrice) {
         this.subtotalPrice = subtotalPrice;
+    }
+
+    public Set<Discount> getDiscounts() {
+        return discounts;
+    }
+
+    public void setDiscounts(Set<Discount> discounts) {
+        this.discounts = discounts;
     }
 
     @Override
