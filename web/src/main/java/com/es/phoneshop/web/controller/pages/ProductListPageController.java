@@ -1,11 +1,8 @@
 package com.es.phoneshop.web.controller.pages;
 
 import com.es.core.model.phone.Phone;
-import com.es.core.model.user.User;
 import com.es.core.service.checkout.CartService;
 import com.es.core.service.product.PhoneService;
-import com.es.core.service.user.UserLevelService;
-import com.es.core.service.user.UserService;
 import com.es.core.util.PageIndexUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -14,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import st.alexandra.facades.UserFacade;
 
 import javax.annotation.Resource;
 import java.security.Principal;
@@ -34,9 +32,7 @@ public class ProductListPageController {
     @Resource
     private CartService cartService;
     @Resource
-    private UserService userService;
-    @Resource
-    private UserLevelService userLevelService;
+    private UserFacade userFacade;
 
     @GetMapping
     public String showProductListPage(Model model,
@@ -48,7 +44,7 @@ public class ProductListPageController {
         int totalPages = phonePage.getTotalPages();
 
         addPageInfoAttributes(model, phonePage, currentPageNum, totalPages);
-        addUserAttributes(model, principal);
+        model.addAttribute("user", userFacade.getUserData(principal));
         model.addAttribute("cart", cartService.getCart());
         return VIEW_NAME;
     }
@@ -64,7 +60,7 @@ public class ProductListPageController {
         int totalPages = phonePage.getTotalPages();
 
         addPageInfoAttributes(model, phonePage, currentPageNum, totalPages);
-        addUserAttributes(model, principal);
+        model.addAttribute("user", userFacade.getUserData(principal));
         model.addAttribute("cart", cartService.getCart());
         return VIEW_NAME;
     }
@@ -76,12 +72,4 @@ public class ProductListPageController {
         model.addAttribute("lastPage", total);
     }
 
-    private void addUserAttributes(Model model, Principal principal) {
-        if (principal != null) {
-            User user = userService.getUserByName(principal.getName());
-            model.addAttribute(user);
-            userLevelService.getDiscountPercentage(user.getLevel())
-                    .ifPresent(discount -> model.addAttribute("levelDiscount", discount));
-        }
-    }
 }

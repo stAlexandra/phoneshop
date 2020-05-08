@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <tags:master pageTitle="My Profile" hideUserPanel="${true}" showMiniCart="${false}">
     <div class="row justify-content-end">
@@ -14,9 +15,9 @@
             <img src="https://i.pinimg.com/originals/13/a4/11/13a411076cdee39085cad97da215d9be.png" width="200"
                  height="200" class="align-self-start mr-3" alt="Profile photo">
             <div class="media-body mt-3 ml-4">
-                <h1>${user.name}</h1>
+                <h1><sec:authentication property="name"/></h1>
                 <p>
-                    <span class="h3">Level ${user.level} Discount ${levelDiscount}%</span>
+                    <span class="h3">Level ${user.level} Discount ${user.discountPercentage}%</span>
                 </p>
             </div>
         </div>

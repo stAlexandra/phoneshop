@@ -1,4 +1,4 @@
-package st.alexandra.facades;
+package st.alexandra.facades.impl;
 
 import com.es.core.exception.CouponNotFoundException;
 import com.es.core.model.cart.Cart;
@@ -13,6 +13,7 @@ import com.es.core.service.user.UserLevelService;
 import com.es.core.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import st.alexandra.facades.PromotionsFacade;
 
 import java.util.Set;
 

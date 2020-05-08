@@ -14,7 +14,7 @@
         </div>
         <div class="col-auto">
                 <h5><sec:authentication property="name"/></h5>
-            <span>Level: ${user.level}</span>&nbsp;<span>Discount: ${levelDiscount}%</span>
+            <span>Level: ${user.level}</span>&nbsp;<span>Discount: ${user.discountPercentage}%</span>
         </div>
     </div>
 </div>
