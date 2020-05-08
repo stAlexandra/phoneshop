@@ -3,7 +3,8 @@ package com.es.phoneshop.web.controller.pages;
 import com.es.core.model.cart.Cart;
 import com.es.core.model.user.User;
 import com.es.core.service.checkout.CartService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.es.core.service.user.UserLevelService;
+import com.es.core.service.user.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +30,10 @@ public class CartPageController {
     private CartService cartService;
     @Resource
     private PromotionsFacade promotionsFacade;
+    @Resource
+    private UserService userService;
+    @Resource
+    private UserLevelService userLevelService;
 
     @GetMapping
     public String getCart(Model model, Principal principal, @RequestParam(required = false) Boolean couponActivated) {
@@ -39,7 +44,7 @@ public class CartPageController {
 
         model.addAttribute("cart", cart);
         model.addAttribute("updateCartRequestData", new UpdateCartRequestData(cart));
-
+        addUserAttributes(model, principal);
         if (couponActivated != null) {
             addCouponInfo(couponActivated, model);
         }
@@ -51,6 +56,7 @@ public class CartPageController {
                                    Model model, Principal principal) {
 
         if (bindingResult.hasErrors()) {
+            addUserAttributes(model, principal);
             model.addAttribute("cart", cartService.getCart());
             return new ModelAndView(VIEW_NAME, model.asMap(), HttpStatus.BAD_REQUEST);
         }
@@ -71,6 +77,15 @@ public class CartPageController {
             model.addAttribute("couponActivatedMsg", "Coupon is successfully activated.");
         } else {
             model.addAttribute("couponErrorMsg", "Coupon could not be activated.");
+        }
+    }
+
+    private void addUserAttributes(Model model, Principal principal) {
+        if (principal != null) {
+            User user = userService.getUserByName(principal.getName());
+            model.addAttribute(user);
+            userLevelService.getDiscountPercentage(user.getLevel())
+                    .ifPresent(discount -> model.addAttribute("levelDiscount", discount));
         }
     }
 }

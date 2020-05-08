@@ -2,9 +2,11 @@ package com.es.phoneshop.web.controller.pages;
 
 import com.es.core.model.order.CustomerInfo;
 import com.es.core.model.order.Order;
+import com.es.core.model.user.User;
 import com.es.core.service.checkout.CartService;
 import com.es.core.service.checkout.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.es.core.service.user.UserLevelService;
+import com.es.core.service.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,7 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import st.alexandra.facades.dto.OrderData;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/order")
@@ -27,16 +31,16 @@ public class OrderPageController {
     private static final String CART_ATTRIBUTE = "cart";
     private static final String ORDER_DATA_ATTRIBUTE = "orderData";
 
-    private final OrderService orderService;
-    private final CartService cartService;
-    private final Validator orderDataValidator;
-
-    @Autowired
-    public OrderPageController(OrderService orderService, CartService cartService, Validator orderDataValidator) {
-        this.orderService = orderService;
-        this.cartService = cartService;
-        this.orderDataValidator = orderDataValidator;
-    }
+    @Resource
+    private OrderService orderService;
+    @Resource
+    private CartService cartService;
+    @Resource
+    private Validator orderDataValidator;
+    @Resource
+    private UserService userService;
+    @Resource
+    private UserLevelService userLevelService;
 
     @InitBinder("orderData")
     private void initBinder(WebDataBinder binder) {
@@ -44,9 +48,10 @@ public class OrderPageController {
     }
 
     @GetMapping
-    public String getOrder(Model model) {
+    public String getOrder(Model model, Principal principal) {
         model.addAttribute(CART_ATTRIBUTE, cartService.getCart());
         model.addAttribute(ORDER_DATA_ATTRIBUTE, new OrderData());
+        addUserAttributes(model, principal);
         return VIEW_NAME;
     }
 
@@ -63,4 +68,12 @@ public class OrderPageController {
         return REDIRECT_PREFIX + ORDER_OVERVIEW + order.getSecureId();
     }
 
+    private void addUserAttributes(Model model, Principal principal) {
+        if (principal != null) {
+            User user = userService.getUserByName(principal.getName());
+            model.addAttribute(user);
+            userLevelService.getDiscountPercentage(user.getLevel())
+                    .ifPresent(discount -> model.addAttribute("levelDiscount", discount));
+        }
+    }
 }

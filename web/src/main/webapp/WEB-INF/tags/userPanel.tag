@@ -4,6 +4,7 @@
 
 <%@attribute name="pageTitle" type="java.lang.String" required="false" %>
 
+<sec:authorize access="isAuthenticated()">
 <div id="userpanel" class="card">
     <div class="row card-body">
         <div class="col-auto">
@@ -12,10 +13,9 @@
             </a>
         </div>
         <div class="col-auto">
-            <sec:authorize access="isAuthenticated()">
                 <h5><sec:authentication property="name"/></h5>
-            </sec:authorize>
-            <span>Level: 10</span>&nbsp;<span>Discount: 10%</span>
+            <span>Level: ${user.level}</span>&nbsp;<span>Discount: ${levelDiscount}%</span>
         </div>
     </div>
 </div>
+</sec:authorize>
