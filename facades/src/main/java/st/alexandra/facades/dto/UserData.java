@@ -1,14 +1,13 @@
 package st.alexandra.facades.dto;
 
-import com.es.core.model.user.Achievement;
-
 import java.util.List;
 
 public class UserData {
     private Integer level;
     private Double discountPercentage;
-    private List<Achievement> achievements;
+    private List<AchievementData> achievements;
     private Long xp;
+    private Long maxXP;
 
     public Integer getLevel() {
         return level;
@@ -26,11 +25,11 @@ public class UserData {
         this.discountPercentage = discountPercentage;
     }
 
-    public List<Achievement> getAchievements() {
+    public List<AchievementData> getAchievements() {
         return achievements;
     }
 
-    public void setAchievements(List<Achievement> achievements) {
+    public void setAchievements(List<AchievementData> achievements) {
         this.achievements = achievements;
     }
 
@@ -40,5 +39,13 @@ public class UserData {
 
     public void setXP(Long xp) {
         this.xp = xp;
+    }
+
+    public Long getMaxXP() {
+        return maxXP;
+    }
+
+    public void setMaxXP(Long maxXP) {
+        this.maxXP = maxXP;
     }
 }

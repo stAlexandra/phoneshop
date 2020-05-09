@@ -5,7 +5,7 @@ import java.util.List;
 public class User {
     private String name;
     private boolean enabled;
-    private int level;
+    private Level level;
     private long experiencePoints;
     private List<Achievement> achievements;
 
@@ -25,11 +25,11 @@ public class User {
         this.enabled = enabled;
     }
 
-    public int getLevel() {
+    public Level getLevel() {
         return level;
     }
 
-    public void setLevel(int level) {
+    public void setLevel(Level level) {
         this.level = level;
     }
 

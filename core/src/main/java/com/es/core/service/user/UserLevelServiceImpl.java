@@ -39,7 +39,7 @@ public class UserLevelServiceImpl implements UserLevelService {
     @Override
     public boolean addLevelDiscountForUser(@NotNull User user) {
         try {
-            Discount discount = userLevelToDiscountDao.getByUserLevel(user.getLevel());
+            Discount discount = userLevelToDiscountDao.getByUserLevel(user.getLevel().getNumber());
             userDiscountsService.addDiscount(user, discount);
         } catch (DuplicateDiscountException exc) {
             System.out.println("Level discount for user " + user.getName() + " is already activated");

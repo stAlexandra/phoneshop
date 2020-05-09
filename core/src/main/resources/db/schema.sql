@@ -8,6 +8,7 @@ drop table if exists discounts2userLevel;
 drop table if exists discounts2users;
 drop table if exists discounts;
 drop table if exists users;
+drop table if exists levels;
 drop table if exists authorities;
 drop table if exists users2achievements;
 drop table if exists achievements;
@@ -93,13 +94,21 @@ create table orderItems
     CONSTRAINT FK_orderItems_orderId FOREIGN KEY (orderId) REFERENCES orders (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE TABLE levels
+(
+    number SMALLINT NOT NULL PRIMARY KEY,
+    minXP  LONG     NOT NULL,
+    maxXP  LONG     NOT NULL
+);
+
 create table users
 (
     username VARCHAR(50)  not null primary key,
     password VARCHAR(100) not null,
     enabled  BOOLEAN      not null,
     level    SMALLINT,
-    xp       BIGINT
+    xp       BIGINT,
+    CONSTRAINT FK_users_level foreign key (level) references levels (number)
 );
 
 create table authorities

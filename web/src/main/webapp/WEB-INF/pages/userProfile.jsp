@@ -20,7 +20,8 @@
                     <span class="h3">Level ${user.level} Discount ${user.discountPercentage}%</span>
                 </p>
                 <div class="col-4">
-                    <progress value="${user.XP}" max="10"></progress>
+                        ${user.XP} / ${user.maxXP}
+                    <progress value="${user.XP}" max="${user.maxXP}"></progress>
                 </div>
             </div>
         </div>
