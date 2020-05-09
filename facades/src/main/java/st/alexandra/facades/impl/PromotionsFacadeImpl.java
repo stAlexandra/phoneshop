@@ -38,17 +38,6 @@ public class PromotionsFacadeImpl implements PromotionsFacade {
     }
 
     @Override
-    public void addUserLevelDiscount(String userName) {
-        User user = userService.getUserByName(userName);
-        if (user != null && userLevelService.addLevelDiscountForUser(user)) {
-            //TODO log
-            System.out.println("Level discount activated for user " + userName);
-        } else {
-            System.out.println("Could not activate discount for user " + userName);
-        }
-    }
-
-    @Override
     public void fetchAndApplyCartDiscounts(String userName, Cart cart) {
         //TODO fetch discounts from providers
         Set<Discount> discounts = userDiscountsService.getActiveDiscounts(userName);
@@ -57,6 +46,23 @@ public class PromotionsFacadeImpl implements PromotionsFacade {
         Set<Discount> inactiveDiscounts = cartDiscountService.getInactiveDiscounts(cart, discounts);
         if (inactiveDiscounts != null && !inactiveDiscounts.isEmpty()) {
             discountService.applyDiscount(inactiveDiscounts); // TODO use return value
+        }
+    }
+
+    @Override
+    public void initUser(String userName) {
+        User user = userService.getUserByName(userName);
+        if (user != null) {
+            addUserLevelDiscount(user);
+        }
+    }
+
+    private void addUserLevelDiscount(User user) {
+        if (userLevelService.addLevelDiscountForUser(user)) {
+            //TODO log
+            System.out.println("Level discount activated for user " + user.getName());
+        } else {
+            System.out.println("Could not activate discount for user");
         }
     }
 

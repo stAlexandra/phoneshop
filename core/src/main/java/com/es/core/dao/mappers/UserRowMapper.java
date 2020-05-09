@@ -17,6 +17,7 @@ public class UserRowMapper implements RowMapper<User> {
         user.setName(resultSet.getString(USERNAME));
         user.setEnabled(resultSet.getBoolean(ENABLED));
         user.setLevel(resultSet.getInt(LEVEL));
+        user.setExperiencePoints(resultSet.getLong(XP));
         return user;
     }
 }

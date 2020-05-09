@@ -1,5 +1,6 @@
 package com.es.core.dao.impl;
 
+import com.es.core.dao.AchievementDao;
 import com.es.core.dao.UserDao;
 import com.es.core.dao.mappers.UserRowMapper;
 import com.es.core.model.user.User;
@@ -23,11 +24,21 @@ public class JdbcUserDao implements UserDao {
     @Resource
     private UserRowMapper userRowMapper;
 
+    @Resource
+    private AchievementDao achievementDao;
+
     @Override
     @Transactional(readOnly = true)
     public User get(String name) {
         MapSqlParameterSource params = new MapSqlParameterSource("name", name);
-        return jdbcTemplate.queryForObject(SQL_GET_USER_BY_NAME, params, userRowMapper);
+        return jdbcTemplate.query(SQL_GET_USER_BY_NAME, params, resultSet -> {
+            if (resultSet.next()) {
+                User user = userRowMapper.mapRow(resultSet, 1);
+                user.setAchievements(achievementDao.getByUserName(user.getName()));
+                return user;
+            }
+            return null;
+        });
     }
 
     @Override

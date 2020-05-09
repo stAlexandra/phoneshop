@@ -9,6 +9,7 @@ public final class DbContract {
         public static final String USERNAME = "username";
         public static final String ENABLED = "enabled";
         public static final String LEVEL = "level";
+        public static final String XP = "xp";
     }
 
     public static class DiscountsTable {

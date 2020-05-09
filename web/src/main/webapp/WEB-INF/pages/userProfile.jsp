@@ -19,6 +19,9 @@
                 <p>
                     <span class="h3">Level ${user.level} Discount ${user.discountPercentage}%</span>
                 </p>
+                <div class="col-4">
+                    <progress value="${user.XP}" max="10"></progress>
+                </div>
             </div>
         </div>
     </div>
@@ -29,28 +32,18 @@
                 <h3><b>My Achievements</b></h3>
             </td>
         </tr>
-            <%--                <c:forEach var="achievement" items="${achievments}" varStatus="index">--%>
-        <tr class="row">
-            <td class="col-2 offset-1">
-                <img width="100" height="100" class="align-self-end"
-                     src="https://yandex.by/images/_crpd/adcs10749/d4d0513igU/uBDBJc1hnntyk1-42fcaNNI2awI-XOE4VLKSOzG2qy-v_22JdAO1nmN1bRUc1Igq_ESeTG2jzhKY35ueTIE8E-gR33fZbsMibsVW5IY">
-            </td>
-            <td class="col-8">
-                <h3>Achievement Name</h3>
-                <p>Achievement Description Achievement DescriptionAchievement Description</p>
-            </td>
-        </tr>
-            <%--                </c:forEach>--%>
-        <tr class="row">
-            <td class="col-2 offset-1">
-                <img width="100" height="100" class="align-self-end"
-                     src="https://yandex.by/images/_crpd/adcs10749/d4d0513igU/uBDBJc1hnntyk1-42fcaNNI2awI-XOE4VLKSOzG2qy-v_22JdAO1nmN1bRUc1Igq_ESeTG2jzhKY35ueTIE8E-gR33fZbsMibsVW5IY">
-            </td>
-            <td class="col-8">
-                <h3>Achievement Name</h3>
-                <p>Achievement Description Achievement DescriptionAchievement Description</p>
-            </td>
-        </tr>
+        <c:forEach items="${user.achievements}" var="achievement">
+            <tr class="row">
+                <td class="col-2 offset-1">
+                    <img width="100" height="100" class="align-self-end"
+                         src="https://yandex.by/images/_crpd/adcs10749/d4d0513igU/uBDBJc1hnntyk1-42fcaNNI2awI-XOE4VLKSOzG2qy-v_22JdAO1nmN1bRUc1Igq_ESeTG2jzhKY35ueTIE8E-gR33fZbsMibsVW5IY">
+                </td>
+                <td class="col-8">
+                    <h3>${achievement.name}</h3>
+                    <p>${achievement.description}</p>
+                </td>
+            </tr>
+        </c:forEach>
     </table>
     <br/><br/><br/>
     <table id="treasures" class="table">

@@ -1,9 +1,13 @@
 package com.es.core.model.user;
 
+import java.util.List;
+
 public class User {
     private String name;
     private boolean enabled;
     private int level;
+    private long experiencePoints;
+    private List<Achievement> achievements;
 
     public String getName() {
         return name;
@@ -27,5 +31,21 @@ public class User {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public List<Achievement> getAchievements() {
+        return achievements;
+    }
+
+    public void setAchievements(List<Achievement> achievements) {
+        this.achievements = achievements;
+    }
+
+    public long getExperiencePoints() {
+        return experiencePoints;
+    }
+
+    public void setExperiencePoints(long experiencePoints) {
+        this.experiencePoints = experiencePoints;
     }
 }

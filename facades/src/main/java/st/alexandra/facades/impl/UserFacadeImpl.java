@@ -27,6 +27,8 @@ public class UserFacadeImpl implements UserFacade {
         if (user != null) {
             userLevelService.getDiscountPercentage(user.getLevel()).ifPresent(userData::setDiscountPercentage);
             userData.setLevel(user.getLevel());
+            userData.setAchievements(user.getAchievements());
+            userData.setXP(user.getExperiencePoints());
         }
         return userData;
     }

@@ -29,7 +29,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
     protected void handle(HttpServletRequest request,
                           HttpServletResponse response, Authentication authentication) throws IOException {
-        addInitialDiscounts(authentication);
+        initializeUser(authentication);
         response.sendRedirect(basePath + "/my-profile"); // TODO check if can send response without redirect
     }
 
@@ -41,11 +41,11 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
     }
 
-    private void addInitialDiscounts(Authentication authentication) {
+    private void initializeUser(Authentication authentication) {
         if (authentication.getPrincipal() instanceof User) {
             String userName = ((User) authentication.getPrincipal()).getUsername();
             if (userName != null) {
-                promotionsFacade.addUserLevelDiscount(userName);
+                promotionsFacade.initUser(userName);
             }
         }
     }
