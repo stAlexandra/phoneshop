@@ -5,6 +5,7 @@ import com.es.core.exception.DuplicateDiscountException;
 import com.es.core.model.discount.Discount;
 import com.es.core.model.discount.DiscountValueType;
 import com.es.core.model.user.User;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -37,11 +38,14 @@ public class UserLevelServiceImpl implements UserLevelService {
 
     @Override
     public boolean addLevelDiscountForUser(@NotNull User user) {
-        Discount discount = userLevelToDiscountDao.getByUserLevel(user.getLevel());
         try {
+            Discount discount = userLevelToDiscountDao.getByUserLevel(user.getLevel());
             userDiscountsService.addDiscount(user, discount);
         } catch (DuplicateDiscountException exc) {
             System.out.println("Level discount for user " + user.getName() + " is already activated");
+            return false;
+        } catch (DataAccessException exc) {
+            System.out.println("Can't activate discount for user " + user.getName());
             return false;
         }
         return true;

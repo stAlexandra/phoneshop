@@ -2,7 +2,6 @@ package com.es.phoneshop.web.controller.pages.admin;
 
 import com.es.core.exception.PhonesNotFoundException;
 import com.es.core.model.phone.Phone;
-import com.es.core.service.PriceService;
 import com.es.core.service.product.PhoneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,9 +25,6 @@ public class AdminProductDetailsPageController {
 
     @Autowired
     private PhoneService phoneService;
-
-    @Autowired
-    private PriceService priceService;
 
     @ExceptionHandler(PhonesNotFoundException.class)
     public String handlePhonesNotFoundException(PhonesNotFoundException e) {

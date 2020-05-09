@@ -11,11 +11,13 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -38,7 +40,8 @@ public class JdbcDiscountDao implements UserLevelDiscountDao, UserDiscountsDao {
     @Transactional(readOnly = true)
     public Discount getByUserLevel(Integer userLevel) {
         SqlParameterSource parameterSource = new MapSqlParameterSource("userLevel", userLevel);
-        return jdbcTemplate.queryForObject(SQL_GET_DISCOUNT_BY_USER_LEVEL, parameterSource, discountRowMapper);
+        List<Discount> discountList = jdbcTemplate.query(SQL_GET_DISCOUNT_BY_USER_LEVEL, parameterSource, discountRowMapper);
+        return CollectionUtils.isEmpty(discountList) ? null : discountList.get(0);
     }
 
     @Override

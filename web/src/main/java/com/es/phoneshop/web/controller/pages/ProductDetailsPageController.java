@@ -2,13 +2,13 @@ package com.es.phoneshop.web.controller.pages;
 
 import com.es.core.dao.PhoneDao;
 import com.es.core.exception.PhonesNotFoundException;
-import com.es.core.service.checkout.CartService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import st.alexandra.facades.CartFacade;
 import st.alexandra.facades.UserFacade;
 
 import javax.annotation.Resource;
@@ -22,7 +22,7 @@ public class ProductDetailsPageController {
     @Resource
     private PhoneDao phoneDao;
     @Resource
-    private CartService cartService;
+    private CartFacade cartFacade;
     @Resource
     private UserFacade userFacade;
 
@@ -35,7 +35,7 @@ public class ProductDetailsPageController {
     public String showProductDetails(@PathVariable("id") Long phoneId, Model model, Principal principal) {
         model.addAttribute("user", userFacade.getUserData(principal));
         model.addAttribute("phone", phoneDao.get(phoneId));
-        model.addAttribute("cart", cartService.getCart());
+        model.addAttribute("cart", cartFacade.getCart());
         return VIEW_NAME;
     }
 

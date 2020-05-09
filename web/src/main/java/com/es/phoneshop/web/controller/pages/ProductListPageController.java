@@ -1,7 +1,6 @@
 package com.es.phoneshop.web.controller.pages;
 
 import com.es.core.model.phone.Phone;
-import com.es.core.service.checkout.CartService;
 import com.es.core.service.product.PhoneService;
 import com.es.core.util.PageIndexUtil;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import st.alexandra.facades.CartFacade;
 import st.alexandra.facades.UserFacade;
 
 import javax.annotation.Resource;
@@ -30,7 +30,7 @@ public class ProductListPageController {
     @Resource
     private PhoneService phoneService;
     @Resource
-    private CartService cartService;
+    private CartFacade cartFacade;
     @Resource
     private UserFacade userFacade;
 
@@ -45,7 +45,7 @@ public class ProductListPageController {
 
         addPageInfoAttributes(model, phonePage, currentPageNum, totalPages);
         model.addAttribute("user", userFacade.getUserData(principal));
-        model.addAttribute("cart", cartService.getCart());
+        model.addAttribute("cart", cartFacade.getCart());
         return VIEW_NAME;
     }
 
@@ -61,7 +61,7 @@ public class ProductListPageController {
 
         addPageInfoAttributes(model, phonePage, currentPageNum, totalPages);
         model.addAttribute("user", userFacade.getUserData(principal));
-        model.addAttribute("cart", cartService.getCart());
+        model.addAttribute("cart", cartFacade.getCart());
         return VIEW_NAME;
     }
 
