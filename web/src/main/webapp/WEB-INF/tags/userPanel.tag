@@ -4,7 +4,7 @@
 
 <%@attribute name="pageTitle" type="java.lang.String" required="false" %>
 
-<sec:authorize access="isAuthenticated()">
+<sec:authorize access="isAuthenticated() && !hasRole('ROLE_ADMIN')">
 <div id="userpanel" class="card">
     <div class="row card-body">
         <div class="col-auto">

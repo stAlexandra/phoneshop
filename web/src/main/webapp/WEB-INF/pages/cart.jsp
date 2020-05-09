@@ -7,6 +7,7 @@
 <tags:master pageTitle="My Cart" showMiniCart="${false}">
     <form id="deleteForm" method="post">
         <input type="hidden" name="_method" value="DELETE"/>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     </form>
     <tags:backToProductList/>
     <c:choose>
