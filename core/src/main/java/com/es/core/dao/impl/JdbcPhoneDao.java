@@ -3,7 +3,7 @@ package com.es.core.dao.impl;
 import com.es.core.dao.ColorDao;
 import com.es.core.dao.PhoneDao;
 import com.es.core.dao.mappers.PhoneRowMapper;
-import com.es.core.exception.PhonesNotFoundException;
+import com.es.core.exception.ProductsNotFoundException;
 import com.es.core.model.phone.Color;
 import com.es.core.model.phone.Phone;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -79,7 +79,7 @@ public class JdbcPhoneDao implements PhoneDao {
     @Resource
     private PhoneRowMapper phoneRowMapper;
 
-    public Phone get(final Long key) throws PhonesNotFoundException {
+    public Phone get(final Long key) throws ProductsNotFoundException {
         Map<String, Long> namedParameters = Collections.singletonMap(PHONE_ID_PARAM, key);
         Set<Color> colors = jdbcColorDao.getColors(key);
 
@@ -90,7 +90,7 @@ public class JdbcPhoneDao implements PhoneDao {
                         phone.setColors(new HashSet<>(colors));
                         return phone;
                     } else {
-                        throw new PhonesNotFoundException(key);
+                        throw new ProductsNotFoundException(key);
                     }
                 });
     }

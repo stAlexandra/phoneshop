@@ -27,7 +27,7 @@ public class AjaxCartController {
             responseData.setQuantityErrorMessage(bindingResult.getFieldError("quantity").getDefaultMessage());
             return new ResponseEntity<>(responseData, HttpStatus.BAD_REQUEST);
         } else {
-            cartFacade.addPhone(requestData.getPhoneId(), requestData.getQuantity());
+            cartFacade.add(requestData.getId(), requestData.getQuantity());
             Cart cart = cartFacade.getCart();
 
             responseData.setNumItems(cart.getItems().size());

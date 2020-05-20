@@ -21,7 +21,7 @@
 </div>
 <div class="row justify-content-between">
     <div class="col-5">
-        <h2 class="display-3">Phonify</h2>
+        <h2 class="display-3">Bookify</h2>
     </div>
     <div class="col-3">
         <c:if test="${param.showMiniCart}">

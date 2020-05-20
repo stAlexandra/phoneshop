@@ -7,15 +7,15 @@
 <tags:master pageTitle="Product Details">
     <a class="btn btn-outline-primary" href="<c:url value="/admin/products"/>" role="button">Back to product list</a>
     <p></p>
-    <c:url value="/admin/products/${phone.id}" var="editProductUrl"/>
+    <c:url value="/admin/products/${product.id}" var="editProductUrl"/>
     <form:form method="post" action="${editProductUrl}" modelAttribute="updatePhoneData">
     <div class="row justify-content-start">
         <div class="col-6">
-            <h1>${phone.model}</h1><br/>
-            <img src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${phone.imageUrl}"
+            <h1>${product.model}</h1><br/>
+            <img src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${product.imageUrl}"
                  class="img-fluid img-thumbnail" alt="Phone image">
             <p class="lead">
-                    ${phone.description}
+                    ${product.description}
             </p>
             <table>
                 <thead class="thead-light">
@@ -50,19 +50,19 @@
                 <tbody>
                 <tr class="row">
                     <td class="col">Size</td>
-                    <td class="col">${phone.displaySizeInches}</td>
+                    <td class="col">${product.displaySizeInches}</td>
                 </tr>
                 <tr class="row">
                     <td class="col">Resolution</td>
-                    <td class="col">${phone.displayResolution}</td>
+                    <td class="col">${product.displayResolution}</td>
                 </tr>
                 <tr class="row">
                     <td class="col">Technology</td>
-                    <td class="col">${phone.displayTechnology}</td>
+                    <td class="col">${product.displayTechnology}</td>
                 </tr>
                 <tr class="row">
                     <td class="col">Pixel density</td>
-                    <td class="col">${phone.pixelDensity}</td>
+                    <td class="col">${product.pixelDensity}</td>
                 </tr>
                 </tbody>
             </table>
@@ -85,11 +85,11 @@
                 </tr>
                 <tr class="row">
                     <td class="col">Height</td>
-                    <td class="col">${phone.heightMm}</td>
+                    <td class="col">${product.heightMm}</td>
                 </tr>
                 <tr class="row">
                     <td class="col">Weight</td>
-                    <td class="col">${phone.weightGr}</td>
+                    <td class="col">${product.weightGr}</td>
                 </tr>
                 </tbody>
             </table>
@@ -98,11 +98,11 @@
                 <tbody>
                 <tr class="row">
                     <td class="col">Front</td>
-                    <td class="col">${phone.frontCameraMegapixels}</td>
+                    <td class="col">${product.frontCameraMegapixels}</td>
                 </tr>
                 <tr class="row">
                     <td class="col">Back</td>
-                    <td class="col">${phone.backCameraMegapixels}</td>
+                    <td class="col">${product.backCameraMegapixels}</td>
                 </tr>
                 </tbody>
             </table>
@@ -111,15 +111,15 @@
                 <tbody>
                 <tr class="row">
                     <td class="col">Talk time</td>
-                    <td class="col">${phone.talkTimeHours}</td>
+                    <td class="col">${product.talkTimeHours}</td>
                 </tr>
                 <tr class="row">
                     <td class="col">Stand by time</td>
-                    <td class="col">${phone.standByTimeHours}</td>
+                    <td class="col">${product.standByTimeHours}</td>
                 </tr>
                 <tr class="row">
                     <td class="col">Battery capacity</td>
-                    <td class="col">${phone.batteryCapacityMah}</td>
+                    <td class="col">${product.batteryCapacityMah}</td>
                 </tr>
                 </tbody>
             </table>
@@ -129,18 +129,18 @@
                 <tr class="row">
                     <td class="col">Colors</td>
                     <td class="col">
-                        <c:forEach var="color" items="${phone.colors}">
+                        <c:forEach var="color" items="${product.colors}">
                             ${color.code}
                         </c:forEach>
                     </td>
                 </tr>
                 <tr class="row">
                     <td class="col">Device type</td>
-                    <td class="col">${phone.deviceType}</td>
+                    <td class="col">${product.deviceType}</td>
                 </tr>
                 <tr class="row">
                     <td class="col">Bluetooth</td>
-                    <td class="col">${phone.bluetooth}</td>
+                    <td class="col">${product.bluetooth}</td>
                 </tr>
                 </tbody>
             </table>

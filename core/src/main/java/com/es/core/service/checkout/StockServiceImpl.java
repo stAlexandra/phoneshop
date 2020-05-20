@@ -21,14 +21,14 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
-    public List<Stock> getStocks(List<Long> phoneIds) {
-        return stockDao.getStocks(phoneIds);
+    public List<Stock> getStocks(List<Long> productIds) {
+        return stockDao.getStocks(productIds);
     }
 
     @Override
-    public Map<Long, Stock> getStocksMap(List<Long> phoneIds) {
-        return stockDao.getStocks(phoneIds).stream()
-                .collect(Collectors.toMap(stock -> stock.getPhone().getId(), UnaryOperator.identity()));
+    public Map<Long, Stock> getStocksMap(List<Long> productIds) {
+        return stockDao.getStocks(productIds).stream()
+                .collect(Collectors.toMap(stock -> stock.getProduct().getId(), UnaryOperator.identity()));
     }
 
     @Override

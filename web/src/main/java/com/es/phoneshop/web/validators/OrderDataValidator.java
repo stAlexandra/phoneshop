@@ -34,9 +34,9 @@ public class OrderDataValidator implements Validator {
 
         stockList.stream()
                 .filter(stock -> {
-                    Long phoneId = stock.getPhone().getId();
+                    Long phoneId = stock.getProduct().getId();
                     return stock.getStock() - stock.getReserved() < orderData.getPhoneIdToQuantity().get(phoneId);
                 })
-                .forEach(stock -> errors.rejectValue("phoneIdToQuantity['" + stock.getPhone().getId() + "']", "outOfStock"));
+                .forEach(stock -> errors.rejectValue("phoneIdToQuantity['" + stock.getProduct().getId() + "']", "outOfStock"));
     }
 }

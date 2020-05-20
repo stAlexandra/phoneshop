@@ -18,6 +18,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     @Value("${base.path}")
     private String basePath;
 
+    @Value("${admin.role}")
+    private String adminRole;
+
     @Autowired
     private PromotionsFacade promotionsFacade;
 
@@ -29,7 +32,14 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
     protected void handle(HttpServletRequest request,
                           HttpServletResponse response, Authentication authentication) throws IOException {
-        initializeUser(authentication);
+        if (authentication.getPrincipal() instanceof User) {
+            User user = (User) authentication.getPrincipal();
+            initializeUser(user.getUsername());
+            if (user.getAuthorities().stream().anyMatch(authority -> adminRole.equals(authority.getAuthority()))) {
+                response.sendRedirect(basePath + "/admin/orders");
+                return;
+            }
+        }
         response.sendRedirect(basePath + "/my-profile"); // TODO check if can send response without redirect
     }
 
@@ -41,12 +51,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
     }
 
-    private void initializeUser(Authentication authentication) {
-        if (authentication.getPrincipal() instanceof User) {
-            String userName = ((User) authentication.getPrincipal()).getUsername();
-            if (userName != null) {
-                promotionsFacade.initUser(userName);
-            }
+    private void initializeUser(String userName) {
+        if (userName != null) {
+            promotionsFacade.initUser(userName);
         }
     }
 }

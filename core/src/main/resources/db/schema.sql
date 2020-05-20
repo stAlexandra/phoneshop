@@ -1,3 +1,4 @@
+drop table if exists books;
 drop table if exists phone2color;
 drop table if exists colors;
 drop table if exists stocks;
@@ -59,13 +60,28 @@ create table phone2color
     CONSTRAINT FK_phone2color_colorId FOREIGN KEY (colorId) REFERENCES colors (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+create table books
+(
+    id BIGINT AUTO_INCREMENT primary key,
+    name VARCHAR(254) NOT NULL,
+    description VARCHAR(4096),
+    imageUrl VARCHAR(254),
+    price FLOAT,
+    author VARCHAR(100),
+    genre VARCHAR(50),
+    dateOfPublishing DATETIME,
+    publisher VARCHAR(100),
+    pageCount BIGINT,
+    CONSTRAINT UC_book UNIQUE (name, author)
+);
+
 create table stocks
 (
-    phoneId  BIGINT   NOT NULL,
+    productId  BIGINT   NOT NULL,
     stock    SMALLINT NOT NULL,
     reserved SMALLINT NOT NULL,
-    UNIQUE (phoneId),
-    CONSTRAINT FK_stocks_phoneId FOREIGN KEY (phoneId) REFERENCES phones (id) ON DELETE CASCADE ON UPDATE CASCADE
+    UNIQUE (productId),
+    CONSTRAINT FK_stocks_productId FOREIGN KEY (productId) REFERENCES books (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 create table orders
@@ -86,11 +102,11 @@ create table orders
 
 create table orderItems
 (
-    phoneId  BIGINT   NOT NULL,
+    productId  BIGINT   NOT NULL,
     orderId  BIGINT   NOT NULL,
     quantity SMALLINT NOT NULL,
-    UNIQUE (phoneId, orderId),
-    CONSTRAINT FK_orderItems_phoneId FOREIGN KEY (phoneId) REFERENCES phones (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    UNIQUE (productId, orderId),
+    CONSTRAINT FK_orderItems_productId FOREIGN KEY (productId) REFERENCES books (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT FK_orderItems_orderId FOREIGN KEY (orderId) REFERENCES orders (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 

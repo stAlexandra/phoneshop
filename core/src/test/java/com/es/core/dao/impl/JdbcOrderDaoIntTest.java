@@ -47,11 +47,11 @@ public class JdbcOrderDaoIntTest {
         order.setSecureId("123456789");
 
         OrderItem item1 = new OrderItem();
-        item1.setPhone(phone1);
+        item1.setProduct(phone1);
         item1.setQuantity(1);
         item1.setOrder(order);
         OrderItem item2 = new OrderItem();
-        item2.setPhone(phone2);
+        item2.setProduct(phone2);
         item2.setQuantity(2);
         item2.setOrder(order);
 

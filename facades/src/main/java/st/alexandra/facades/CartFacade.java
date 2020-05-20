@@ -6,7 +6,7 @@ import st.alexandra.facades.dto.UpdateCartRequestData;
 public interface CartFacade {
     Cart getCart();
 
-    void addPhone(Long phoneId, Long quantity);
+    void add(Long phoneId, Long quantity);
 
     void update(UpdateCartRequestData updateCartRequestData);
 

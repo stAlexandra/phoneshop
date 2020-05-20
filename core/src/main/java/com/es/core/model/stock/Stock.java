@@ -1,18 +1,18 @@
 package com.es.core.model.stock;
 
-import com.es.core.model.phone.Phone;
+import com.es.core.model.product.Product;
 
 public class Stock {
-    private Phone phone;
+    private Product product;
     private Integer stock;
     private Integer reserved;
 
-    public Phone getPhone() {
-        return phone;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setPhone(Phone phone) {
-        this.phone = phone;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public Integer getStock() {

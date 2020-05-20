@@ -1,7 +1,7 @@
-function addToCart(phoneId) {
+function addToCart(id) {
     var cartItemInfo = {
-        phoneId: phoneId,
-        quantity: $("#quantity" + phoneId).val()
+        id: id,
+        quantity: $("#quantity" + id).val()
     };
 
 
@@ -14,9 +14,9 @@ function addToCart(phoneId) {
         document.getElementById("numItems").innerHTML = response.numItems;
         document.getElementById("totalPrice").innerHTML = response.totalPrice
             .toLocaleString("en-US", {style: "currency", currency: "USD", minimumFractionDigits: 2});
-        document.getElementById("quantity" + phoneId).value = "1";
-        document.getElementById("quantityError" + phoneId).innerText = "";
+        document.getElementById("quantity" + id).value = "1";
+        document.getElementById("quantityError" + id).innerText = "";
     }).fail(function (response) {
-        document.getElementById("quantityError" + phoneId).innerText = response.responseJSON.quantityErrorMessage;
+        document.getElementById("quantityError" + id).innerText = response.responseJSON.quantityErrorMessage;
     })
 }

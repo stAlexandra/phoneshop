@@ -29,7 +29,7 @@ public class JdbcStockDaoTest {
     @Test
     public void get() {
         Stock stock = jdbcStockDao.get(PHONE_ID);
-        assertNotNull(stock.getPhone());
+        assertNotNull(stock.getProduct());
         assertNotNull(stock.getStock());
         assertNotNull(stock.getReserved());
     }
@@ -40,7 +40,7 @@ public class JdbcStockDaoTest {
         List<Stock> stockList = jdbcStockDao.getStocks(phoneIds);
 
         assertEquals(phoneIds.size(), stockList.size());
-        stockList.stream().map(Stock::getPhone)
+        stockList.stream().map(Stock::getProduct)
                 .forEach(phone -> assertThat(phone.getId(), anyOf(is(1000L), is(1001L), is(1002L))));
     }
 }

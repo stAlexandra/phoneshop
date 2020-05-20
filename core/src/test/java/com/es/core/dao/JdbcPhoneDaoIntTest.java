@@ -2,7 +2,7 @@ package com.es.core.dao;
 
 import com.es.core.dao.impl.JdbcColorDao;
 import com.es.core.dao.impl.JdbcPhoneDao;
-import com.es.core.exception.PhonesNotFoundException;
+import com.es.core.exception.ProductsNotFoundException;
 import com.es.core.model.phone.Color;
 import com.es.core.model.phone.Phone;
 import org.junit.Assert;
@@ -29,7 +29,7 @@ public class JdbcPhoneDaoIntTest extends AbstractPhoneTest {
     @Autowired
     private JdbcColorDao jdbcColorDao;
 
-    @Test(expected = PhonesNotFoundException.class)
+    @Test(expected = ProductsNotFoundException.class)
     public void testGetPhoneNotExist() {
         jdbcPhoneDao.get(12345L);
     }
@@ -45,10 +45,10 @@ public class JdbcPhoneDaoIntTest extends AbstractPhoneTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testSaveEmptyPhone() {
-        Phone phone = new Phone();
+    public void testSaveEmptyProduct() {
+        Phone product = new Phone();
 
-        jdbcPhoneDao.save(phone);
+        jdbcPhoneDao.save(product);
     }
 
     @Test(expected = IllegalArgumentException.class)

@@ -21,10 +21,7 @@
                     <thead class="thead-light">
                     <tr class="row">
                         <th class="col">Image</th>
-                        <th class="col">Brand</th>
-                        <th class="col">Model</th>
-                        <th class="col">Color</th>
-                        <th class="col">Display size</th>
+                        <th class="col">Name</th>
                         <th class="col">Price</th>
                         <th class="col">Quantity</th>
                         <th class="col">Action</th>
@@ -34,33 +31,26 @@
                     <c:forEach var="item" items="${cart.items}" varStatus="status">
                         <tr class="row">
                             <td class="col">
-                                <a href="<c:url value="/productDetails/${item.phone.id}"/>">
-                                    <img src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${item.phone.imageUrl}"
-                                         class="img-thumbnail" alt="Phone preview" width="150" height="150">
+                                <a href="<c:url value="/productDetails/${item.product.id}"/>">
+                                    <img src="${item.product.imageUrl}"
+                                         class="img-thumbnail" alt="Product preview" width="150" height="150">
                                 </a>
                             </td>
-                            <td class="col">${item.phone.brand}</td>
                             <td class="col">
-                                <a href="<c:url value="/productDetails/${item.phone.id}"/>">${item.phone.model}</a>
+                                <a href="<c:url value="/productDetails/${item.product.id}"/>">${item.product.name}</a>
                             </td>
-                            <td class="col">
-                                <c:forEach var="color" items="${item.phone.colors}">
-                                    ${color.code}
-                                </c:forEach>
-                            </td>
-                            <td class="col">${item.phone.displaySizeInches}"</td>
-                            <td class="col"><fmt:formatNumber value="${item.phone.price}" type="currency"
+                            <td class="col"><fmt:formatNumber value="${item.product.price}" type="currency"
                                                               currencySymbol="$"/></td>
                             <td class="col">
                                 <c:set var="i" value="${status.index}"/>
                                 <form:input path="cartItemDataList[${i}].quantity" cssClass="form-control"/>
-                                <form:hidden path="cartItemDataList[${i}].phoneId"/>
+                                <form:hidden path="cartItemDataList[${i}].id"/>
                                 <form:errors path="cartItemDataList[${i}].quantity" cssClass="text-danger"
                                              element="div"/>
                             </td>
                             <td class="col">
                                 <button id="deleteButton" form="deleteForm" class="btn btn-outline-secondary"
-                                        formaction="<c:url value="/cart/${item.phone.id}"/>">
+                                        formaction="<c:url value="/cart/${item.product.id}"/>">
                                     Delete
                                 </button>
                             </td>

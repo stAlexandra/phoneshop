@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface StockService {
-    List<Stock> getStocks(List<Long> phoneIds);
+    List<Stock> getStocks(List<Long> productIds);
 
-    Map<Long, Stock> getStocksMap(List<Long> phoneIds);
+    Map<Long, Stock> getStocksMap(List<Long> productIds);
 
     void updateStocks(Collection<Stock> stockList);
 }

@@ -1,13 +1,11 @@
 package com.es.core.dao.impl;
 
 import com.es.core.dao.OrderDao;
-import com.es.core.dao.mappers.ColorRowMapper;
 import com.es.core.dao.mappers.OrderItemRowMapper;
 import com.es.core.dao.mappers.OrderRowMapper;
 import com.es.core.model.order.Order;
 import com.es.core.model.order.OrderItem;
 import com.es.core.model.order.OrderStatus;
-import com.es.core.model.phone.Color;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -23,9 +21,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Transactional
 @Repository
@@ -34,23 +30,19 @@ public class JdbcOrderDao implements OrderDao {
             "deliveryAddress, contactPhoneNo, status) VALUES(:secureId, NOW(), :subtotal, :deliveryPrice, :totalPrice, :firstName, :lastName, " +
             ":deliveryAddress, :contactPhoneNo, :status)";
     private static final String SQL_GET_ORDER_BY_SECURE_ID = "SELECT * FROM orders o " +
-            "JOIN orderItems oI ON o.id = oI.orderId JOIN phones ph ON oI.phoneId = ph.id " +
-            "LEFT JOIN phone2color ph2c ON ph.id = ph2c.phoneId LEFT JOIN colors c ON ph2c.colorId = c.id " +
+            "JOIN orderItems oI ON o.id = oI.orderId JOIN books b ON oI.productId = b.id " +
             "WHERE secureId = :secureId";
     private static final String SQL_GET_ORDER_BY_ID = "SELECT * FROM orders o " +
-            "JOIN orderItems oI ON o.id = oI.orderId JOIN phones ph ON oI.phoneId = ph.id " +
-            "LEFT JOIN phone2color ph2c ON ph.id = ph2c.phoneId LEFT JOIN colors c ON ph2c.colorId = c.id " +
+            "JOIN orderItems oI ON o.id = oI.orderId JOIN books b ON oI.productId = b.id " +
             "WHERE o.id = :orderId";
     private static final String SQL_GET_ALL_ORDERS_SORTED = "SELECT * FROM orders o " +
-            "JOIN orderItems oI ON o.id = oI.orderId JOIN phones ph ON oI.phoneId = ph.id " +
-            "LEFT JOIN phone2color ph2c ON ph.id = ph2c.phoneId LEFT JOIN colors c ON ph2c.colorId = c.id " +
+            "JOIN orderItems oI ON o.id = oI.orderId JOIN books b ON oI.productId = b.id " +
             "ORDER BY {0} {1}";
     private static final String SQL_UPDATE_ORDER_STATUS = "UPDATE orders SET status = :status WHERE id = :orderId";
-    private static final String SQL_INSERT_ORDER_ITEM = "INSERT INTO orderItems (phoneId, orderId, quantity) VALUES (:phoneId, :orderId, :quantity)";
+    private static final String SQL_INSERT_ORDER_ITEM = "INSERT INTO orderItems (productId, orderId, quantity) VALUES (:productId, :orderId, :quantity)";
     private static final String ORDERS_ID_COL = "orders.id";
-    private static final String ORDER_ITEMS_PHONE_ID_COL = "orderItems.phoneId";
     private static final String SECURE_ID_PARAM = "secureId";
-    private static final String PHONE_ID_PARAM = "phoneId";
+    private static final String PRODUCT_ID_PARAM = "productId";
     private static final String ORDER_ID_PARAM = "orderId";
     private static final String STATUS_PARAM = "status";
     private static final String QUANTITY_PARAM = "quantity";
@@ -63,9 +55,7 @@ public class JdbcOrderDao implements OrderDao {
 
     @Resource
     private OrderItemRowMapper orderItemRowMapper;
-
-    @Resource
-    private ColorRowMapper colorRowMapper;
+    
 
     @Override
     public void save(Order order) {
@@ -141,13 +131,8 @@ public class JdbcOrderDao implements OrderDao {
         while (!resultSet.isAfterLast() && resultSet.getLong(ORDERS_ID_COL) == order.getId()) {
             OrderItem orderItem = orderItemRowMapper.mapRow(resultSet, resultSet.getRow());
             orderItem.setOrder(order);
-
-            Set<Color> colorSet = new HashSet<>();
-            do {
-                colorSet.add(colorRowMapper.mapRow(resultSet, resultSet.getRow()));
-            } while (resultSet.next() && orderItem.getPhone().getId() == resultSet.getLong(ORDER_ITEMS_PHONE_ID_COL));
-            orderItem.getPhone().setColors(colorSet);
             orderItems.add(orderItem);
+            resultSet.next();
         }
         return orderItems;
     }
@@ -155,7 +140,7 @@ public class JdbcOrderDao implements OrderDao {
     private void saveOrderItems(List<OrderItem> orderItems) {
         MapSqlParameterSource[] batchParamSources = orderItems.stream().map(orderItem -> {
             MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-            parameterSource.addValue(PHONE_ID_PARAM, orderItem.getPhone().getId());
+            parameterSource.addValue(PRODUCT_ID_PARAM, orderItem.getProduct().getId());
             parameterSource.addValue(ORDER_ID_PARAM, orderItem.getOrder().getId());
             parameterSource.addValue(QUANTITY_PARAM, orderItem.getQuantity());
             return parameterSource;

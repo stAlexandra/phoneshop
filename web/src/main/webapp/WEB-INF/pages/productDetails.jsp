@@ -8,122 +8,50 @@
     <a class="btn btn-outline-primary" href="<c:url value="/productList"/>" role="button">Back to product list</a>
     <p></p>
     <div class="row justify-content-start">
-        <div class="col-6">
-            <h1>${phone.model}</h1><br/>
-            <img src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${phone.imageUrl}"
-                 class="img-fluid img-thumbnail" alt="Phone image">
-            <p class="lead">${phone.description}</p>
-            <div class="card col-5">
+        <div class="col-3">
+            <img src="${book.imageUrl}" class="img-fluid img-thumbnail" alt="book image" width="200" height="400">
+        </div>
+        <div class="col-5">
+            <h2>${book.name}</h2><br/>
+            <div class="card">
                 <div class="card-body">
                     <h3>
                         <strong>Price: </strong>
-                        <span><fmt:formatNumber value="${phone.price}" type="currency" currencySymbol="$"/></span>
+                        <span><fmt:formatNumber value="${book.price}" type="currency" currencySymbol="$"/></span>
                     </h3>
                     <div class="input-group">
-                        <input class="form-control" id="quantity${phone.id}" value="1"/>
-                        <div id="quantityError${phone.id}" name="quantityError" class="text-danger"></div>
+                        <input class="form-control" id="quantity${book.id}" value="1"/>
+                        <div id="quantityError${book.id}" name="quantityError" class="text-danger"></div>
                         <span class="input-group-btn">
-                            <button class="btn btn-primary" onclick="addToCart(${phone.id})">Add to cart</button>
-                        </span>
+                                <button class="btn btn-primary" onclick="addToCart(${book.id})">Add to cart</button>
+                            </span>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-1"></div>
         <div class="col-4">
-            <h3>Display</h3>
-            <table class="table table-sm">
+            <table class="table table-lg">
                 <tbody>
                 <tr class="row">
-                    <td class="col">Size</td>
-                    <td class="col">${phone.displaySizeInches}</td>
+                    <td class="col">Genre</td>
+                    <td class="col">${book.genre}</td>
                 </tr>
                 <tr class="row">
-                    <td class="col">Resolution</td>
-                    <td class="col">${phone.displayResolution}</td>
+                    <td class="col">Publisher</td>
+                    <td class="col">${book.publisher}</td>
                 </tr>
                 <tr class="row">
-                    <td class="col">Technology</td>
-                    <td class="col">${phone.displayTechnology}</td>
-                </tr>
-                <tr class="row">
-                    <td class="col">Pixel density</td>
-                    <td class="col">${phone.pixelDensity}</td>
+                    <td class="col">Pages</td>
+                    <td class="col">${book.pageCount}</td>
                 </tr>
                 </tbody>
             </table>
-            <h3>Dimensions & weight</h3>
-            <table class="table table-sm">
-                <tbody>
-                <tr class="row">
-                    <td class="col">Length</td>
-                    <td class="col">${phone.lengthMm}</td>
-                </tr>
-                <tr class="row">
-                    <td class="col">Width</td>
-                    <td class="col">${phone.widthMm}</td>
-                </tr>
-                <tr class="row">
-                    <td class="col">Height</td>
-                    <td class="col">${phone.heightMm}</td>
-                </tr>
-                <tr class="row">
-                    <td class="col">Weight</td>
-                    <td class="col">${phone.weightGr}</td>
-                </tr>
-                </tbody>
-            </table>
-            <h3>Camera</h3>
-            <table class="table table-sm">
-                <tbody>
-                <tr class="row">
-                    <td class="col">Front</td>
-                    <td class="col">${phone.frontCameraMegapixels}</td>
-                </tr>
-                <tr class="row">
-                    <td class="col">Back</td>
-                    <td class="col">${phone.backCameraMegapixels}</td>
-                </tr>
-                </tbody>
-            </table>
-            <h3>Battery</h3>
-            <table class="table table-sm">
-                <tbody>
-                <tr class="row">
-                    <td class="col">Talk time</td>
-                    <td class="col">${phone.talkTimeHours}</td>
-                </tr>
-                <tr class="row">
-                    <td class="col">Stand by time</td>
-                    <td class="col">${phone.standByTimeHours}</td>
-                </tr>
-                <tr class="row">
-                    <td class="col">Battery capacity</td>
-                    <td class="col">${phone.batteryCapacityMah}</td>
-                </tr>
-                </tbody>
-            </table>
-            <h3>Other</h3>
-            <table class="table table-sm">
-                <tbody>
-                <tr class="row">
-                    <td class="col">Colors</td>
-                    <td class="col">
-                        <c:forEach var="color" items="${phone.colors}">
-                            ${color.code}
-                        </c:forEach>
-                    </td>
-                </tr>
-                <tr class="row">
-                    <td class="col">Device type</td>
-                    <td class="col">${phone.deviceType}</td>
-                </tr>
-                <tr class="row">
-                    <td class="col">Bluetooth</td>
-                    <td class="col">${phone.bluetooth}</td>
-                </tr>
-                </tbody>
-            </table>
+        </div>
+    </div>
+    <p><h1></h1></p>
+    <div class="row">
+        <div class="col-8">
+            <p>${book.description}</p>
         </div>
     </div>
 </tags:master>

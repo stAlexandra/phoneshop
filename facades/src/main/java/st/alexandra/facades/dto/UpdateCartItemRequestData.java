@@ -5,7 +5,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 public class UpdateCartItemRequestData {
-    private Long phoneId;
+    private Long id;
 
     @NotNull
     @Min(value = 1L)
@@ -15,17 +15,17 @@ public class UpdateCartItemRequestData {
     public UpdateCartItemRequestData() {
     }
 
-    public UpdateCartItemRequestData(Long phoneId, Long quantity) {
-        this.phoneId = phoneId;
+    public UpdateCartItemRequestData(Long id, Long quantity) {
+        this.id = id;
         this.quantity = quantity;
     }
 
-    public Long getPhoneId() {
-        return phoneId;
+    public Long getId() {
+        return id;
     }
 
-    public void setPhoneId(Long phoneId) {
-        this.phoneId = phoneId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getQuantity() {

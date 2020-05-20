@@ -61,11 +61,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void placeOrder(Order order) {
         Map<Long, Stock> phoneIdToStock = stockService.getStocksMap(order.getOrderItems().stream()
-                .map(item -> item.getPhone().getId())
+                .map(item -> item.getProduct().getId())
                 .collect(Collectors.toList()));
 
         order.getOrderItems().forEach(orderItem -> {
-            Stock stock = phoneIdToStock.get(orderItem.getPhone().getId());
+            Stock stock = phoneIdToStock.get(orderItem.getProduct().getId());
             stock.setStock(stock.getStock() - orderItem.getQuantity());
         });
         stockService.updateStocks(phoneIdToStock.values());
@@ -97,7 +97,7 @@ public class OrderServiceImpl implements OrderService {
         List<OrderItem> orderItems = cart.getItems().stream()
                 .map(cartItem -> {
                     OrderItem orderItem = new OrderItem();
-                    orderItem.setPhone(cartItem.getPhone());
+                    orderItem.setProduct(cartItem.getProduct());
                     orderItem.setQuantity(cartItem.getQuantity().intValue());
                     orderItem.setOrder(order);
                     return orderItem;

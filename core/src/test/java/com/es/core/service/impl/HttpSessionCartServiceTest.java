@@ -20,8 +20,8 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class HttpSessionCartServiceTest {
-    private static final Long PHONE_ID = 1L;
-    private static final BigDecimal PHONE_PRICE = new BigDecimal(100.0);
+    private static final Long PRODUCT_ID = 1L;
+    private static final BigDecimal PRODUCT_PRICE = new BigDecimal(100.0);
 
     @InjectMocks
     private HttpSessionCartService cartService;
@@ -30,43 +30,47 @@ public class HttpSessionCartServiceTest {
     private Cart cart;
 
     @Mock
-    private PhoneDao phoneDao;
+    private PhoneDao productDao;
 
     @Mock
-    private Phone phone;
+    private Phone product;
 
     @Before
     public void setUp(){
-        when(phoneDao.get(PHONE_ID)).thenReturn(phone);
-        when(phone.getPrice()).thenReturn(PHONE_PRICE);
-        when(phone.getId()).thenReturn(PHONE_ID);
+        when(productDao.get(PRODUCT_ID)).thenReturn(product);
+        when(product.getPrice()).thenReturn(PRODUCT_PRICE);
+        when(product.getId()).thenReturn(PRODUCT_ID);
     }
 
     @Test
-    public void addNewPhoneToCart() {
-        cartService.addPhone(PHONE_ID, 1L);
+    public void addNewProductToCart() {
+        cartService.addProduct(PRODUCT_ID, 1L);
         assertEquals(1, cart.getItems().size());
-        assertEquals(PHONE_PRICE, cart.getItems().get(0).getPhone().getPrice());
+        assertEquals(PRODUCT_PRICE, cart.getItems().get(0).getPhone().getPrice());
     }
 
     @Test
-    public void addMoreOfExistingPhoneToCart(){
+    public void addMoreOfExistingProductToCart(){
+        // given
         long quantity1 = 1L;
         long quantity2 = 2L;
-        cartService.addPhone(PHONE_ID, quantity1);
-        cartService.addPhone(PHONE_ID, quantity2);
 
+        // when
+        cartService.addProduct(PRODUCT_ID, quantity1);
+        cartService.addProduct(PRODUCT_ID, quantity2);
+
+        // then
         assertEquals(1, cart.getItems().size());
         assertEquals(quantity1 + quantity2, cart.getItems().get(0).getQuantity().longValue());
-        assertEquals(PHONE_PRICE.multiply(BigDecimal.valueOf(quantity1 + quantity2)), cart.getTotalPrice());
+        assertEquals(PRODUCT_PRICE.multiply(BigDecimal.valueOf(quantity1 + quantity2)), cart.getTotalPrice());
     }
 
     @Test
     public void remove() {
-        cartService.addPhone(PHONE_ID, 3L);
+        cartService.addProduct(PRODUCT_ID, 3L);
         assertEquals(1, cart.getItems().size());
 
-        boolean removed = cartService.remove(PHONE_ID);
+        boolean removed = cartService.remove(PRODUCT_ID);
 
         assertEquals(0, cart.getItems().size());
         assertTrue(removed);

@@ -1,9 +1,9 @@
 package com.es.core.service.checkout;
 
-import com.es.core.dao.PhoneDao;
 import com.es.core.model.cart.Cart;
 import com.es.core.model.cart.CartItem;
-import com.es.core.model.phone.Phone;
+import com.es.core.model.product.Product;
+import com.es.core.service.product.ProductService;
 import com.es.core.util.DiscountUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Service
 public class HttpSessionCartService implements CartService {
     @Autowired
-    private PhoneDao phoneDao;
+    private ProductService productService;
 
     @Autowired
     private Cart cart;
@@ -26,18 +26,18 @@ public class HttpSessionCartService implements CartService {
     }
 
     @Override
-    public void addPhone(Long phoneId, Long quantity) {
+    public void addProduct(Long id, Long quantity) {
         Optional<CartItem> optionalCartItem = cart
                 .getItems().stream()
-                .filter(item -> phoneId.equals(item.getPhone().getId()))
+                .filter(item -> id.equals(item.getProduct().getId()))
                 .findAny();
 
         if (optionalCartItem.isPresent()) {
             CartItem cartItem = optionalCartItem.get();
             cartItem.setQuantity(cartItem.getQuantity() + quantity);
         } else {
-            Phone phone = phoneDao.get(phoneId);
-            cart.getItems().add(new CartItem(phone, quantity));
+            Product product = productService.get(id);
+            cart.getItems().add(new CartItem(product, quantity));
         }
         recalculateCart();
     }
@@ -45,24 +45,24 @@ public class HttpSessionCartService implements CartService {
     @Override
     public void update(Map<Long, Long> phoneIdToQuantity) {
         List<CartItem> updatedCartItems = cart.getItems().stream()
-                .filter(item -> phoneIdToQuantity.containsKey(item.getPhone().getId()))
-                .peek(item -> item.setQuantity(phoneIdToQuantity.get(item.getPhone().getId())))
+                .filter(item -> phoneIdToQuantity.containsKey(item.getProduct().getId()))
+                .peek(item -> item.setQuantity(phoneIdToQuantity.get(item.getProduct().getId())))
                 .collect(Collectors.toList());
         cart.setItems(updatedCartItems);
         recalculateCart();
     }
 
     @Override
-    public boolean remove(Long phoneId) {
-        boolean isRemoved = cart.getItems().removeIf(item -> phoneId.equals(item.getPhone().getId()));
+    public boolean remove(Long id) {
+        boolean isRemoved = cart.getItems().removeIf(item -> id.equals(item.getProduct().getId()));
         recalculateCart();
         return isRemoved;
     }
 
     @Override
-    public void remove(Collection<Long> phoneIdList) {
+    public void remove(Collection<Long> idList) {
         List<CartItem> remainedItems = cart.getItems().stream()
-                .filter(item -> !phoneIdList.contains(item.getPhone().getId()))
+                .filter(item -> !idList.contains(item.getProduct().getId()))
                 .collect(Collectors.toList());
         cart.setItems(remainedItems);
         recalculateCart();
@@ -76,7 +76,7 @@ public class HttpSessionCartService implements CartService {
 
     public void recalculateCart() {
         BigDecimal totalItemsPrice = cart.getItems().stream()
-                .map(cartItem -> cartItem.getPhone().getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())))
+                .map(cartItem -> cartItem.getProduct().getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())))
                 .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
         cart.setSubtotalPrice(totalItemsPrice);
 

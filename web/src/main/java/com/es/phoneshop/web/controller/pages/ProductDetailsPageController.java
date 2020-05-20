@@ -1,7 +1,7 @@
 package com.es.phoneshop.web.controller.pages;
 
-import com.es.core.dao.PhoneDao;
-import com.es.core.exception.PhonesNotFoundException;
+import com.es.core.exception.ProductsNotFoundException;
+import com.es.core.service.product.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,21 +20,21 @@ public class ProductDetailsPageController {
     private static final String VIEW_NAME = "productDetails";
     private static final String PHONE_NOT_FOUND_VIEW_NAME = "phoneNotFound";
     @Resource
-    private PhoneDao phoneDao;
+    private ProductService productService;
     @Resource
     private CartFacade cartFacade;
     @Resource
     private UserFacade userFacade;
 
-    @ExceptionHandler(PhonesNotFoundException.class)
-    public String handlePhonesNotFoundException(PhonesNotFoundException e) {
+    @ExceptionHandler(ProductsNotFoundException.class)
+    public String handlePhonesNotFoundException(ProductsNotFoundException e) {
         return PHONE_NOT_FOUND_VIEW_NAME;
     }
 
     @GetMapping(path = "/{id}")
-    public String showProductDetails(@PathVariable("id") Long phoneId, Model model, Principal principal) {
+    public String showProductDetails(@PathVariable("id") Long id, Model model, Principal principal) {
         model.addAttribute("user", userFacade.getUserData(principal));
-        model.addAttribute("phone", phoneDao.get(phoneId));
+        model.addAttribute("book", productService.get(id));
         model.addAttribute("cart", cartFacade.getCart());
         return VIEW_NAME;
     }

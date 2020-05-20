@@ -9,7 +9,7 @@
     <thead class="thead-light">
     <tr class="row">
         <th class="col">Image</th>
-        <th class="col">Brand</th>
+        <th class="col">Name</th>
         <th class="col">Model</th>
         <th class="col">Color</th>
         <th class="col">Display size</th>
@@ -17,25 +17,25 @@
     </tr>
     </thead>
     <tbody>
-    <c:forEach var="phone" items="${phonePage.content}" varStatus="status">
+    <c:forEach var="item" items="${productsPage.content}" varStatus="status">
     <tr class="row">
         <td class="col">
-            <a href="<c:url value="/admin/products/${phone.id}"/>">
-                <img src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${item.phone.imageUrl}"
+            <a href="<c:url value="/admin/products/${item.id}"/>">
+                <img src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${item.product.imageUrl}"
                      class="img-thumbnail" alt="Phone preview" width="150" height="150">
             </a>
         </td>
-        <td class="col">${phone.brand}</td>
+        <td class="col"></td>
         <td class="col">
-            <a href="<c:url value="/admin/products/${phone.id}"/>">${phone.model}</a>
+            <a href="<c:url value="/admin/products/${item.id}"/>">${item.model}</a>
         </td>
         <td class="col">
-            <c:forEach var="color" items="${phone.colors}">
+            <c:forEach var="color" items="${item.colors}">
                 ${color.code}
             </c:forEach>
         </td>
-        <td class="col">${phone.displaySizeInches}"</td>
-        <td class="col"><fmt:formatNumber value="${phone.price}" type="currency"
+        <td class="col">${item.displaySizeInches}"</td>
+        <td class="col"><fmt:formatNumber value="${item.price}" type="currency"
                                           currencySymbol="$"/></td>
     </tr>
     </c:forEach>

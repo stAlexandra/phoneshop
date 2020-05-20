@@ -1,7 +1,7 @@
 package com.es.phoneshop.web.controller.pages.admin;
 
-import com.es.core.model.phone.Phone;
-import com.es.core.service.product.PhoneService;
+import com.es.core.model.product.Book;
+import com.es.core.service.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -15,22 +15,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminProductsPageController {
     private static final int CURRENT_PAGE_NUM = 1;
     private static final int PAGE_SIZE = 10;
-    private static final String PHONE_PAGE_ATTRIBUTE = "phonePage";
+    private static final String PRODUCT_PAGE_ATTRIBUTE = "productsPage";
     private static final String VIEW_NAME = "admin/products";
 
     @Value("${phones.defaultSortName}")
-    private String defaultPhonesSortName;
+    private String defaultSortName;
 
     @Value("${phones.defaultSortOrder}")
-    private String defaultPhonesSortOrder;
+    private String defaultSortOrder;
 
     @Autowired
-    private PhoneService phoneService;
+    private ProductService productService;
 
     @GetMapping
     public String showProducts(Model model){
-        Page<Phone> phonePage = phoneService.getPage(CURRENT_PAGE_NUM - 1, PAGE_SIZE, defaultPhonesSortName, defaultPhonesSortOrder);
-        model.addAttribute(PHONE_PAGE_ATTRIBUTE, phonePage);
+        Page<Book> productPage = productService.getPage(CURRENT_PAGE_NUM - 1, PAGE_SIZE, defaultSortName, defaultSortOrder);
+        model.addAttribute(PRODUCT_PAGE_ATTRIBUTE, productPage);
         return VIEW_NAME;
     }
 }

@@ -1,8 +1,8 @@
 package com.es.phoneshop.web.controller.pages.admin;
 
-import com.es.core.exception.PhonesNotFoundException;
-import com.es.core.model.phone.Phone;
-import com.es.core.service.product.PhoneService;
+import com.es.core.exception.ProductsNotFoundException;
+import com.es.core.model.product.Book;
+import com.es.core.service.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -19,26 +19,25 @@ import javax.validation.Valid;
 @RequestMapping("/admin/products")
 public class AdminProductDetailsPageController {
     private static final String VIEW_NAME = "admin/productDetails";
-    private static final String PHONE_NOT_FOUND_VIEW_NAME = "phoneNotFound";
-    private static final String PHONE_ATTRIBUTE = "phone";
+    private static final String PRODUCT_NOT_FOUND_VIEW = "productNotFound";
+    private static final String PRODUCT = "phone";
     private static final String UPDATE_PHONE_DATA_ATTRIBUTE = "updatePhoneData";
 
     @Autowired
-    private PhoneService phoneService;
+    private ProductService productService;
 
-    @ExceptionHandler(PhonesNotFoundException.class)
-    public String handlePhonesNotFoundException(PhonesNotFoundException e) {
-        return PHONE_NOT_FOUND_VIEW_NAME;
+    @ExceptionHandler(ProductsNotFoundException.class)
+    public String handlePhonesNotFoundException(ProductsNotFoundException e) {
+        return PRODUCT_NOT_FOUND_VIEW;
     }
 
     @GetMapping(path = "/{id}")
-    public String showProductDetails(@PathVariable("id") Long phoneId, Model model) {
-        Phone phone = phoneService.getPhone(phoneId);
-        model.addAttribute(PHONE_ATTRIBUTE, phone);
-
+    public String showProductDetails(@PathVariable("id") Long productId, Model model) {
+        Book book = productService.get(productId);
+        model.addAttribute(PRODUCT, book);
         UpdatePhoneData updatePhoneData = new UpdatePhoneData();
-        updatePhoneData.setWidthMm(phone.getWidthMm());
-        updatePhoneData.setLengthMm(phone.getLengthMm());
+//        updatePhoneData.setWidthMm(phone.getWidthMm());
+//        updatePhoneData.setLengthMm(phone.getLengthMm());
 
         model.addAttribute(UPDATE_PHONE_DATA_ATTRIBUTE, updatePhoneData);
         return VIEW_NAME;
@@ -47,7 +46,7 @@ public class AdminProductDetailsPageController {
     @PutMapping(path = "/{id}")
     public ModelAndView editProduct(@PathVariable("id") Long phoneId, @Valid @ModelAttribute UpdatePhoneData updatePhoneData, BindingResult bindingResult, ModelMap modelMap){
         if(bindingResult.hasErrors()){
-            modelMap.addAttribute(PHONE_ATTRIBUTE, phoneService.getPhone(phoneId));
+            modelMap.addAttribute(PRODUCT, productService.get(phoneId));
             return new ModelAndView(VIEW_NAME, modelMap, HttpStatus.BAD_REQUEST);
         }
 

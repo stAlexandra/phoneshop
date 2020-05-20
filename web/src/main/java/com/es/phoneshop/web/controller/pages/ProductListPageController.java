@@ -1,7 +1,7 @@
 package com.es.phoneshop.web.controller.pages;
 
-import com.es.core.model.phone.Phone;
-import com.es.core.service.product.PhoneService;
+import com.es.core.model.product.Book;
+import com.es.core.service.product.ProductService;
 import com.es.core.util.PageIndexUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -28,7 +28,7 @@ public class ProductListPageController {
     private int defaultNumPageIndexes;
 
     @Resource
-    private PhoneService phoneService;
+    private ProductService productService;
     @Resource
     private CartFacade cartFacade;
     @Resource
@@ -40,10 +40,10 @@ public class ProductListPageController {
                                       @RequestParam(name = "sort", defaultValue = "") String sortName,
                                       @RequestParam(name = "order", defaultValue = "") String sortOrder,
                                       Principal principal) {
-        Page<Phone> phonePage = phoneService.getPage(currentPageNum - 1, defaultPageSize, sortName, sortOrder);
-        int totalPages = phonePage.getTotalPages();
+        Page<Book> bookPage = productService.getPage(currentPageNum - 1, defaultPageSize, sortName, sortOrder);
+        int totalPages = bookPage.getTotalPages();
 
-        addPageInfoAttributes(model, phonePage, currentPageNum, totalPages);
+        addPageInfoAttributes(model, bookPage, currentPageNum, totalPages);
         model.addAttribute("user", userFacade.getUserData(principal));
         model.addAttribute("cart", cartFacade.getCart());
         return VIEW_NAME;
@@ -56,7 +56,7 @@ public class ProductListPageController {
                                       @RequestParam(name = "sort", defaultValue = "") String sortName,
                                       @RequestParam(name = "order", defaultValue = "") String sortOrder,
                                       Principal principal) {
-        Page<Phone> phonePage = phoneService.getPage(currentPageNum - 1, defaultPageSize, query, sortName, sortOrder);
+        Page<Book> phonePage = productService.getPage(currentPageNum - 1, defaultPageSize, query, sortName, sortOrder);
         int totalPages = phonePage.getTotalPages();
 
         addPageInfoAttributes(model, phonePage, currentPageNum, totalPages);
@@ -65,8 +65,8 @@ public class ProductListPageController {
         return VIEW_NAME;
     }
 
-    private void addPageInfoAttributes(Model model, Page<Phone> phonePage, int current, int total) {
-        model.addAttribute("phonePage", phonePage);
+    private void addPageInfoAttributes(Model model, Page<Book> page, int current, int total) {
+        model.addAttribute("productsPage", page);
         model.addAttribute("beginPage", PageIndexUtil.getBegin(current, Math.min(defaultNumPageIndexes, total), total));
         model.addAttribute("endPage", PageIndexUtil.getEnd(current, Math.min(defaultNumPageIndexes, total), total));
         model.addAttribute("lastPage", total);

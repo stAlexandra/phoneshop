@@ -23,12 +23,12 @@
         <thead class="thead-light">
         <tr class="row">
             <th class="col">Image</th>
-            <th class="col">Brand
+            <th class="col">Name
                 <a href="<c:url value="">
                     <c:if test="${not empty param.query}">
                         <c:param name="query" value="${param.query}"/>
                     </c:if>
-                    <c:param name="sort" value="brand"/>
+                    <c:param name="sort" value="name"/>
                     <c:param name="order" value="asc"/></c:url>">
                     <i class="fas fa-long-arrow-alt-up"></i>
                 </a>
@@ -36,17 +36,17 @@
                     <c:if test="${not empty param.query}">
                         <c:param name="query" value="${param.query}"/>
                     </c:if>
-                    <c:param name="sort" value="brand"/>
+                    <c:param name="sort" value="name"/>
                     <c:param name="order" value="desc"/></c:url>">
                     <i class="fas fa-long-arrow-alt-down"></i>
                 </a>
             </th>
-            <th class="col">Model
+            <th class="col">Author
                 <a href="<c:url value="">
                     <c:if test="${not empty param.query}">
                         <c:param name="query" value="${param.query}"/>
                     </c:if>
-                    <c:param name="sort" value="model"/>
+                    <c:param name="sort" value="author"/>
                     <c:param name="order" value="asc"/></c:url>">
                     <i class="fas fa-long-arrow-alt-up"></i>
                 </a>
@@ -54,26 +54,7 @@
                     <c:if test="${not empty param.query}">
                         <c:param name="query" value="${param.query}"/>
                     </c:if>
-                    <c:param name="sort" value="model"/>
-                    <c:param name="order" value="desc"/></c:url>">
-                    <i class="fas fa-long-arrow-alt-down"></i>
-                </a>
-            </th>
-            <th class="col">Color</th>
-            <th class="col">Display size
-                <a href="<c:url value="">
-                    <c:if test="${not empty param.query}">
-                        <c:param name="query" value="${param.query}"/>
-                    </c:if>
-                    <c:param name="sort" value="displaySizeInches"/>
-                    <c:param name="order" value="asc"/></c:url>">
-                    <i class="fas fa-long-arrow-alt-up"></i>
-                </a>
-                <a href="<c:url value="">
-                    <c:if test="${not empty param.query}">
-                        <c:param name="query" value="${param.query}"/>
-                    </c:if>
-                    <c:param name="sort" value="displaySizeInches"/>
+                    <c:param name="sort" value="author"/>
                     <c:param name="order" value="desc"/></c:url>">
                     <i class="fas fa-long-arrow-alt-down"></i>
                 </a>
@@ -101,30 +82,24 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="phone" items="${phonePage.content}" varStatus="status">
+        <c:forEach var="item" items="${productsPage.content}" varStatus="status">
             <tr class="row">
                 <td class="col">
-                    <a href="<c:url value="/productDetails/${phone.id}"/>">
-                        <img src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${phone.imageUrl}"
+                    <a href="<c:url value="/productDetails/${item.id}"/>">
+                        <img src="${item.imageUrl}"
                              class="img-thumbnail" alt="Phone preview" width="150" height="150">
                     </a>
                 </td>
-                <td class="col">${phone.brand}</td>
-                <td class="col"><a href="<c:url value="/productDetails/${phone.id}"/>">${phone.model}</a></td>
+                <td class="col"><a href="<c:url value="/productDetails/${item.id}"/>">${item.name}</a></td>
+                <td class="col">${item.author}</td>
+                <td class="col"><fmt:formatNumber value="${item.price}" type="currency" currencySymbol="$"/></td>
                 <td class="col">
-                    <c:forEach var="color" items="${phone.colors}">
-                        ${color.code}
-                    </c:forEach>
-                </td>
-                <td class="col">${phone.displaySizeInches}"</td>
-                <td class="col"><fmt:formatNumber value="${phone.price}" type="currency" currencySymbol="$"/></td>
-                <td class="col">
-                    <input id="quantity${phone.id}" name="quantity" type="text" value="1" class="form-control">
-                    <div id="quantityError${phone.id}" class="text-danger"></div>
+                    <input id="quantity${item.id}" name="quantity" type="text" value="1" class="form-control">
+                    <div id="quantityError${item.id}" class="text-danger"></div>
                 </td>
                 <td class="col">
                     <button id="addToCartButton" type="button" class="btn btn-outline-primary"
-                            onclick="addToCart(${phone.id})">
+                            onclick="addToCart(${item.id})">
                         Add to cart
                     </button>
                 </td>
@@ -135,7 +110,7 @@
     <nav aria-label="Product list pages">
         <ul class="pagination pagination-lg justify-content-end">
             <c:choose>
-            <c:when test="${phonePage.hasPrevious()}">
+            <c:when test="${productsPage.hasPrevious()}">
             <li class="page-item"></c:when>
                 <c:otherwise>
             <li class="page-item disabled">
@@ -155,13 +130,13 @@
                         </c:url>">&larr;</a>
             </li>
             <c:choose>
-            <c:when test="${phonePage.hasPrevious()}">
+            <c:when test="${productsPage.hasPrevious()}">
             <li class="page-item"></c:when>
                 <c:otherwise>
             <li class="page-item disabled"></c:otherwise>
                 </c:choose>
                 <a class="page-link" href="<c:url value="">
-                            <c:param name="page" value="${phonePage.number}"/>
+                            <c:param name="page" value="${productsPage.number}"/>
                             <c:if test="${not empty param.query}">
                                 <c:param name="query" value="${param.query}"/>
                             </c:if>
@@ -176,7 +151,7 @@
 
             <c:forEach var="i" begin="${beginPage}" end="${endPage}" varStatus="status">
                 <c:choose>
-                    <c:when test="${phonePage.number eq i-1}">
+                    <c:when test="${productsPage.number eq i-1}">
                         <li class="page-item active">
                     </c:when>
                     <c:otherwise>
@@ -201,7 +176,7 @@
             </c:forEach>
 
             <c:choose>
-            <c:when test="${phonePage.hasNext()}">
+            <c:when test="${productsPage.hasNext()}">
             <li class="page-item">
                 </c:when>
                 <c:otherwise>
@@ -209,7 +184,7 @@
                 </c:otherwise>
                 </c:choose>
                 <a class="page-link" href="<c:url value="">
-                            <c:param name="page" value="${phonePage.number + 2}"/>
+                            <c:param name="page" value="${productsPage.number + 2}"/>
                             <c:if test="${not empty param.query}">
                                 <c:param name="query" value="${param.query}"/>
                             </c:if>
@@ -223,7 +198,7 @@
             </li>
 
             <c:choose>
-            <c:when test="${phonePage.hasNext()}">
+            <c:when test="${productsPage.hasNext()}">
             <li class="page-item">
                 </c:when>
                 <c:otherwise>

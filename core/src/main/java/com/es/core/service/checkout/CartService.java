@@ -8,13 +8,13 @@ import java.util.Map;
 public interface CartService {
     Cart getCart();
 
-    void addPhone(Long phoneId, Long quantity);
+    void addProduct(Long id, Long quantity);
 
     void update(Map<Long, Long> items);
 
-    boolean remove(Long phoneId);
+    boolean remove(Long id);
 
-    void remove(Collection<Long> phoneIdList);
+    void remove(Collection<Long> idList);
 
     void clearCart();
 

@@ -21,6 +21,20 @@ public final class DbContract {
         public static final String ENABLED = "enabled";
     }
 
+    public static class BooksTable {
+        public static final String TABLE = "discounts";
+        public static final String ID = "id";
+        public static final String NAME = "name";
+        public static final String DESCRIPTION = "description";
+        public static final String IMAGE_URL = "imageUrl";
+        public static final String PRICE = "price";
+        public static final String AUTHOR = "author";
+        public static final String GENRE = "genre";
+        public static final String DATE_OF_PUBLISHING = "dateOfPublishing";
+        public static final String PUBLISHER = "publisher";
+        public static final String PAGE_COUNT = "pageCount";
+    }
+    
     // TODO: check if needed
 //    public static class Discounts2UserLevelTable {
 //        public static final String TABLE = "discounts2userLevel";

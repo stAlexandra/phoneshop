@@ -1,8 +1,8 @@
 package com.es.core.service.product;
 
-import com.es.core.dao.PhoneDao;
-import com.es.core.exception.PhonesNotFoundException;
-import com.es.core.model.phone.Phone;
+import com.es.core.dao.BookDao;
+import com.es.core.exception.ProductsNotFoundException;
+import com.es.core.model.product.Book;
 import org.h2.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class PhoneServiceImpl implements PhoneService {
+public class ProductServiceImpl implements ProductService {
     @Value("${phones.defaultSortName}")
     private String defaultPhonesSortName;
 
@@ -22,31 +22,31 @@ public class PhoneServiceImpl implements PhoneService {
     private String defaultPhonesSortOrder;
 
     @Autowired
-    private PhoneDao phoneDao;
+    private BookDao bookDao;
 
-    public Page<Phone> getPage(int currentPage, int pageSize, String sortName, String sortOrder) {
+    public Page<Book> getPage(int currentPage, int pageSize, String sortName, String sortOrder) {
         int startItem = currentPage * pageSize;
-        int totalSize = phoneDao.findValidPhonesTotalCount();
+        int totalSize = bookDao.findValidTotalCount();
 
-        List<Phone> phonesOnPageList = phoneDao.findAllValid(startItem - 1, pageSize,
+        List<Book> phonesOnPageList = bookDao.findAllValid(startItem - 1, pageSize,
                 StringUtils.isNullOrEmpty(sortName) ? defaultPhonesSortName : sortName,
                 StringUtils.isNullOrEmpty(sortName) ? defaultPhonesSortOrder : sortOrder);
 
         return new PageImpl<>(phonesOnPageList, PageRequest.of(currentPage, pageSize), totalSize);
     }
 
-    public Page<Phone> getPage(int currentPage, int pageSize, String query, String sortName, String sortOrder) {
-        int totalSize = phoneDao.findPhonesMatchingQueryTotalCount(query);
+    public Page<Book> getPage(int currentPage, int pageSize, String query, String sortName, String sortOrder) {
+        int totalSize = bookDao.findMatchingQueryTotalCount(query);
         int startItem = currentPage * pageSize;
 
-        List<Phone> phonesOnPageList = phoneDao.findAllValid(startItem - 1, pageSize, query,
+        List<Book> phonesOnPageList = bookDao.findAllValid(startItem - 1, pageSize, query,
                 StringUtils.isNullOrEmpty(sortName) ? defaultPhonesSortName : sortName,
                 StringUtils.isNullOrEmpty(sortName) ? defaultPhonesSortOrder : sortOrder);
 
         return new PageImpl<>(phonesOnPageList, PageRequest.of(currentPage, pageSize), totalSize);
     }
 
-    public Phone getPhone(Long phoneId) throws PhonesNotFoundException {
-        return phoneDao.get(phoneId);
+    public Book get(Long id) throws ProductsNotFoundException {
+        return bookDao.get(id);
     }
 }

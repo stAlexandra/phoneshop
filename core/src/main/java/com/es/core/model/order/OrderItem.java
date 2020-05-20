@@ -1,20 +1,20 @@
 package com.es.core.model.order;
 
-import com.es.core.model.phone.Phone;
+import com.es.core.model.product.Product;
 
 import java.util.Objects;
 
 public class OrderItem {
-    private Phone phone;
+    private Product product;
     private Order order;
     private Integer quantity;
 
-    public Phone getPhone() {
-        return phone;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setPhone(final Phone phone) {
-        this.phone = phone;
+    public void setProduct(final Product product) {
+        this.product = product;
     }
 
     public Order getOrder() {
@@ -38,12 +38,12 @@ public class OrderItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderItem orderItem = (OrderItem) o;
-        return Objects.equals(getPhone(), orderItem.getPhone()) &&
+        return Objects.equals(getProduct(), orderItem.getProduct()) &&
                 Objects.equals(getOrder(), orderItem.getOrder());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPhone(), getOrder());
+        return Objects.hash(getProduct(), getOrder());
     }
 }

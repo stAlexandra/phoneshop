@@ -26,14 +26,14 @@ public class CartFacadeImpl implements CartFacade {
     }
 
     @Override
-    public void addPhone(Long phoneId, Long quantity) {
-        cartService.addPhone(phoneId, quantity);
+    public void add(Long phoneId, Long quantity) {
+        cartService.addProduct(phoneId, quantity);
     }
 
     @Override
     public void update(UpdateCartRequestData updateCartRequestData) {
         Map<Long, Long> phoneIdToQuantity = updateCartRequestData.getCartItemDataList().stream()
-                .collect(Collectors.toMap(UpdateCartItemRequestData::getPhoneId, UpdateCartItemRequestData::getQuantity));
+                .collect(Collectors.toMap(UpdateCartItemRequestData::getId, UpdateCartItemRequestData::getQuantity));
         cartService.update(phoneIdToQuantity);
     }
 

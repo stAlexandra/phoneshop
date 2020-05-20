@@ -17,28 +17,27 @@
             <table class="table">
                 <thead class="thead-light">
                 <tr class="row">
-                    <th class="col">Brand</th>
-                    <th class="col">Model</th>
-                    <th class="col">Color</th>
-                    <th class="col">Display size</th>
-                    <th class="col">Quantity</th>
+                    <th class="col">Image</th>
+                    <th class="col">Name</th>
                     <th class="col">Price</th>
+                    <th class="col">Quantity</th>
+                    <th class="col">Action</th>
                 </tr>
                 </thead>
                 <tbody>
                 <c:forEach var="item" items="${order.orderItems}" varStatus="status">
                     <tr class="row">
-                        <td class="col">${item.phone.brand}</td>
-                        <td class="col">${item.phone.model}</td>
                         <td class="col">
-                            <c:forEach var="color" items="${item.phone.colors}">
-                                ${color.code}
-                            </c:forEach>
+                            <a href="<c:url value="/productDetails/${item.product.id}"/>">
+                                <img src="${item.product.imageUrl}"
+                                     class="img-thumbnail" alt="Product preview" width="150" height="150">
+                            </a>
                         </td>
-                        <td class="col">${item.phone.displaySizeInches}"</td>
+                        <td class="col">${item.product.name}</td>
+                        <td class="col">${item.product.price}</td>
                         <td class="col">${item.quantity}</td>
                         <td class="col">
-                            <fmt:formatNumber value="${item.phone.price}" type="currency" currencySymbol="$"/>
+                            <fmt:formatNumber value="${item.product.price}" type="currency" currencySymbol="$"/>
                         </td>
                     </tr>
                 </c:forEach>
