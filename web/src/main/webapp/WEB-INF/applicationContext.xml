@@ -6,6 +6,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <import resource="classpath:context/applicationContext-core.xml"/>
+    <import resource="classpath:context/applicationContext-demoda.xml"/>
     <import resource="classpath:context/applicationContext-facades.xml"/>
     <import resource="security.xml"/>
 
