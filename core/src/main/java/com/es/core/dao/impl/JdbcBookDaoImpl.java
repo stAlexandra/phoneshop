@@ -1,6 +1,6 @@
 package com.es.core.dao.impl;
 
-import com.es.core.dao.BookDao;
+import com.es.core.dao.ProductDao;
 import com.es.core.exception.ProductsNotFoundException;
 import com.es.core.model.product.Book;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -22,7 +22,7 @@ import java.util.Map;
 import static com.es.core.dao.DbContract.BooksTable.ID;
 
 @Repository
-public class JdbcBookDaoImpl implements BookDao {
+public class JdbcBookDaoImpl implements ProductDao<Book> {
     private static final String SQL_SELECT_BY_ID = "SELECT * FROM books WHERE id = :id";
     private static final String SQL_INSERT = "INSERT INTO books VALUES (:id, :name, :description, :imageUrl, :price, :author, " +
             ":genre, :dateOfPublishing, :publisher, :pageCount)";

@@ -20,7 +20,7 @@
             <password-encoder ref="encoder"/>
             <jdbc-user-service data-source-ref="dataSource"
                                users-by-username-query="select username, password, enabled
-      	                                           from users where username = ?"
+      	                                           from principals where username = ?"
                                authorities-by-username-query="select username, authority from authorities where username = ?"
                                role-prefix="ROLE_"/>
         </authentication-provider>

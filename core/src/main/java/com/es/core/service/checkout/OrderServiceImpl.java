@@ -84,6 +84,21 @@ public class OrderServiceImpl implements OrderService {
         orderDao.updateOrderStatus(id, status);
     }
 
+    @Override
+    public void saveOrderForUser(Order order, String userName) {
+        orderDao.saveUserOrders(order, userName);
+    }
+
+    @Override
+    public List<Order> getUserOrders(String userName) {
+        return orderDao.getByUserName(userName);
+    }
+
+    @Override
+    public Integer getUserOrdersCount(String userName) {
+        return getUserOrders(userName).size();
+    }
+
     private void setCustomerInfoToOrder(Order order, CustomerInfo customerInfo) {
         order.setFirstName(customerInfo.getFirstName());
         order.setLastName(customerInfo.getLastName());

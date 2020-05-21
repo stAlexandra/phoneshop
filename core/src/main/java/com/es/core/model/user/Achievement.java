@@ -1,15 +1,16 @@
 package com.es.core.model.user;
 
 public class Achievement {
-    private Long id;
+    private String id;
     private String name;
     private String description;
+    private Long levelPoints;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -27,5 +28,13 @@ public class Achievement {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Long getLevelPoints() {
+        return levelPoints;
+    }
+
+    public void setLevelPoints(Long levelPoints) {
+        this.levelPoints = levelPoints;
     }
 }

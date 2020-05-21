@@ -6,6 +6,7 @@ import com.es.core.dao.mappers.OrderRowMapper;
 import com.es.core.model.order.Order;
 import com.es.core.model.order.OrderItem;
 import com.es.core.model.order.OrderStatus;
+import org.h2.util.StringUtils;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -38,8 +39,14 @@ public class JdbcOrderDao implements OrderDao {
     private static final String SQL_GET_ALL_ORDERS_SORTED = "SELECT * FROM orders o " +
             "JOIN orderItems oI ON o.id = oI.orderId JOIN books b ON oI.productId = b.id " +
             "ORDER BY {0} {1}";
+    private static final String SQL_GET_ALL_BY_USER = "SELECT * FROM orders2users o2u " +
+            "JOIN orders o ON o2u.orderId=o.id " +
+            "JOIN orderItems oI ON o.id = oI.orderId JOIN books b ON oI.productId = b.id " +
+            "WHERE o2u.username=:userName";
     private static final String SQL_UPDATE_ORDER_STATUS = "UPDATE orders SET status = :status WHERE id = :orderId";
     private static final String SQL_INSERT_ORDER_ITEM = "INSERT INTO orderItems (productId, orderId, quantity) VALUES (:productId, :orderId, :quantity)";
+    private static final String SQL_INSERT_USER_ORDERS = "INSERT INTO orders2users (orderId, username) VALUES (:orderId, :userName)";
+
     private static final String ORDERS_ID_COL = "orders.id";
     private static final String SECURE_ID_PARAM = "secureId";
     private static final String PRODUCT_ID_PARAM = "productId";
@@ -89,20 +96,7 @@ public class JdbcOrderDao implements OrderDao {
     @Override
     public List<Order> getAll(String sortName, String sortOrder) {
         String sqlWithParams = MessageFormat.format(SQL_GET_ALL_ORDERS_SORTED, sortName, sortOrder);
-
-        return jdbcTemplate.query(sqlWithParams, resultSet -> {
-            List<Order> orders = new ArrayList<>();
-            if (resultSet.next()) {
-                while (!resultSet.isAfterLast()) {
-                    Order order = orderRowMapper.mapRow(resultSet, resultSet.getRow());
-
-                    List<OrderItem> orderItems = retrieveOrderItems(resultSet, order);
-                    order.setOrderItems(orderItems);
-                    orders.add(order);
-                }
-            }
-            return orders;
-        });
+        return findAllUsingQuery(sqlWithParams, new MapSqlParameterSource());
     }
 
     @Override
@@ -147,5 +141,35 @@ public class JdbcOrderDao implements OrderDao {
         }).toArray(MapSqlParameterSource[]::new);
 
         jdbcTemplate.batchUpdate(SQL_INSERT_ORDER_ITEM, batchParamSources);
+    }
+
+    @Override
+    public List<Order> getByUserName(String userName) {
+        return findAllUsingQuery(SQL_GET_ALL_BY_USER, new MapSqlParameterSource("userName", userName));
+    }
+
+    private List<Order> findAllUsingQuery(String sqlQuery, SqlParameterSource params) {
+        return jdbcTemplate.query(sqlQuery, params, resultSet -> {
+            List<Order> orders = new ArrayList<>();
+            if (resultSet.next()) {
+                while (!resultSet.isAfterLast()) {
+                    Order order = orderRowMapper.mapRow(resultSet, resultSet.getRow());
+
+                    List<OrderItem> orderItems = retrieveOrderItems(resultSet, order);
+                    order.setOrderItems(orderItems);
+                    orders.add(order);
+                }
+            }
+            return orders;
+        });
+    }
+
+    @Override
+    public void saveUserOrders(Order order, String userName) {
+        if (order.getId() == null || StringUtils.isNullOrEmpty(userName)) throw new IllegalArgumentException();
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("orderId", order.getId());
+        params.addValue("userName", userName);
+        jdbcTemplate.update(SQL_INSERT_USER_ORDERS, params);
     }
 }

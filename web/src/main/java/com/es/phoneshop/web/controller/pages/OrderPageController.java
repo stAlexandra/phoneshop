@@ -7,7 +7,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import st.alexandra.facades.CartFacade;
 import st.alexandra.facades.OrderFacade;
 import st.alexandra.facades.UserFacade;
@@ -52,13 +51,14 @@ public class OrderPageController {
     }
 
     @PostMapping
-    public String placeOrder(@Valid @ModelAttribute OrderData orderData, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+    public String placeOrder(@Valid @ModelAttribute OrderData orderData, BindingResult bindingResult, Model model,
+                             Principal principal) {
         if(bindingResult.hasErrors()) {
             model.addAttribute(CART_ATTRIBUTE, cartFacade.getCart());
             return VIEW_NAME;
         }
         Order order = orderFacade.createOrder(cartFacade.getCart(), orderData);
-        orderFacade.placeOrder(order);
+        orderFacade.placeOrder(order, principal.getName());
         return REDIRECT_PREFIX + ORDER_OVERVIEW + order.getSecureId();
     }
 

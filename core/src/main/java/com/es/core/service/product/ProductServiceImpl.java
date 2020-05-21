@@ -1,6 +1,6 @@
 package com.es.core.service.product;
 
-import com.es.core.dao.BookDao;
+import com.es.core.dao.ProductDao;
 import com.es.core.exception.ProductsNotFoundException;
 import com.es.core.model.product.Book;
 import org.h2.util.StringUtils;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ProductServiceImpl implements ProductService {
+public class ProductServiceImpl implements ProductService<Book> {
     @Value("${phones.defaultSortName}")
     private String defaultPhonesSortName;
 
@@ -22,13 +22,13 @@ public class ProductServiceImpl implements ProductService {
     private String defaultPhonesSortOrder;
 
     @Autowired
-    private BookDao bookDao;
+    private ProductDao<Book> productDao;
 
     public Page<Book> getPage(int currentPage, int pageSize, String sortName, String sortOrder) {
         int startItem = currentPage * pageSize;
-        int totalSize = bookDao.findValidTotalCount();
+        int totalSize = productDao.findValidTotalCount();
 
-        List<Book> phonesOnPageList = bookDao.findAllValid(startItem - 1, pageSize,
+        List<Book> phonesOnPageList = productDao.findAllValid(startItem - 1, pageSize,
                 StringUtils.isNullOrEmpty(sortName) ? defaultPhonesSortName : sortName,
                 StringUtils.isNullOrEmpty(sortName) ? defaultPhonesSortOrder : sortOrder);
 
@@ -36,10 +36,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public Page<Book> getPage(int currentPage, int pageSize, String query, String sortName, String sortOrder) {
-        int totalSize = bookDao.findMatchingQueryTotalCount(query);
+        int totalSize = productDao.findMatchingQueryTotalCount(query);
         int startItem = currentPage * pageSize;
 
-        List<Book> phonesOnPageList = bookDao.findAllValid(startItem - 1, pageSize, query,
+        List<Book> phonesOnPageList = productDao.findAllValid(startItem - 1, pageSize, query,
                 StringUtils.isNullOrEmpty(sortName) ? defaultPhonesSortName : sortName,
                 StringUtils.isNullOrEmpty(sortName) ? defaultPhonesSortOrder : sortOrder);
 
@@ -47,6 +47,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public Book get(Long id) throws ProductsNotFoundException {
-        return bookDao.get(id);
+        return productDao.get(id);
     }
 }

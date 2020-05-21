@@ -19,4 +19,10 @@ public interface OrderService {
     List<Order> getAllOrdersSortedByDate();
 
     void updateOrderStatus(Long id, OrderStatus status);
+
+    void saveOrderForUser(Order order, String userName);
+
+    List<Order> getUserOrders(String userName);
+
+    Integer getUserOrdersCount(String userName);
 }

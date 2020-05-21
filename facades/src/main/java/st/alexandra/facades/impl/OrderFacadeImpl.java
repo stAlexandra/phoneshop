@@ -4,6 +4,7 @@ import com.es.core.model.cart.Cart;
 import com.es.core.model.order.CustomerInfo;
 import com.es.core.model.order.Order;
 import com.es.core.model.order.OrderStatus;
+import com.es.core.service.achievement.AchievementService;
 import com.es.core.service.checkout.OrderService;
 import org.springframework.stereotype.Component;
 import st.alexandra.facades.OrderFacade;
@@ -14,9 +15,11 @@ import java.util.List;
 @Component
 public class OrderFacadeImpl implements OrderFacade {
     private final OrderService orderService;
+    private final AchievementService achievementService;
 
-    public OrderFacadeImpl(OrderService orderService) {
+    public OrderFacadeImpl(OrderService orderService, AchievementService achievementService) {
         this.orderService = orderService;
+        this.achievementService = achievementService;
     }
 
     @Override
@@ -27,8 +30,10 @@ public class OrderFacadeImpl implements OrderFacade {
     }
 
     @Override
-    public void placeOrder(Order order) {
+    public void placeOrder(Order order, String userName) {
         orderService.placeOrder(order);
+        orderService.saveOrderForUser(order, userName);
+        achievementService.checkForOrderAchievements(order, userName);
     }
 
     @Override

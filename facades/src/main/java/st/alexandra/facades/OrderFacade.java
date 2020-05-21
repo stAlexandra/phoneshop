@@ -10,7 +10,7 @@ import java.util.List;
 public interface OrderFacade {
     Order createOrder(Cart cart, OrderData orderData);
 
-    void placeOrder(Order order);
+    void placeOrder(Order order, String userName);
 
     Order getOrderBySecureId(String secureId);
 

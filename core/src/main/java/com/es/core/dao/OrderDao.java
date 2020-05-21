@@ -9,6 +9,8 @@ public interface OrderDao {
     void save(Order order);
     Order getBySecureId(String secureId);
     Order getById(Long id);
+    List<Order> getByUserName(String userName);
     List<Order> getAll(String sortName, String sortOrder);
     void updateOrderStatus(Long id, OrderStatus orderStatus);
+    void saveUserOrders(Order order, String userName);
 }

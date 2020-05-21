@@ -7,7 +7,6 @@ import com.es.core.model.user.Level;
 import com.es.core.model.user.User;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -18,7 +17,7 @@ import javax.annotation.Resource;
 @Transactional
 @Repository
 public class JdbcUserDao implements UserDao {
-    private static final String SQL_INSERT_USER = "INSERT INTO users (username, enabled, level) VALUES ( :name, :enabled, :level )";
+    private static final String SQL_UPDATE_USER = "UPDATE users SET level=:level, xp=:xp WHERE username=:name";
     private static final String SQL_GET_USER_BY_NAME = "SELECT * FROM users LEFT JOIN levels ON users.level = levels.number WHERE username = :name";
 
     @Resource
@@ -27,6 +26,8 @@ public class JdbcUserDao implements UserDao {
     private UserRowMapper userRowMapper;
     @Resource
     private AchievementDao achievementDao;
+//    @Resource
+//    private OrderDao orderDao;
 
     @Override
     @Transactional(readOnly = true)
@@ -39,6 +40,7 @@ public class JdbcUserDao implements UserDao {
                 User user = userRowMapper.mapRow(resultSet, 1);
                 user.setLevel(levelRowMapper.mapRow(resultSet, 1));
                 user.setAchievements(achievementDao.getByUserName(user.getName()));
+                //user.setOrders(orderDao.getByUserName(user.getName()));
                 return user;
             }
             return null;
@@ -47,7 +49,10 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public void save(User user) {
-        BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
-        jdbcTemplate.update(SQL_INSERT_USER, parameterSource);
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("name", user.getName());
+        params.addValue("level", user.getLevel().getNumber());
+        params.addValue("xp", user.getXp());
+        jdbcTemplate.update(SQL_UPDATE_USER, params);
     }
 }

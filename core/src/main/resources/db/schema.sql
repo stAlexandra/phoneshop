@@ -3,6 +3,7 @@ drop table if exists phone2color;
 drop table if exists colors;
 drop table if exists stocks;
 drop table if exists phones;
+drop table if exists orders2users;
 drop table if exists orderItems;
 drop table if exists orders;
 drop table if exists discounts2userLevel;
@@ -11,6 +12,7 @@ drop table if exists discounts;
 drop table if exists users;
 drop table if exists levels;
 drop table if exists authorities;
+drop table if exists principals;
 drop table if exists users2achievements;
 drop table if exists achievements;
 
@@ -120,18 +122,23 @@ CREATE TABLE levels
 create table users
 (
     username VARCHAR(50)  not null primary key,
-    password VARCHAR(100) not null,
-    enabled  BOOLEAN      not null,
     level    SMALLINT,
     xp       BIGINT,
     CONSTRAINT FK_users_level foreign key (level) references levels (number)
+);
+
+create table principals
+(
+    username VARCHAR(50)  not null primary key,
+    password VARCHAR(100) not null,
+    enabled  BOOLEAN      not null
 );
 
 create table authorities
 (
     username  VARCHAR(50) not null,
     authority VARCHAR(50) not null,
-    constraint fk_authorities_users foreign key (username) references users (username)
+    constraint fk_authorities_users foreign key (username) references principals (username)
 );
 create unique index ix_auth_username on authorities (username, authority);
 
@@ -165,18 +172,27 @@ CREATE TABLE discounts2users
 
 CREATE TABLE achievements
 (
-    id          BIGINT AUTO_INCREMENT primary key,
+    id          VARCHAR(30) primary key,
     name        VARCHAR(30) NOT NULL,
     description VARCHAR(200),
-    levelPoints INTEGER,
+    levelPoints BIGINT,
     imageUrl    VARCHAR(254)
 );
 
 CREATE TABLE users2achievements
 (
     username      VARCHAR(50),
-    achievementId BIGINT,
+    achievementId VARCHAR(30),
     UNIQUE (username, achievementId),
     CONSTRAINT FK_users2achievements_achievementId FOREIGN KEY (achievementId) REFERENCES achievements (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT FK_users2achievements_username FOREIGN KEY (username) REFERENCES users (username) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE orders2users
+(
+   orderId BIGINT,
+   username VARCHAR(50),
+   UNIQUE (username, orderId),
+   CONSTRAINT FK_orders2users_orderId FOREIGN KEY (orderId) REFERENCES orders (id) ON DELETE CASCADE ON UPDATE CASCADE,
+   CONSTRAINT FK_orders2users_username FOREIGN KEY (username) REFERENCES users (username) ON DELETE CASCADE ON UPDATE CASCADE
 );

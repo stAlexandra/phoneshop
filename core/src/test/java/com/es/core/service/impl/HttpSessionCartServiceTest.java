@@ -1,8 +1,8 @@
 package com.es.core.service.impl;
 
-import com.es.core.dao.PhoneDao;
+import com.es.core.dao.ProductDao;
 import com.es.core.model.cart.Cart;
-import com.es.core.model.phone.Phone;
+import com.es.core.model.product.Product;
 import com.es.core.service.checkout.HttpSessionCartService;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,10 +30,10 @@ public class HttpSessionCartServiceTest {
     private Cart cart;
 
     @Mock
-    private PhoneDao productDao;
+    private ProductDao productDao;
 
     @Mock
-    private Phone product;
+    private Product product;
 
     @Before
     public void setUp(){
@@ -46,7 +46,7 @@ public class HttpSessionCartServiceTest {
     public void addNewProductToCart() {
         cartService.addProduct(PRODUCT_ID, 1L);
         assertEquals(1, cart.getItems().size());
-        assertEquals(PRODUCT_PRICE, cart.getItems().get(0).getPhone().getPrice());
+        assertEquals(PRODUCT_PRICE, cart.getItems().get(0).getProduct().getPrice());
     }
 
     @Test

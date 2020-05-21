@@ -6,9 +6,8 @@ public class User {
     private String name;
     private boolean enabled;
     private Level level;
-    private long experiencePoints;
+    private long xp;
     private List<Achievement> achievements;
-
     public String getName() {
         return name;
     }
@@ -41,11 +40,11 @@ public class User {
         this.achievements = achievements;
     }
 
-    public long getExperiencePoints() {
-        return experiencePoints;
+    public long getXp() {
+        return xp;
     }
 
-    public void setExperiencePoints(long experiencePoints) {
-        this.experiencePoints = experiencePoints;
+    public void setXp(long xp) {
+        this.xp = xp;
     }
 }

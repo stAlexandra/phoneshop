@@ -47,4 +47,21 @@
     <bean id="productRowMapper" class="org.springframework.jdbc.core.BeanPropertyRowMapper">
         <property name="mappedClass" value="com.es.core.model.product.Book"/>
     </bean>
+
+    <bean id="abstractAchHandler" abstract="true" class="com.es.core.service.achievement.handlers.AbstractAchHandler">
+        <property name="achievementDao" ref="jdbcAchievementDao"/>
+    </bean>
+
+    <bean id="firstOrderAchHandler" class="com.es.core.service.achievement.handlers.FirstOrderAchHandler" parent="abstractAchHandler">
+        <property name="achievementId" value="FIRST_ORDER"/>
+    </bean>
+
+    <alias name="achievementServiceImpl" alias="achievementService"/>
+    <bean id="achievementServiceImpl" class="com.es.core.service.achievement.AchievementServiceImpl">
+        <property name="handlers">
+            <list>
+                <ref bean="firstOrderAchHandler"/>
+            </list>
+        </property>
+    </bean>
 </beans>

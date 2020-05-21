@@ -7,11 +7,16 @@
 <tags:master pageTitle="My Profile" hideUserPanel="${true}" showMiniCart="${false}">
     <div class="row justify-content-end">
         <div class="col-auto">
+            <a class="btn btn-outline-success" href="<c:url value="/my-profile/orders"/>" role="button">
+                My Orders
+            </a>
+        </div>
+        <div class="col-auto">
             <tags:backToProductList/>
         </div>
     </div>
-    <div id="userinfo">
-        <div class="media">
+    <div id="userinfo" class="row">
+        <div class="media col-6">
             <img src="https://i.pinimg.com/originals/13/a4/11/13a411076cdee39085cad97da215d9be.png" width="200"
                  height="200" class="align-self-start mr-3" alt="Profile photo">
             <div class="media-body mt-3 ml-4">
@@ -19,11 +24,13 @@
                 <p>
                     <span class="h3">Level ${user.level} Discount ${user.discountPercentage}%</span>
                 </p>
-                <div class="col-4">
-                        ${user.XP} / ${user.maxXP}
+                <div>${user.XP} / ${user.maxXP}
                     <progress value="${user.XP}" max="${user.maxXP}"></progress>
                 </div>
             </div>
+        </div>
+        <div class="col-6">
+
         </div>
     </div>
     <br/><br/><br/>
